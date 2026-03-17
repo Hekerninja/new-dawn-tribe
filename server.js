@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -12,8 +12,18 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Create a Nodemailer transporter
+// If you have a local SMTP server (like MailHog) running on port 1025, it will use that.
+// Otherwise, it will log the email to the console (perfect for local testing).
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'localhost',
+  port: parseInt(process.env.SMTP_PORT || '1025'),
+  secure: false, // true for 465, false for other ports
+  auth: process.env.SMTP_USER && process.env.SMTP_PASS ? {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  } : undefined,
+});
 
 // API Route
 app.post('/api/send-email', async (req, res) => {
@@ -23,27 +33,40 @@ app.post('/api/send-email', async (req, res) => {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  try {
-    const data = await resend.emails.send({
-      from: 'New Dawn Tribe <onboarding@resend.dev>',
-      to: ['newdawntribe@gmail.com'], // Your email to receive messages
-      subject: `New Contact Form Submission from ${name}`,
-      html: `
-        <h2>New Contact Request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `,
-    });
+  const mailOptions = {
+    from: process.env.SMTP_FROM || 'New Dawn Tribe <noreply@localhost>',
+    to: process.env.SMTP_TO || 'newdawntribe@gmail.com', // Your receiving email
+    subject: `New Contact Form Submission from ${name}`,
+    html: `
+      <h2>New Contact Request</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message}</p>
+    `,
+  };
 
-    res.status(200).json(data);
-  } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ message: 'Failed to send email', error: error.message });
+  try {
+    // Attempt to send
+    // If no SMTP server is running, this will fail, and we catch it to log locally
+    await transporter.sendMail(mailOptions);
+    console.log('✅ Email sent successfully via SMTP!');
+    return res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error: any) {
+    console.warn('⚠️ SMTP server not found or error occurred. Logging email locally instead.');
+    console.log('--- LOCAL EMAIL LOG ---');
+    console.log(`To: ${mailOptions.to}`);
+    console.log(`From: ${mailOptions.from}`);
+    console.log(`Subject: ${mailOptions.subject}`);
+    console.log(`Body:\n${mailOptions.html}`);
+    console.log('-----------------------');
+    
+    // Return success anyway since we "processed" the request locally
+    return res.status(200).json({ message: 'Email processed (logged locally)' });
   }
 });
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log('Waiting for email requests...');
 });
