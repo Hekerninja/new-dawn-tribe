@@ -12,13 +12,12 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-// Create a Nodemailer transporter
-// If you have a local SMTP server (like MailHog) running on port 1025, it will use that.
-// Otherwise, it will log the email to the console (perfect for local testing).
+// Configure Nodemailer for Papercut SMTP
+// Papercut defaults to localhost:25
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'localhost',
-  port: parseInt(process.env.SMTP_PORT || '1025'),
-  secure: false, // true for 465, false for other ports
+  port: parseInt(process.env.SMTP_PORT || '25'),
+  secure: false, // Papercut usually uses non-secure on port 25
   auth: process.env.SMTP_USER && process.env.SMTP_PASS ? {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -34,8 +33,8 @@ app.post('/api/send-email', async (req, res) => {
   }
 
   const mailOptions = {
-    from: process.env.SMTP_FROM || 'New Dawn Tribe <noreply@localhost>',
-    to: process.env.SMTP_TO || 'newdawntribe@gmail.com', // Your receiving email
+    from: process.env.SMTP_FROM || 'New Dawn Tribe <noreply@papercut>',
+    to: process.env.SMTP_TO || 'newdawntribe@gmail.com',
     subject: `New Contact Form Submission from ${name}`,
     html: `
       <h2>New Contact Request</h2>
@@ -47,26 +46,19 @@ app.post('/api/send-email', async (req, res) => {
   };
 
   try {
-    // Attempt to send
-    // If no SMTP server is running, this will fail, and we catch it to log locally
     await transporter.sendMail(mailOptions);
-    console.log('✅ Email sent successfully via SMTP!');
+    console.log('✅ Email sent successfully via Papercut!');
     return res.status(200).json({ message: 'Email sent successfully' });
   } catch (error: any) {
-    console.warn('⚠️ SMTP server not found or error occurred. Logging email locally instead.');
-    console.log('--- LOCAL EMAIL LOG ---');
-    console.log(`To: ${mailOptions.to}`);
-    console.log(`From: ${mailOptions.from}`);
-    console.log(`Subject: ${mailOptions.subject}`);
-    console.log(`Body:\n${mailOptions.html}`);
-    console.log('-----------------------');
-    
-    // Return success anyway since we "processed" the request locally
-    return res.status(200).json({ message: 'Email processed (logged locally)' });
+    console.error('❌ Error sending email via Papercut:', error.message);
+    return res.status(500).json({ 
+      message: 'Failed to send email', 
+      error: error.message 
+    });
   }
 });
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  console.log('Waiting for email requests...');
+  console.log('Connected to Papercut SMTP on localhost:25');
 });
