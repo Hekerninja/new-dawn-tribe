@@ -37,19 +37,23 @@ const Index = () => {
 
     setIsSubmitting(true);
     try {
+      // This request is proxied by Vite to http://localhost:3001/api/send-email
       const response = await fetch('/api/send-email', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send message');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to send message');
       }
 
       showSuccess("Message sent! We'll get back to you soon.");
       setFormData({ name: '', email: '', message: '' });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Email sending failed:", error);
       showError("Failed to send message. Please try again or call us directly.");
     } finally {
