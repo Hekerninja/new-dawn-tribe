@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { showSuccess, showError } from "@/utils/toast";
-import emailjs from '@emailjs/browser';
 
 const blogs = [
   { id: 1, title: "Understanding the First Steps of Recovery", excerpt: "Recovery begins with a single step. Learn how to navigate the initial challenges of breaking free from addiction.", date: "Oct 15, 2023", readTime: "5 min read" },
@@ -25,11 +24,6 @@ const Index = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // EmailJS Configuration
-  const EMAILJS_PUBLIC_KEY = "sgdJuhHd-PCugkMVE";
-  const EMAILJS_SERVICE_ID = "service_m348hnf";
-  const EMAILJS_TEMPLATE_ID = "template_yk92adc";
-
   const handleWhatsAppClick = () => {
     window.open("https://wa.me/919529806294", "_blank");
   };
@@ -43,13 +37,16 @@ const Index = () => {
 
     setIsSubmitting(true);
     try {
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: formData.message,
-        to_email: "newdawntribe@gmail.com"
-      };
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY);
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
       showSuccess("Message sent! We'll get back to you soon.");
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {
