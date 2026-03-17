@@ -51,10 +51,7 @@ app.post('/api/send-email', async (req, res) => {
     return res.status(200).json({ message: 'Email sent successfully' });
   } catch (error: any) {
     console.error('❌ Error sending email via Papercut:', error.message);
-    return res.status(500).json({ 
-      message: 'Failed to send email', 
-      error: error.message 
-    });
+    return res.status(500).json({ message: 'Failed to send email', error: error.message });
   }
 });
 
