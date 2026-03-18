@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { showSuccess, showError } from "@/utils/toast";
+import emailjs from '@emailjs/browser';
 
 const blogs = [
   { id: 1, title: "Understanding the First Steps of Recovery", excerpt: "Recovery begins with a single step. Learn how to navigate the initial challenges of breaking free from addiction.", date: "Oct 15, 2023", readTime: "5 min read" },
@@ -30,26 +31,28 @@ const Index = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!formData.name || !formData.email || !formData.message) {
       showError("Please fill in all fields.");
       return;
     }
 
     setIsSubmitting(true);
+    
     try {
-      // This request is proxied by Vite to http://localhost:3001/api/send-email
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_name: "New Dawn Tribe"
+      };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to send message');
-      }
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
 
       showSuccess("Message sent! We'll get back to you soon.");
       setFormData({ name: '', email: '', message: '' });
@@ -261,17 +264,35 @@ const Index = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="text-sm font-medium mb-1 block">Name</label>
-                    <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                    <Input 
+                      placeholder="Your Name" 
+                      value={formData.name} 
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-1 block">Email</label>
-                    <Input type="email" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                    <Input 
+                      type="email" 
+                      placeholder="your@email.com" 
+                      value={formData.email} 
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-1 block">Message</label>
-                    <Textarea placeholder="How can we help you?" rows={4} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} />
+                    <Textarea 
+                      placeholder="How can we help you?" 
+                      rows={4} 
+                      value={formData.message} 
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })} 
+                    />
                   </div>
-                  <Button type="submit" className="w-full bg-teal-600 hover:bg-teal-700 text-white" disabled={isSubmitting}>
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white" 
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
