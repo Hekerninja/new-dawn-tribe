@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, Clock, Share2, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { blogs } from './Index';
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const BlogPost = () => {
   const { id } = useParams();
@@ -12,9 +13,9 @@ const BlogPost = () => {
 
   if (!blog) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">Post Not Found</h1>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-4">Post Not Found</h1>
           <Link to="/">
             <Button variant="outline">Back to Home</Button>
           </Link>
@@ -81,32 +82,33 @@ const BlogPost = () => {
   const postContent = content[blog.id] || { paragraphs: ["Content coming soon."], keyTakeaways: [] };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-50 animate-fade-in transition-colors duration-300">
+      <nav className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 transition-colors duration-300">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2">
             <div className="bg-teal-600 p-2 rounded-lg">
               <Heart className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-bold text-slate-800">New Dawn Tribe</span>
+            <span className="text-xl font-bold text-slate-800 dark:text-slate-100">New Dawn Tribe</span>
           </Link>
-          <Link to="/">
-            <Button variant="ghost" className="text-slate-600">Home</Button>
-          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link to="/">
+              <Button variant="ghost" className="text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400">Home</Button>
+            </Link>
+          </div>
         </div>
       </nav>
-
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <Link to="/" className="inline-flex items-center text-teal-600 hover:text-teal-700 mb-8 font-medium">
+        <Link to="/" className="inline-flex items-center text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 mb-8 font-medium">
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Blog
         </Link>
-
-        <Card className="border-none shadow-xl overflow-hidden">
+        <Card className="border-none shadow-xl overflow-hidden bg-white dark:bg-slate-900 transition-colors duration-300">
           <div className="h-64 md:h-96 overflow-hidden">
             <img src={blog.image} alt={blog.title} className="w-full h-full object-cover" />
           </div>
           <CardContent className="p-8 md:p-12">
-            <div className="flex items-center gap-4 text-sm text-slate-500 mb-6">
+            <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400 mb-6">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
                 <span>{blog.date}</span>
@@ -116,29 +118,23 @@ const BlogPost = () => {
                 <span>{blog.readTime}</span>
               </div>
             </div>
-
-            <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-8 leading-tight">{postContent.title}</h1>
-
-            <div className="prose prose-lg prose-slate max-w-none text-slate-600">
-              <p className="text-xl leading-relaxed mb-6 text-slate-700 font-medium">{blog.excerpt}</p>
-              
+            <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-50 mb-8 leading-tight">{postContent.title}</h1>
+            <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+              <p className="text-xl leading-relaxed mb-6 text-slate-700 dark:text-slate-200 font-medium">{blog.excerpt}</p>
               {postContent.paragraphs.map((paragraph, index) => (
                 <p key={index} className="mb-6">{paragraph}</p>
               ))}
-
-              <h3 className="text-2xl font-bold text-slate-900 mt-12 mb-6">Key Takeaways</h3>
-              <ul className="list-disc pl-6 space-y-3 mb-8 text-slate-700">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mt-12 mb-6">Key Takeaways</h3>
+              <ul className="list-disc pl-6 space-y-3 mb-8 text-slate-700 dark:text-slate-300">
                 {postContent.keyTakeaways.map((takeaway, index) => (
                   <li key={index} className="leading-relaxed">{takeaway}</li>
                 ))}
               </ul>
-
               <p className="mb-6">
                 Remember, recovery is a journey unique to each individual. What works for one person may not work for another. The most important thing is to stay open to learning, to be patient with yourself, and to keep moving forward. You have the strength within you to overcome any challenge and build a life you love.
               </p>
             </div>
-
-            <div className="mt-12 pt-8 border-t border-slate-200 flex justify-between items-center">
+            <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" className="gap-2">
                   <Heart className="w-4 h-4" /> Like
