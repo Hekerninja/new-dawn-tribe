@@ -37,14 +37,34 @@ export const blogs = [
 ];
 
 const services = [
-  { icon: <Heart className="w-8 h-8 text-teal-600" />, title: "One-on-One Coaching", description: "Personalized sessions tailored to your unique journey and recovery goals." },
-  { icon: <Users className="w-8 h-8 text-teal-600" />, title: "Group Support", description: "Connect with others on similar paths in a safe, facilitated environment." },
-  { icon: <Shield className="w-8 h-8 text-teal-600" />, title: "Relapse Prevention", description: "Strategic planning and tools to maintain your sobriety long-term." },
-  { icon: <MessageSquare className="w-8 h-8 text-teal-600" />, title: "Family Counseling", description: "Healing the family unit and rebuilding trust with loved ones." }
+  {
+    icon: <Heart className="w-8 h-8 text-teal-600" />,
+    title: "One-on-One Coaching",
+    description: "Personalized sessions tailored to your unique journey and recovery goals."
+  },
+  {
+    icon: <Users className="w-8 h-8 text-teal-600" />,
+    title: "Group Support",
+    description: "Connect with others on similar paths in a safe, facilitated environment."
+  },
+  {
+    icon: <Shield className="w-8 h-8 text-teal-600" />,
+    title: "Relapse Prevention",
+    description: "Strategic planning and tools to maintain your sobriety long-term."
+  },
+  {
+    icon: <MessageSquare className="w-8 h-8 text-teal-600" />,
+    title: "Family Counseling",
+    description: "Healing the family unit and rebuilding trust with loved ones."
+  }
 ];
 
 const Index = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleWhatsAppClick = () => {
@@ -53,19 +73,26 @@ const Index = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!formData.name || !formData.email || !formData.message) {
       showError("Please fill in all fields.");
       return;
     }
 
     setIsSubmitting(true);
+
     try {
+      // Send data to our secure backend endpoint
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        })
       });
 
       const data = await response.json();
@@ -77,8 +104,8 @@ const Index = () => {
       showSuccess("Message sent! We'll get back to you soon.");
       setFormData({ name: '', email: '', message: '' });
     } catch (error: any) {
-      console.error("Email sending failed:", error);
-      showError(error.message || "Failed to send message. Please try again or call us directly.");
+      console.error("Error sending message:", error);
+      showError("Failed to send message. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);
     }
