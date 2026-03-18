@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { showSuccess, showError } from "@/utils/toast";
-import emailjs from '@emailjs/browser';
 import { Link } from 'react-router-dom';
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -38,26 +37,10 @@ export const blogs = [
 ];
 
 const services = [
-  {
-    icon: <Heart className="w-8 h-8 text-teal-600" />,
-    title: "One-on-One Coaching",
-    description: "Personalized sessions tailored to your unique journey and recovery goals."
-  },
-  {
-    icon: <Users className="w-8 h-8 text-teal-600" />,
-    title: "Group Support",
-    description: "Connect with others on similar paths in a safe, facilitated environment."
-  },
-  {
-    icon: <Shield className="w-8 h-8 text-teal-600" />,
-    title: "Relapse Prevention",
-    description: "Strategic planning and tools to maintain your sobriety long-term."
-  },
-  {
-    icon: <MessageSquare className="w-8 h-8 text-teal-600" />,
-    title: "Family Counseling",
-    description: "Healing the family unit and rebuilding trust with loved ones."
-  }
+  { icon: <Heart className="w-8 h-8 text-teal-600" />, title: "One-on-One Coaching", description: "Personalized sessions tailored to your unique journey and recovery goals." },
+  { icon: <Users className="w-8 h-8 text-teal-600" />, title: "Group Support", description: "Connect with others on similar paths in a safe, facilitated environment." },
+  { icon: <Shield className="w-8 h-8 text-teal-600" />, title: "Relapse Prevention", description: "Strategic planning and tools to maintain your sobriety long-term." },
+  { icon: <MessageSquare className="w-8 h-8 text-teal-600" />, title: "Family Counseling", description: "Healing the family unit and rebuilding trust with loved ones." }
 ];
 
 const Index = () => {
@@ -74,25 +57,28 @@ const Index = () => {
       showError("Please fill in all fields.");
       return;
     }
+
     setIsSubmitting(true);
     try {
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: formData.message,
-        to_name: "New Dawn Tribe"
-      };
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        templateParams,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      );
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send message');
+      }
+
       showSuccess("Message sent! We'll get back to you soon.");
       setFormData({ name: '', email: '', message: '' });
     } catch (error: any) {
       console.error("Email sending failed:", error);
-      showError("Failed to send message. Please try again or call us directly.");
+      showError(error.message || "Failed to send message. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);
     }
