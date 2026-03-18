@@ -33,9 +33,6 @@ jobs:
           password: ${{ secrets.HOSTINGER_FTP_PASS }}
           local-dir: ./dist/
           server-dir: /public_html/
-          # Exclude node_modules and other unnecessary files
           exclude: |
             **/.git*
-            **/.git*/**
             **/node_modules/**
-            **/dist/**
