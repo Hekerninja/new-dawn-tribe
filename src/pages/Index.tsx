@@ -60,11 +60,7 @@ const services = [
 ];
 
 const Index = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleWhatsAppClick = () => {
@@ -73,16 +69,12 @@ const Index = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!formData.name || !formData.email || !formData.message) {
       showError("Please fill in all fields.");
       return;
     }
-
     setIsSubmitting(true);
-
     try {
-      // Send data to our secure backend endpoint
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
@@ -94,13 +86,10 @@ const Index = () => {
           message: formData.message
         })
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message || 'Failed to send message');
       }
-
       showSuccess("Message sent! We'll get back to you soon.");
       setFormData({ name: '', email: '', message: '' });
     } catch (error: any) {
@@ -179,12 +168,7 @@ const Index = () => {
               </p>
               <div className="flex gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-teal-600 dark:text-teal-400">100+</div>
-                  <div className="text-sm text-slate-500 dark:text-slate-400">Lives Changed</div>
-                </div>
-                <div className="w-px bg-slate-200 dark:bg-slate-700" />
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-teal-600 dark:text-teal-400">5+</div>
+                  <div className="text-2xl font-bold text-teal-600 dark:text-teal-400">2+</div>
                   <div className="text-sm text-slate-500 dark:text-slate-400">Years Experience</div>
                 </div>
               </div>
