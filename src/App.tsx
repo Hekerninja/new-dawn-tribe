@@ -12,6 +12,7 @@ import BlogPost from "./pages/BlogPost";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
+import SobrietyTracker from "./pages/SobrietyTracker";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/tracker" element={<SobrietyTracker />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
