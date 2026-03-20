@@ -1,1 +1,0 @@
-// This component has been removed as the site is now permanently in deep space mode.

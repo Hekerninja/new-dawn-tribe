@@ -1,1 +1,177 @@
-"use client"; import React from 'react'; import { Link } from 'react-router-dom'; import { ArrowLeft, Heart, Shield, Users, Target, BookOpen } from 'lucide-react'; import { Button } from "@/components/ui/button"; import { Card, CardContent } from "@/components/ui/card"; import { ThemeToggle } from "@/components/ThemeToggle"; import bookCover from '../assets/book-cover.jpg'; import CosmicBackground from '@/components/CosmicBackground'; const About = () => { return ( <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative"> <CosmicBackground /> {/* Navigation */} <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300"> <div className="container mx-auto px-4 py-4 flex justify-between items-center"> <Link to="/" className="flex items-center gap-2 group cursor-pointer"> <div className="bg-teal-500 p-2 rounded-lg transition-transform duration-300 group-hover:scale-110"> <Heart className="w-6 h-6 text-white" /> </div> <span className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-teal-400">New Dawn Tribe</span> </Link> <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300"> <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link> <Link to="/about" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">About</Link> <Link to="/services" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Services</Link> <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link> <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Contact</Link> </div> <div className="flex items-center gap-2"> <ThemeToggle /> <Link to="/contact"> <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5"> Book Consultation </Button> </Link> </div> </div> </nav> {/* Hero Section */} <section className="relative py-20 md:py-32 overflow-hidden animate-slide-up z-10"> <div className="container mx-auto px-4 text-center max-w-4xl"> <Link to="/" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium animate-slide-up delay-100"> <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home </Link> <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-200"> My Journey <br /> <span className="text-teal-400">From Darkness to Light</span> </h1> </div> </section> {/* Story Section */} <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10"> <div className="container mx-auto px-4 max-w-4xl"> <div className="grid md:grid-cols-2 gap-12 items-center mb-16"> <div className="relative group"> <div className="absolute -inset-4 bg-teal-500/20 rounded-2xl transform rotate-3 -z-10 transition-transform duration-500 group-hover:rotate-6" /> <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=800" alt="Man standing in front of a sunrise" className="w-full h-96 object-cover rounded-xl shadow-lg img-smooth group-hover:scale-105" /> </div> <div className="animate-slide-up delay-100"> <h2 className="text-3xl font-bold text-white mb-6">Two Years Ago</h2> <p className="text-gray-300 mb-4 leading-relaxed text-lg"> Two years ago, I was in the depths of addiction, struggling to find a way forward. Today, I stand sober, clear-minded, and committed to helping others reclaim their lives. </p> <p className="text-gray-300 mb-6 leading-relaxed text-lg"> My journey wasn't easy, and it wasn't perfect — but it was real. And that's exactly what I bring into my work. </p> </div> </div> <div className="animate-slide-up delay-200"> <h2 className="text-3xl font-bold text-white mb-6">Why Lived Experience Matters</h2> <p className="text-gray-300 mb-6 leading-relaxed text-lg"> As a de-addiction coach, I don't just offer advice from theory — I offer guidance rooted in lived experience. I understand the cravings, the relapses, the guilt, and the rebuilding. I know what it takes to start over, and more importantly, how to keep going. </p> <p className="text-gray-300 mb-8 leading-relaxed text-lg"> This isn't just my profession. It's my purpose. </p> </div> </div> </section> {/* Book Section */} <section className="py-20 bg-black/30 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10"> <div className="container mx-auto px-4 max-w-4xl"> <div className="grid md:grid-cols-2 gap-12 items-center"> <div className="animate-slide-up delay-100"> <div className="relative group"> <div className="absolute -inset-4 bg-amber-500/20 rounded-2xl transform rotate-2 -z-10 transition-transform duration-500 group-hover:rotate-3" /> <img src={bookCover} alt="Autobiography of a Teenage Addict book cover" className="w-full max-w-sm mx-auto rounded-xl shadow-2xl img-smooth group-hover:scale-105" /> </div> </div> <div className="animate-slide-up delay-200"> <div className="flex items-center gap-3 mb-4"> <BookOpen className="w-8 h-8 text-teal-400" /> <h2 className="text-3xl font-bold text-white">Published Work</h2> </div> <p className="text-gray-300 mb-4 leading-relaxed text-lg font-medium"> I'm an author of <span className="text-teal-400 italic">"Autobiography of a Teenage Addict - From the Agony of Childhood Trauma to a Life of Global Healing"</span> </p> <div className="flex items-center gap-2 text-amber-400 font-semibold text-lg"> <span className="bg-amber-500/20 px-4 py-2 rounded-full border border-amber-500/30">Publishing on 15th April 2026</span> </div> <p className="text-gray-300 mt-6 leading-relaxed"> This book shares my personal journey from childhood trauma through addiction to recovery and global healing. It's a testament to the power of resilience and the possibility of transformation. </p> </div> </div> </div> </section> {/* Mission Section */} <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10"> <div className="container mx-auto px-4 max-w-4xl"> <div className="text-center mb-16"> <h2 className="text-3xl font-bold text-white mb-4">My Mission</h2> <p className="text-gray-300 text-lg">To help people break free from addiction, rebuild their identity, and create a life they're proud of.</p> </div> <div className="grid md:grid-cols-3 gap-8"> <Card className="border border-white/10 shadow-lg bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2"> <CardContent className="p-8 text-center"> <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"> <Target className="w-8 h-8 text-teal-400" /> </div> <h3 className="text-xl font-bold text-white mb-4">Break Free</h3> <p className="text-gray-300">Whether you're at rock bottom or just starting to question your habits, you're not alone — and change is possible.</p> </CardContent> </Card> <Card className="border border-white/10 shadow-lg bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2"> <CardContent className="p-8 text-center"> <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"> <Users className="w-8 h-8 text-teal-400" /> </div> <h3 className="text-xl font-bold text-white mb-4">Rebuild Identity</h3> <p className="text-gray-300">Rediscover who you are beyond addiction. We help you find your true self and build a new, authentic identity.</p> </CardContent> </Card> <Card className="border border-white/10 shadow-lg bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2"> <CardContent className="p-8 text-center"> <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"> <Shield className="w-8 h-8 text-teal-400" /> </div> <h3 className="text-xl font-bold text-white mb-4">Create a Future</h3> <p className="text-gray-300">Build a life you're proud of. We provide the tools and support to create lasting change and a brighter future.</p> </CardContent> </Card> </div> </div> </section> {/* Call to Action */} <section className="py-20 bg-teal-600/90 text-white animate-slide-up z-10"> <div className="container mx-auto px-4 text-center"> <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Your Journey?</h2> <p className="text-teal-100 text-lg mb-8 max-w-2xl mx-auto"> You don't have to do this alone. Let's work together to reclaim your life and build a future you love.</p> <Link to="/contact"> <Button size="lg" className="bg-white text-teal-600 hover:bg-slate-100 text-lg px-8 btn-smooth shadow-lg hover:shadow-xl transform hover:-translate-y-1"> Book a Consultation </Button> </Link> </div> </section> {/* Footer */} <footer className="bg-black/60 backdrop-blur-sm text-gray-400 py-8 border-t border-white/10 animate-fade-in transition-colors duration-300 z-10"> <div className="container mx-auto px-4 text-center"> <p>&copy; 2026 New Dawn Tribe. All rights reserved.</p> <p className="text-sm mt-2">Empowering young adults to live free from addiction.</p> </div> </footer> </div> ); }; export default About;
+"use client";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Heart, Shield, Users, Target, BookOpen } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import bookCover from '../assets/book-cover.jpg';
+import CosmicBackground from '@/components/CosmicBackground';
+
+const About = () => {
+  return (
+    <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
+      <CosmicBackground />
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link to="/" className="flex items-center gap-2 group cursor-pointer">
+            <div className="bg-teal-500 p-2 rounded-lg transition-transform duration-300 group-hover:scale-110">
+              <Heart className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-teal-400">New Dawn Tribe</span>
+          </Link>
+          <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300">
+            <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link>
+            <Link to="/about" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">About</Link>
+            <Link to="/services" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Services</Link>
+            <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
+            <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Contact</Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link to="/contact">
+              <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                Book Consultation
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative py-20 md:py-32 overflow-hidden animate-slide-up z-10">
+        <div className="container mx-auto px-4 text-center max-w-4xl">
+          <Link to="/" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium animate-slide-up delay-100">
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
+          </Link>
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-200">
+            My Journey <br />
+            <span className="text-teal-400">From Darkness to Light</span>
+          </h1>
+        </div>
+      </section>
+
+      {/* Story Section */}
+      <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-teal-500/20 rounded-2xl transform rotate-3 -z-10 transition-transform duration-500 group-hover:rotate-6" />
+              <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=800" alt="Man standing in front of a sunrise" className="w-full h-96 object-cover rounded-xl shadow-lg img-smooth group-hover:scale-105" />
+            </div>
+            <div className="animate-slide-up delay-100">
+              <h2 className="text-3xl font-bold text-white mb-6">Two Years Ago</h2>
+              <p className="text-gray-300 mb-4 leading-relaxed text-lg">
+                Two years ago, I was in the depths of addiction, struggling to find a way forward. Today, I stand sober, clear-minded, and committed to helping others reclaim their lives.
+              </p>
+              <p className="text-gray-300 mb-6 leading-relaxed text-lg">
+                My journey wasn't easy, and it wasn't perfect — but it was real. And that's exactly what I bring into my work.
+              </p>
+            </div>
+          </div>
+          <div className="animate-slide-up delay-200">
+            <h2 className="text-3xl font-bold text-white mb-6">Why Lived Experience Matters</h2>
+            <p className="text-gray-300 mb-6 leading-relaxed text-lg">
+              As a de-addiction coach, I don't just offer advice from theory — I offer guidance rooted in lived experience. I understand the cravings, the relapses, the guilt, and the rebuilding. I know what it takes to start over, and more importantly, how to keep going.
+            </p>
+            <p className="text-gray-300 mb-8 leading-relaxed text-lg">
+              This isn't just my profession. It's my purpose.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Book Section */}
+      <section className="py-20 bg-black/30 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="animate-slide-up delay-100">
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-amber-500/20 rounded-2xl transform rotate-2 -z-10 transition-transform duration-500 group-hover:rotate-3" />
+                <img src={bookCover} alt="Autobiography of a Teenage Addict book cover" className="w-full max-w-sm mx-auto rounded-xl shadow-2xl img-smooth group-hover:scale-105" />
+              </div>
+            </div>
+            <div className="animate-slide-up delay-200">
+              <div className="flex items-center gap-3 mb-4">
+                <BookOpen className="w-8 h-8 text-teal-400" />
+                <h2 className="text-3xl font-bold text-white">Published Work</h2>
+              </div>
+              <p className="text-gray-300 mb-4 leading-relaxed text-lg font-medium">
+                I'm an author of <span className="text-teal-400 italic">"Autobiography of a Teenage Addict - From the Agony of Childhood Trauma to a Life of Global Healing"</span>
+              </p>
+              <div className="flex items-center gap-2 text-amber-400 font-semibold text-lg">
+                <span className="bg-amber-500/20 px-4 py-2 rounded-full border border-amber-500/30">Publishing on 15th April 2026</span>
+              </div>
+              <p className="text-gray-300 mt-6 leading-relaxed">
+                This book shares my personal journey from childhood trauma through addiction to recovery and global healing. It's a testament to the power of resilience and the possibility of transformation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission Section */}
+      <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-white mb-4">My Mission</h2>
+            <p className="text-gray-300 text-lg">To help people break free from addiction, rebuild their identity, and create a life they're proud of.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border border-white/10 shadow-lg bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2">
+              <CardContent className="p-8 text-center">
+                <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Target className="w-8 h-8 text-teal-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4">Break Free</h3>
+                <p className="text-gray-300">Whether you're at rock bottom or just starting to question your habits, you're not alone — and change is possible.</p>
+              </CardContent>
+            </Card>
+            <Card className="border border-white/10 shadow-lg bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2">
+              <CardContent className="p-8 text-center">
+                <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Users className="w-8 h-8 text-teal-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4">Rebuild Identity</h3>
+                <p className="text-gray-300">Rediscover who you are beyond addiction. We help you find your true self and build a new, authentic identity.</p>
+              </CardContent>
+            </Card>
+            <Card className="border border-white/10 shadow-lg bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2">
+              <CardContent className="p-8 text-center">
+                <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Shield className="w-8 h-8 text-teal-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4">Create a Future</h3>
+                <p className="text-gray-300">Build a life you're proud of. We provide the tools and support to create lasting change and a brighter future.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-20 bg-teal-600/90 text-white animate-slide-up z-10">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Your Journey?</h2>
+          <p className="text-teal-100 text-lg mb-8 max-w-2xl mx-auto">
+            You don't have to do this alone. Let's work together to reclaim your life and build a future you love.
+          </p>
+          <Link to="/contact">
+            <Button size="lg" className="bg-white text-teal-600 hover:bg-slate-100 text-lg px-8 btn-smooth shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              Book a Consultation
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black/60 backdrop-blur-sm text-gray-400 py-8 border-t border-white/10 animate-fade-in transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4 text-center">
+          <p>&copy; 2026 New Dawn Tribe. All rights reserved.</p>
+          <p className="text-sm mt-2">Empowering young adults to live free from addiction.</p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default About;

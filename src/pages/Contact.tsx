@@ -1,1 +1,247 @@
-"use client"; import React, { useState } from 'react'; import { Link } from 'react-router-dom'; import { Phone, Mail, Instagram, Twitter, Linkedin, MapPin, Clock, Send, Heart } from 'lucide-react'; import { Button } from "@/components/ui/button"; import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; import { Input } from "@/components/ui/input"; import { Textarea } from "@/components/ui/textarea"; import { showSuccess, showError } from "@/utils/toast"; import { ThemeToggle } from "@/components/ThemeToggle"; import emailjs from '@emailjs/browser'; import CosmicBackground from '@/components/CosmicBackground'; const Contact = () => { const [formData, setFormData] = useState({ name: '', email: '', message: '' }); const [isSubmitting, setIsSubmitting] = useState(false); const handleWhatsAppClick = () => { window.open("https://wa.me/919529806294", "_blank"); }; const handleSubmit = async (e: React.FormEvent) => { e.preventDefault(); if (!formData.name || !formData.email || !formData.message) { showError("Please fill in all fields."); return; } setIsSubmitting(true); try { const SERVICE_ID = 'service_vrjey4g'; const TEMPLATE_ID = 'template_qsqn1wo'; const PUBLIC_KEY = 'sgdJuhHd-PCugkMVE'; const templateParams = { from_name: formData.name, from_email: formData.email, message: formData.message, to_name: "New Dawn Tribe", }; await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY); showSuccess("Message sent! We'll get back to you soon."); setFormData({ name: '', email: '', message: '' }); } catch (error: any) { console.error("Error sending message:", error); showError("Failed to send message. Please try again or call us directly."); } finally { setIsSubmitting(false); } }; return ( <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative"> <CosmicBackground /> <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300"> <div className="container mx-auto px-4 py-4 flex justify-between items-center"> <Link to="/" className="flex items-center gap-2 group cursor-pointer"> <div className="bg-teal-500 p-2 rounded-lg transition-transform duration-300 group-hover:scale-110"> <Heart className="w-6 h-6 text-white" /> </div> <span className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-teal-400">New Dawn Tribe</span> </Link> <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300"> <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link> <Link to="/about" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">About</Link> <Link to="/services" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Services</Link> <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link> <Link to="/contact" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">Contact</Link> </div> <div className="flex items-center gap-2"> <ThemeToggle /> <Link to="/contact"> <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5"> Book Consultation </Button> </Link> </div> </div> </nav> <section className="relative py-20 md:py-32 overflow-hidden animate-slide-up z-10"> <div className="container mx-auto px-4 text-center max-w-4xl"> <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-100"> Get in Touch <br /> <span className="text-teal-400">We're Here to Help</span> </h1> <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto animate-slide-up delay-200"> Have questions about our services or ready to start your journey? Reach out to us directly or fill out the form below. </p> </div> </section> <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10"> <div className="container mx-auto px-4"> <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto"> <div className="space-y-8 animate-slide-up delay-100"> <div> <h2 className="text-3xl font-bold text-white mb-6">Contact Information</h2> <p className="text-gray-300 mb-8 leading-relaxed"> We're here to support you every step of the way. Reach out through any of the channels below or send us a message. </p> </div> <div className="space-y-6"> <div className="flex items-start gap-4 group"> <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110"> <Phone className="w-6 h-6 text-teal-400" /> </div> <div> <h3 className="font-semibold text-white mb-1">Phone</h3> <p className="text-gray-300">+91 9529806294</p> <p className="text-sm text-gray-400 mt-1">Available Mon-Sat, 9am-6pm</p> </div> </div> <div className="flex items-start gap-4 group"> <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110"> <Mail className="w-6 h-6 text-teal-400" /> </div> <div> <h3 className="font-semibold text-white mb-1">Email</h3> <p className="text-gray-300">sagar@sagarbanerjee.com</p> <p className="text-sm text-gray-400 mt-1">We respond within 24 hours</p> </div> </div> <div className="flex items-start gap-4 group"> <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110"> <MapPin className="w-6 h-6 text-teal-400" /> </div> <div> <h3 className="font-semibold text-white mb-1">Location</h3> <p className="text-gray-300">Online Services Worldwide</p> <p className="text-sm text-gray-400 mt-1">Serving clients globally via video call</p> </div> </div> <div className="flex items-start gap-4 group"> <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110"> <Clock className="w-6 h-6 text-teal-400" /> </div> <div> <h3 className="font-semibold text-white mb-1">Working Hours</h3> <p className="text-gray-300">Monday - Saturday: 9:00 AM - 6:00 PM</p> <p className="text-sm text-gray-400 mt-1">Sunday: Closed</p> </div> </div> </div> <div className="pt-6"> <h3 className="text-lg font-semibold text-white mb-4">Follow Our Journey</h3> <div className="flex gap-4"> <a href="https://www.instagram.com/newdawntribe/" target="_blank" rel="noopener noreferrer"> <Button size="icon" variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-white btn-smooth"> <Instagram className="w-5 h-5" /> </Button> </a> <a href="https://x.com/NewDawnTribe" target="_blank" rel="noopener noreferrer"> <Button size="icon" variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-white btn-smooth"> <Twitter className="w-5 h-5" /> </Button> </a> <a href="https://www.linkedin.com/in/sagar-banerjee-40522b3b8/" target="_blank" rel="noopener noreferrer"> <Button size="icon" variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-white btn-smooth"> <Linkedin className="w-5 h-5" /> </Button> </a> </div> </div> </div> <Card className="bg-black/40 backdrop-blur-sm border border-white/10 shadow-xl card-smooth transform hover:-translate-y-2 animate-slide-up delay-200"> <CardHeader> <CardTitle className="text-2xl text-white">Send Us a Message</CardTitle> <CardDescription className="text-gray-300">Fill out the form below and we'll get back to you within 24 hours.</CardDescription> </CardHeader> <CardContent> <form onSubmit={handleSubmit} className="space-y-6"> <div> <label className="text-sm font-medium mb-2 block text-gray-300">Full Name</label> <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required /> </div> <div> <label className="text-sm font-medium mb-2 block text-gray-300">Email Address</label> <Input type="email" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required /> </div> <div> <label className="text-sm font-medium mb-2 block text-gray-300">Message</label> <Textarea placeholder="How can we help you? Tell us about your journey or questions..." rows={6} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required /> </div> <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg flex items-center justify-center gap-2" disabled={isSubmitting}> {isSubmitting ? ( <> <span className="animate-spin">⟳</span> Sending... </> ) : ( <> <Send className="w-4 h-4" /> Send Message </> )} </Button> </form> </CardContent> </Card> </div> </div> </section> <section className="py-12 bg-black/30 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10"> <div className="container mx-auto px-4"> <div className="max-w-4xl mx-auto bg-black/40 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden h-64 flex items-center justify-center border border-white/10"> <div className="text-center p-8"> <MapPin className="w-12 h-12 text-teal-400 mx-auto mb-4" /> <h3 className="text-xl font-bold text-white mb-2">Online Services Worldwide</h3> <p className="text-gray-300">We provide virtual sessions to clients across the globe, making professional support accessible from anywhere.</p> </div> </div> </div> </section> <footer className="bg-black/60 backdrop-blur-sm text-gray-400 py-8 border-t border-white/10 animate-fade-in transition-colors duration-300 z-10"> <div className="container mx-auto px-4 text-center"> <p>&copy; 2026 New Dawn Tribe. All rights reserved.</p> <p className="text-sm mt-2">Empowering young adults to live free from addiction.</p> </div> </footer> </div> ); }; export default Contact;
+"use client";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Phone, Mail, Instagram, Twitter, Linkedin, MapPin, Clock, Send, Heart } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { showSuccess, showError } from "@/utils/toast";
+import emailjs from '@emailjs/browser';
+import CosmicBackground from '@/components/CosmicBackground';
+
+const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleWhatsAppClick = () => {
+    window.open("https://wa.me/919529806294", "_blank");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      showError("Please fill in all fields.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const SERVICE_ID = 'service_vrjey4g';
+      const TEMPLATE_ID = 'template_qsqn1wo';
+      const PUBLIC_KEY = 'sgdJuhHd-PCugkMVE';
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_name: "New Dawn Tribe",
+      };
+
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+      showSuccess("Message sent! We'll get back to you soon.");
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error: any) {
+      console.error("Error sending message:", error);
+      showError("Failed to send message. Please try again or call us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
+      <CosmicBackground />
+      <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link to="/" className="flex items-center gap-2 group cursor-pointer">
+            <div className="bg-teal-500 p-2 rounded-lg transition-transform duration-300 group-hover:scale-110">
+              <Heart className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-teal-400">New Dawn Tribe</span>
+          </Link>
+          <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300">
+            <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link>
+            <Link to="/about" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">About</Link>
+            <Link to="/services" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Services</Link>
+            <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
+            <Link to="/contact" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">Contact</Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link to="/contact">
+              <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                Book Consultation
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative py-20 md:py-32 overflow-hidden animate-slide-up z-10">
+        <div className="container mx-auto px-4 text-center max-w-4xl">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-100">
+            Get in Touch <br />
+            <span className="text-teal-400">We're Here to Help</span>
+          </h1>
+          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto animate-slide-up delay-200">
+            Have questions about our services or ready to start your journey? Reach out to us directly or fill out the form below.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <div className="space-y-8 animate-slide-up delay-100">
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">Contact Information</h2>
+                <p className="text-gray-300 mb-8 leading-relaxed">
+                  We're here to support you every step of the way. Reach out through any of the channels below or send us a message.
+                </p>
+              </div>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 group">
+                  <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110">
+                    <Phone className="w-6 h-6 text-teal-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white mb-1">Phone</h3>
+                    <p className="text-gray-300">+91 9529806294</p>
+                    <p className="text-sm text-gray-400 mt-1">Available Mon-Sat, 9am-6pm</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 group">
+                  <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110">
+                    <Mail className="w-6 h-6 text-teal-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white mb-1">Email</h3>
+                    <p className="text-gray-300">sagar@sagarbanerjee.com</p>
+                    <p className="text-sm text-gray-400 mt-1">We respond within 24 hours</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 group">
+                  <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110">
+                    <MapPin className="w-6 h-6 text-teal-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white mb-1">Location</h3>
+                    <p className="text-gray-300">Online Services Worldwide</p>
+                    <p className="text-sm text-gray-400 mt-1">Serving clients globally via video call</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 group">
+                  <div className="bg-teal-500/20 p-3 rounded-full transition-transform duration-300 group-hover:scale-110">
+                    <Clock className="w-6 h-6 text-teal-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white mb-1">Working Hours</h3>
+                    <p className="text-gray-300">Monday - Saturday: 9:00 AM - 6:00 PM</p>
+                    <p className="text-sm text-gray-400 mt-1">Sunday: Closed</p>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Follow Our Journey</h3>
+                <div className="flex gap-4">
+                  <a href="https://www.instagram.com/newdawntribe/" target="_blank" rel="noopener noreferrer">
+                    <Button size="icon" variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-white btn-smooth">
+                      <Instagram className="w-5 h-5" />
+                    </Button>
+                  </a>
+                  <a href="https://x.com/NewDawnTribe" target="_blank" rel="noopener noreferrer">
+                    <Button size="icon" variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-white btn-smooth">
+                      <Twitter className="w-5 h-5" />
+                    </Button>
+                  </a>
+                  <a href="https://www.linkedin.com/in/sagar-banerjee-40522b3b8/" target="_blank" rel="noopener noreferrer">
+                    <Button size="icon" variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-white btn-smooth">
+                      <Linkedin className="w-5 h-5" />
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <Card className="bg-black/40 backdrop-blur-sm border border-white/10 shadow-xl card-smooth transform hover:-translate-y-2 animate-slide-up delay-200">
+              <CardHeader>
+                <CardTitle className="text-2xl text-white">Send Us a Message</CardTitle>
+                <CardDescription className="text-gray-300">Fill out the form below and we'll get back to you within 24 hours.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block text-gray-300">Full Name</label>
+                    <Input
+                      placeholder="Your Name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block text-gray-300">Email Address</label>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block text-gray-300">Message</label>
+                    <Textarea
+                      placeholder="How can we help you? Tell us about your journey or questions..."
+                      rows={6}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="animate-spin">⟳</span> Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" /> Send Message
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-black/30 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto bg-black/40 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden h-64 flex items-center justify-center border border-white/10">
+            <div className="text-center p-8">
+              <MapPin className="w-12 h-12 text-teal-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">Online Services Worldwide</h3>
+              <p className="text-gray-300">We provide virtual sessions to clients across the globe, making professional support accessible from anywhere.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-black/60 backdrop-blur-sm text-gray-400 py-8 border-t border-white/10 animate-fade-in transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4 text-center">
+          <p>&copy; 2026 New Dawn Tribe. All rights reserved.</p>
+          <p className="text-sm mt-2">Empowering young adults to live free from addiction.</p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Contact;

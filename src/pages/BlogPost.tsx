@@ -1,1 +1,158 @@
-"use client"; import React from 'react'; import { useParams, Link } from 'react-router-dom'; import { ArrowLeft, Calendar, Clock, Share2, Heart } from 'lucide-react'; import { Button } from "@/components/ui/button"; import { Card, CardContent } from "@/components/ui/card"; import { blogs } from './Index'; import { ThemeToggle } from "@/components/ThemeToggle"; import CosmicBackground from '@/components/CosmicBackground'; const BlogPost = () => { const { id } = useParams(); const blog = blogs.find(b => b.id === parseInt(id!)); if (!blog) { return ( <div className="min-h-screen flex items-center justify-center bg-[#0a0a1a] font-sans text-foreground relative"> <CosmicBackground /> <div className="text-center z-10"> <h1 className="text-4xl font-bold text-white mb-4">Post Not Found</h1> <Link to="/"> <Button variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-500/10">Back to Home</Button> </Link> </div> </div> ); } const content: Record<number, { title: string; paragraphs: string[]; keyTakeaways: string[] }> = { 1: { title: "Understanding the First Steps of Recovery", paragraphs: [ "Recovery from addiction is often described as a journey, but it's more accurate to call it a series of small, deliberate steps. The first step is arguably the most difficult: admitting that you have a problem. This isn't just about saying the words; it's about truly internalizing the reality that your current path is unsustainable. For many young adults, this realization comes after a series of setbacks, a moment of clarity, or a plea from a loved one. It's a moment of vulnerability that requires immense courage.", "Once you've taken that first step, the next challenge is understanding what recovery actually looks like. It's not a linear path where you simply stop using and everything goes back to normal. Recovery is a process of rebuilding. It involves identifying the triggers that lead to substance use, understanding the underlying emotional or psychological needs that the substance was filling, and developing healthier coping mechanisms. This phase often requires professional guidance, whether through therapy, counseling, or support groups.", "The initial days and weeks of recovery can be incredibly challenging. Withdrawal symptoms, both physical and psychological, can be overwhelming. Cravings can feel insurmountable. It's during this time that having a strong support system is crucial. Friends, family, and mentors can provide the encouragement and accountability needed to stay on track. But it's also important to be kind to yourself. Relapse is a common part of the recovery process for many, and it doesn't mean you've failed. It means you need to adjust your approach and try again.", "Building a new identity is another critical aspect of early recovery. For years, your life may have revolved around obtaining and using substances. Now, you need to discover who you are without them. This can be a scary prospect, but it's also an opportunity for growth. Explore new hobbies, reconnect with old passions, and set new goals. The process of self-discovery can be empowering and can provide a sense of purpose that was missing before.", "Finally, remember that recovery is a lifelong commitment. It's not something you achieve and then move on from. It's a continuous process of learning, growing, and adapting. There will be good days and bad days, but the key is to keep moving forward. Every day you stay sober is a victory. Every challenge you overcome makes you stronger. And every step you take brings you closer to the life you truly want to live." ], keyTakeaways: [ "Admitting you have a problem is the courageous first step.", "Recovery is a process of rebuilding, not just stopping use.", "A strong support system is essential for navigating early challenges.", "Discovering a new identity without substances is empowering.", "Recovery is a lifelong commitment to growth and adaptation." ] }, 2: { title: "Building a Support System That Lasts", paragraphs: [ "One of the most significant factors in long-term recovery is the quality of your support system. Addiction is often a lonely experience, characterized by isolation and secrecy. Breaking free from addiction means breaking that isolation and building a network of people who understand, care, and can help you stay accountable. But building a support system isn't just about finding people who are nice to you; it's about finding the right people who will challenge you, support you, and hold you to your goals.", "Start by identifying the people in your life who are already supportive. These might be family members, close friends, or mentors who have always been there for you. Reach out to them and be honest about your journey. Let them know what you need, whether it's someone to talk to, someone to hold you accountable, or just someone to spend time with. Don't be afraid to ask for help; it's a sign of strength, not weakness.", "In addition to personal connections, consider joining support groups. Groups like AA, NA, or SMART Recovery offer a unique environment where you can connect with others who are going through similar experiences. These groups provide a sense of community and understanding that can be hard to find elsewhere. They also offer practical advice and strategies for staying sober, shared by people who have been in your shoes.", "It's also important to set boundaries with people who may not be supportive of your recovery. This can be difficult, especially if they are family members or long-time friends. But if someone is enabling your addiction or discouraging your progress, it's okay to distance yourself. Your recovery is your priority, and you need to protect your peace and your progress.", "Finally, remember that building a support system is a two-way street. It's not just about receiving support; it's also about giving it. As you grow in your recovery, you'll find that helping others can be incredibly rewarding. It reinforces your own commitment and gives you a sense of purpose. Whether it's mentoring someone new, volunteering, or just being there for a friend, giving back strengthens your own support network and deepens your connection to the community." ], keyTakeaways: [ "A strong support system is the foundation of long-term sobriety.", "Be honest with loved ones and ask for the specific help you need.", "Support groups provide unique community and shared wisdom.", "Setting boundaries with unsupportive people is crucial for protection.", "Giving back to others strengthens your own recovery journey." ] }, 3: { title: "Mindfulness Techniques for Cravings", paragraphs: [ "Cravings are one of the most challenging aspects of recovery. They can strike at any time, often triggered by stress, emotions, or environmental cues. The key to managing cravings is not to fight them, but to understand them and learn how to ride them out. Mindfulness is a powerful tool for this. It involves paying attention to the present moment without judgment, allowing you to observe your cravings without being controlled by them.", "One effective mindfulness technique is the 'urge surfing' method. When a craving hits, instead of trying to suppress it or give in to it, imagine it as a wave. Observe the physical sensations, the thoughts, and the emotions that come with the craving. Notice how it builds, peaks, and eventually subsides. By observing the craving without reacting to it, you realize that it's temporary and that you have the power to let it pass.", "Another technique is deep breathing. When you feel a craving, take a moment to focus on your breath. Inhale deeply through your nose, hold for a few seconds, and exhale slowly through your mouth. Repeat this several times. This simple act can help calm your nervous system, reduce stress, and create a pause between the craving and your reaction. It gives you time to think and choose a different response.", "Mindfulness also involves being aware of your triggers. What situations, people, or emotions tend to lead to cravings? By identifying these triggers, you can develop strategies to avoid them or cope with them more effectively. This might mean changing your routine, avoiding certain places, or having a plan in place for when you encounter a trigger.", "Finally, practice mindfulness in your daily life. It's not just about managing cravings; it's about living more fully in the present moment. Engage your senses, pay attention to your surroundings, and appreciate the small moments of joy. The more you practice mindfulness, the more natural it becomes, and the better equipped you'll be to handle the challenges of recovery with grace and resilience." ], keyTakeaways: [ "Mindfulness helps you observe cravings without being controlled by them.", "'Urge surfing' allows you to ride out cravings like a wave.", "Deep breathing creates a pause to choose a different response.", "Identifying triggers helps you develop effective coping strategies.", "Daily mindfulness practice builds resilience for long-term recovery." ] } }; const postContent = content[blog.id] || { paragraphs: ["Content coming soon."], keyTakeaways: [] }; return ( <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative"> <CosmicBackground /> <nav className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50 transition-colors duration-300"> <div className="container mx-auto px-4 py-4 flex justify-between items-center"> <Link to="/" className="flex items-center gap-2"> <div className="bg-teal-500 p-2 rounded-lg"> <Heart className="w-6 h-6 text-white" /> </div> <span className="text-xl font-bold text-white">New Dawn Tribe</span> </Link> <div className="flex items-center gap-4"> <ThemeToggle /> <Link to="/services"> <Button variant="ghost" className="text-gray-300 hover:text-teal-400">Services</Button> </Link> <Link to="/"> <Button variant="ghost" className="text-gray-300 hover:text-teal-400">Home</Button> </Link> </div> </div> </nav> <div className="container mx-auto px-4 py-12 max-w-4xl z-10 relative"> <Link to="/" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium"> <ArrowLeft className="w-4 h-4 mr-2" /> Back to Blog </Link> <Card className="border border-white/10 shadow-xl overflow-hidden bg-black/40 backdrop-blur-sm transition-colors duration-300"> <div className="h-64 md:h-96 overflow-hidden"> <img src={blog.image} alt={blog.title} className="w-full h-full object-cover" /> </div> <CardContent className="p-8 md:p-12"> <div className="flex items-center gap-4 text-sm text-gray-400 mb-6"> <div className="flex items-center gap-1"> <Calendar className="w-4 h-4" /> <span>{blog.date}</span> </div> <div className="flex items-center gap-1"> <Clock className="w-4 h-4" /> <span>{blog.readTime}</span> </div> </div> <h1 className="text-3xl md:text-5xl font-bold text-white mb-8 leading-tight">{postContent.title}</h1> <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-gray-300"> <p className="text-xl leading-relaxed mb-6 text-gray-200 font-medium">{blog.excerpt}</p> {postContent.paragraphs.map((paragraph, index) => ( <p key={index} className="mb-6">{paragraph}</p> ))} <h3 className="text-2xl font-bold text-white mt-12 mb-6">Key Takeaways</h3> <ul className="list-disc pl-6 space-y-3 mb-8 text-gray-300"> {postContent.keyTakeaways.map((takeaway, index) => ( <li key={index} className="leading-relaxed">{takeaway}</li> ))} </ul> <p className="mb-6"> Remember, recovery is a journey unique to each individual. What works for one person may not work for another. The most important thing is to stay open to learning, to be patient with yourself, and to keep moving forward. You have the strength within you to overcome any challenge and build a life you love. </p> </div> <div className="mt-12 pt-8 border-t border-white/10 flex justify-between items-center"> <div className="flex gap-2"> <Button variant="outline" size="sm" className="gap-2 border-white/20 text-white hover:bg-white/10"> <Heart className="w-4 h-4" /> Like </Button> <Button variant="outline" size="sm" className="gap-2 border-white/20 text-white hover:bg-white/10"> <Share2 className="w-4 h-4" /> Share </Button> </div> </div> </CardContent> </Card> </div> </div> ); }; export default BlogPost;
+"use client";
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft, Calendar, Clock, Share2, Heart } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { blogs } from './Index';
+import CosmicBackground from '@/components/CosmicBackground';
+
+const BlogPost = () => {
+  const { id } = useParams();
+  const blog = blogs.find(b => b.id === parseInt(id!));
+
+  if (!blog) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a1a] font-sans text-foreground relative">
+        <CosmicBackground />
+        <div className="text-center z-10">
+          <h1 className="text-4xl font-bold text-white mb-4">Post Not Found</h1>
+          <Link to="/">
+            <Button variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-500/10">Back to Home</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const content: Record<number, { title: string; paragraphs: string[]; keyTakeaways: string[] }> = {
+    1: {
+      title: "Understanding the First Steps of Recovery",
+      paragraphs: [
+        "Recovery from addiction is often described as a journey, but it's more accurate to call it a series of small, deliberate steps. The first step is arguably the most difficult: admitting that you have a problem. This isn't just about saying the words; it's about truly internalizing the reality that your current path is unsustainable. For many young adults, this realization comes after a series of setbacks, a moment of clarity, or a plea from a loved one. It's a moment of vulnerability that requires immense courage.",
+        "Once you've taken that first step, the next challenge is understanding what recovery actually looks like. It's not a linear path where you simply stop using and everything goes back to normal. Recovery is a process of rebuilding. It involves identifying the triggers that lead to substance use, understanding the underlying emotional or psychological needs that the substance was filling, and developing healthier coping mechanisms. This phase often requires professional guidance, whether through therapy, counseling, or support groups.",
+        "The initial days and weeks of recovery can be incredibly challenging. Withdrawal symptoms, both physical and psychological, can be overwhelming. Cravings can feel insurmountable. It's during this time that having a strong support system is crucial. Friends, family, and mentors can provide the encouragement and accountability needed to stay on track. But it's also important to be kind to yourself. Relapse is a common part of the recovery process for many, and it doesn't mean you've failed. It means you need to adjust your approach and try again.",
+        "Building a new identity is another critical aspect of early recovery. For years, your life may have revolved around obtaining and using substances. Now, you need to discover who you are without them. This can be a scary prospect, but it's also an opportunity for growth. Explore new hobbies, reconnect with old passions, and set new goals. The process of self-discovery can be empowering and can provide a sense of purpose that was missing before.",
+        "Finally, remember that recovery is a lifelong commitment. It's not something you achieve and then move on from. It's a continuous process of learning, growing, and adapting. There will be good days and bad days, but the key is to keep moving forward. Every day you stay sober is a victory. Every challenge you overcome makes you stronger. And every step you take brings you closer to the life you truly want to live."
+      ],
+      keyTakeaways: [
+        "Admitting you have a problem is the courageous first step.",
+        "Recovery is a process of rebuilding, not just stopping use.",
+        "A strong support system is essential for navigating early challenges.",
+        "Discovering a new identity without substances is empowering.",
+        "Recovery is a lifelong commitment to growth and adaptation."
+      ]
+    },
+    2: {
+      title: "Building a Support System That Lasts",
+      paragraphs: [
+        "One of the most significant factors in long-term recovery is the quality of your support system. Addiction is often a lonely experience, characterized by isolation and secrecy. Breaking free from addiction means breaking that isolation and building a network of people who understand, care, and can help you stay accountable. But building a support system isn't just about finding people who are nice to you; it's about finding the right people who will challenge you, support you, and hold you to your goals.",
+        "Start by identifying the people in your life who are already supportive. These might be family members, close friends, or mentors who have always been there for you. Reach out to them and be honest about your journey. Let them know what you need, whether it's someone to talk to, someone to hold you accountable, or just someone to spend time with. Don't be afraid to ask for help; it's a sign of strength, not weakness.",
+        "In addition to personal connections, consider joining support groups. Groups like AA, NA, or SMART Recovery offer a unique environment where you can connect with others who are going through similar experiences. These groups provide a sense of community and understanding that can be hard to find elsewhere. They also offer practical advice and strategies for staying sober, shared by people who have been in your shoes.",
+        "It's also important to set boundaries with people who may not be supportive of your recovery. This can be difficult, especially if they are family members or long-time friends. But if someone is enabling your addiction or discouraging your progress, it's okay to distance yourself. Your recovery is your priority, and you need to protect your peace and your progress.",
+        "Finally, remember that building a support system is a two-way street. It's not just about receiving support; it's also about giving it. As you grow in your recovery, you'll find that helping others can be incredibly rewarding. It reinforces your own commitment and gives you a sense of purpose. Whether it's mentoring someone new, volunteering, or just being there for a friend, giving back strengthens your own support network and deepens your connection to the community."
+      ],
+      keyTakeaways: [
+        "A strong support system is the foundation of long-term sobriety.",
+        "Be honest with loved ones and ask for the specific help you need.",
+        "Support groups provide unique community and shared wisdom.",
+        "Setting boundaries with unsupportive people is crucial for protection.",
+        "Giving back to others strengthens your own recovery journey."
+      ]
+    },
+    3: {
+      title: "Mindfulness Techniques for Cravings",
+      paragraphs: [
+        "Cravings are one of the most challenging aspects of recovery. They can strike at any time, often triggered by stress, emotions, or environmental cues. The key to managing cravings is not to fight them, but to understand them and learn how to ride them out. Mindfulness is a powerful tool for this. It involves paying attention to the present moment without judgment, allowing you to observe your cravings without being controlled by them.",
+        "One effective mindfulness technique is the 'urge surfing' method. When a craving hits, instead of trying to suppress it or give in to it, imagine it as a wave. Observe the physical sensations, the thoughts, and the emotions that come with the craving. Notice how it builds, peaks, and eventually subsides. By observing the craving without reacting to it, you realize that it's temporary and that you have the power to let it pass.",
+        "Another technique is deep breathing. When you feel a craving, take a moment to focus on your breath. Inhale deeply through your nose, hold for a few seconds, and exhale slowly through your mouth. Repeat this several times. This simple act can help calm your nervous system, reduce stress, and create a pause between the craving and your reaction. It gives you time to think and choose a different response.",
+        "Mindfulness also involves being aware of your triggers. What situations, people, or emotions tend to lead to cravings? By identifying these triggers, you can develop strategies to avoid them or cope with them more effectively. This might mean changing your routine, avoiding certain places, or having a plan in place for when you encounter a trigger.",
+        "Finally, practice mindfulness in your daily life. It's not just about managing cravings; it's about living more fully in the present moment. Engage your senses, pay attention to your surroundings, and appreciate the small moments of joy. The more you practice mindfulness, the more natural it becomes, and the better equipped you'll be to handle the challenges of recovery with grace and resilience."
+      ],
+      keyTakeaways: [
+        "Mindfulness helps you observe cravings without being controlled by them.",
+        "'Urge surfing' allows you to ride out cravings like a wave.",
+        "Deep breathing creates a pause to choose a different response.",
+        "Identifying triggers helps you develop effective coping strategies.",
+        "Daily mindfulness practice builds resilience for long-term recovery."
+      ]
+    }
+  };
+
+  const postContent = content[blog.id] || { paragraphs: ["Content coming soon."], keyTakeaways: [] };
+
+  return (
+    <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
+      <CosmicBackground />
+      <nav className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50 transition-colors duration-300">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="bg-teal-500 p-2 rounded-lg">
+              <Heart className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-bold text-white">New Dawn Tribe</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link to="/services">
+              <Button variant="ghost" className="text-gray-300 hover:text-teal-400">Services</Button>
+            </Link>
+            <Link to="/">
+              <Button variant="ghost" className="text-gray-300 hover:text-teal-400">Home</Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <div className="container mx-auto px-4 py-12 max-w-4xl z-10 relative">
+        <Link to="/" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium">
+          <ArrowLeft className="w-4 h-4 mr-2" /> Back to Blog
+        </Link>
+        <Card className="border border-white/10 shadow-xl overflow-hidden bg-black/40 backdrop-blur-sm transition-colors duration-300">
+          <div className="h-64 md:h-96 overflow-hidden">
+            <img src={blog.image} alt={blog.title} className="w-full h-full object-cover" />
+          </div>
+          <CardContent className="p-8 md:p-12">
+            <div className="flex items-center gap-4 text-sm text-gray-400 mb-6">
+              <div className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                <span>{blog.date}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                <span>{blog.readTime}</span>
+              </div>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-8 leading-tight">{postContent.title}</h1>
+            <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-gray-300">
+              <p className="text-xl leading-relaxed mb-6 text-gray-200 font-medium">{blog.excerpt}</p>
+              {postContent.paragraphs.map((paragraph, index) => (
+                <p key={index} className="mb-6">{paragraph}</p>
+              ))}
+              <h3 className="text-2xl font-bold text-white mt-12 mb-6">Key Takeaways</h3>
+              <ul className="list-disc pl-6 space-y-3 mb-8 text-gray-300">
+                {postContent.keyTakeaways.map((takeaway, index) => (
+                  <li key={index} className="leading-relaxed">{takeaway}</li>
+                ))}
+              </ul>
+              <p className="mb-6">
+                Remember, recovery is a journey unique to each individual. What works for one person may not work for another. The most important thing is to stay open to learning, to be patient with yourself, and to keep moving forward. You have the strength within you to overcome any challenge and build a life you love.
+              </p>
+            </div>
+            <div className="mt-12 pt-8 border-t border-white/10 flex justify-between items-center">
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" className="gap-2 border-white/20 text-white hover:bg-white/10">
+                  <Heart className="w-4 h-4" /> Like
+                </Button>
+                <Button variant="outline" size="sm" className="gap-2 border-white/20 text-white hover:bg-white/10">
+                  <Share2 className="w-4 h-4" /> Share
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default BlogPost;

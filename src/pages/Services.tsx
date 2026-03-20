@@ -1,1 +1,232 @@
-"use client"; import React from 'react'; import { Link } from 'react-router-dom'; import { ArrowLeft, Heart, Shield, Users, MessageSquare, Calendar, CheckCircle, Star, Globe } from 'lucide-react'; import { Button } from "@/components/ui/button"; import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"; import { Badge } from "@/components/ui/badge"; import { ThemeToggle } from "@/components/ThemeToggle"; import CosmicBackground from '@/components/CosmicBackground'; const services = [ { id: 1, icon: <Heart className="w-8 h-8 text-teal-400" />, title: "One-on-One Coaching", description: "Personalized sessions tailored to your unique journey and recovery goals. Work directly with an experienced coach who understands your struggles.", features: ["Weekly 60-minute sessions", "Customized recovery plan", "24/7 support access", "Progress tracking", "10-min healing session included"], price: "₹599 / session", popular: true }, { id: 2, icon: <Users className="w-8 h-8 text-teal-400" />, title: "Group Support", description: "Connect with others on similar paths in a safe, facilitated environment. Share experiences and build a supportive community.", features: ["Small group sessions (6-8 people)", "Weekly meetings", "Facilitated by experts", "Safe & confidential space", "10-min healing session included"], price: "₹199 / session", popular: false }, { id: 3, icon: <Shield className="w-8 h-8 text-teal-400" />, title: "Relapse Prevention", description: "Strategic planning and tools to maintain your sobriety long-term. Learn to identify triggers and develop effective coping strategies.", features: ["Trigger identification", "Coping strategy development", "Emergency action plan", "Monthly check-ins", "10-min healing session included"], price: "₹399 / session", popular: false }, { id: 4, icon: <MessageSquare className="w-8 h-8 text-teal-400" />, title: "Family Counseling", description: "Healing the family unit and rebuilding trust with loved ones. Address family dynamics and create a supportive home environment.", features: ["Family sessions", "Communication skills", "Trust rebuilding", "Education for family members", "10-min healing session included", "Conducted by Retd Lt Col Iti Banerjee"], price: "₹899 / session", popular: false } ]; const Services = () => { const handleWhatsAppClick = () => { window.open("https://wa.me/919529806294", "_blank"); }; return ( <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative"> <CosmicBackground /> {/* Navigation */} <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300"> <div className="container mx-auto px-4 py-4 flex justify-between items-center"> <Link to="/" className="flex items-center gap-2 group cursor-pointer"> <div className="bg-teal-500 p-2 rounded-lg transition-transform duration-300 group-hover:scale-110"> <Heart className="w-6 h-6 text-white" /> </div> <span className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-teal-400">New Dawn Tribe</span> </Link> <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300"> <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link> <Link to="/about" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">About</Link> <Link to="/services" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">Services</Link> <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link> <Link to="/#contact" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Contact</Link> </div> <div className="flex items-center gap-2"> <ThemeToggle /> <Link to="/contact"> <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5"> Book Consultation </Button> </Link> </div> </div> </nav> {/* Hero Section */} <section className="relative py-20 md:py-32 overflow-hidden animate-slide-up z-10"> <div className="container mx-auto px-4 text-center max-w-4xl"> <Link to="/" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium animate-slide-up delay-100"> <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home </Link> <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-200"> Our Services <br /> <span className="text-teal-400">Tailored for Your Recovery</span> </h1> <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto animate-slide-up delay-300 flex items-center justify-center gap-2"> <Globe className="w-5 h-5" /> All sessions are conducted online for your convenience. </p> </div> </section> {/* Services Grid */} <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10"> <div className="container mx-auto px-4"> <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto"> {services.map((service, index) => ( <Card key={service.id} className={`border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2 ${service.popular ? 'ring-2 ring-teal-400 relative' : ''}`}> {service.popular && ( <div className="absolute -top-4 left-1/2 transform -translate-x-1/2"> <Badge className="bg-teal-500 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</Badge> </div> )} <CardHeader className="pt-8 pb-4"> <div className="mb-4 transition-transform duration-300 group-hover:scale-110">{service.icon}</div> <CardTitle className="text-2xl text-white">{service.title}</CardTitle> <CardDescription className="text-gray-300 mt-2">{service.description}</CardDescription> </CardHeader> <CardContent className="pb-4"> <ul className="space-y-3 mb-6"> {service.features.map((feature, idx) => ( <li key={idx} className="flex items-start gap-2 text-gray-300"> <CheckCircle className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" /> <span>{feature}</span> </li> ))} </ul> <div className="flex items-center justify-between pt-4 border-t border-white/10"> <div className="text-lg font-bold text-white">{service.price}</div> <div className="flex items-center gap-1 text-amber-400"> <Star className="w-4 h-4 fill-current" /> <Star className="w-4 h-4 fill-current" /> <Star className="w-4 h-4 fill-current" /> <Star className="w-4 h-4 fill-current" /> <Star className="w-4 h-4 fill-current" /> </div> </div> </CardContent> <CardFooter className="pt-0"> <Link to="/contact"> <Button className={`w-full ${service.popular ? 'bg-teal-500 hover:bg-teal-600' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}> Book Session </Button> </Link> </CardFooter> </Card> ))} </div> </div> </section> {/* Why Choose Us */} <section className="py-20 bg-black/30 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10"> <div className="container mx-auto px-4 max-w-4xl"> <div className="text-center mb-16"> <h2 className="text-3xl font-bold text-white mb-4">Why Choose New Dawn Tribe?</h2> <p className="text-gray-300 text-lg">We combine professional expertise with lived experience to provide authentic, effective support.</p> </div> <div className="grid md:grid-cols-3 gap-8"> <div className="text-center"> <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"> <Users className="w-8 h-8 text-teal-400" /> </div> <h3 className="text-xl font-bold text-white mb-4">Personalized Approach</h3> <p className="text-gray-300">Every journey is unique. We tailor our services to your specific needs and goals.</p> </div> <div className="text-center"> <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"> <Shield className="w-8 h-8 text-teal-400" /> </div> <h3 className="text-xl font-bold text-white mb-4">Evidence-Based</h3> <p className="text-gray-300">Our methods are grounded in proven techniques and the latest research in addiction recovery.</p> </div> <div className="text-center"> <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"> <Heart className="w-8 h-8 text-teal-400" /> </div> <h3 className="text-xl font-bold text-white mb-4">Compassionate Care</h3> <p className="text-gray-300">We offer a non-judgmental, supportive environment where you can heal and grow.</p> </div> </div> </div> </section> {/* Call to Action */} <section className="py-20 bg-teal-600/90 text-white animate-slide-up z-10"> <div className="container mx-auto px-4 text-center"> <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Take the Next Step?</h2> <p className="text-teal-100 text-lg mb-8 max-w-2xl mx-auto"> Contact us today to schedule a free consultation and find the right service for your journey.</p> <Link to="/contact"> <Button size="lg" className="bg-white text-teal-600 hover:bg-slate-100 text-lg px-8 btn-smooth shadow-lg hover:shadow-xl transform hover:-translate-y-1"> Book a Free Consultation </Button> </Link> </div> </section> {/* Footer */} <footer className="bg-black/60 backdrop-blur-sm text-gray-400 py-8 border-t border-white/10 animate-fade-in transition-colors duration-300 z-10"> <div className="container mx-auto px-4 text-center"> <p>&copy; 2026 New Dawn Tribe. All rights reserved.</p> <p className="text-sm mt-2">Empowering young adults to live free from addiction.</p> </div> </footer> </div> ); }; export default Services;
+"use client";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Heart, Shield, Users, MessageSquare, Calendar, CheckCircle, Star, Globe } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import CosmicBackground from '@/components/CosmicBackground';
+
+const services = [
+  {
+    id: 1,
+    icon: <Heart className="w-8 h-8 text-teal-400" />,
+    title: "One-on-One Coaching",
+    description: "Personalized sessions tailored to your unique journey and recovery goals. Work directly with an experienced coach who understands your struggles.",
+    features: [
+      "Weekly 60-minute sessions",
+      "Customized recovery plan",
+      "24/7 support access",
+      "Progress tracking",
+      "10-min healing session included"
+    ],
+    price: "₹599 / session",
+    popular: true
+  },
+  {
+    id: 2,
+    icon: <Users className="w-8 h-8 text-teal-400" />,
+    title: "Group Support",
+    description: "Connect with others on similar paths in a safe, facilitated environment. Share experiences and build a supportive community.",
+    features: [
+      "Small group sessions (6-8 people)",
+      "Weekly meetings",
+      "Facilitated by experts",
+      "Safe & confidential space",
+      "10-min healing session included"
+    ],
+    price: "₹199 / session",
+    popular: false
+  },
+  {
+    id: 3,
+    icon: <Shield className="w-8 h-8 text-teal-400" />,
+    title: "Relapse Prevention",
+    description: "Strategic planning and tools to maintain your sobriety long-term. Learn to identify triggers and develop effective coping strategies.",
+    features: [
+      "Trigger identification",
+      "Coping strategy development",
+      "Emergency action plan",
+      "Monthly check-ins",
+      "10-min healing session included"
+    ],
+    price: "₹399 / session",
+    popular: false
+  },
+  {
+    id: 4,
+    icon: <MessageSquare className="w-8 h-8 text-teal-400" />,
+    title: "Family Counseling",
+    description: "Healing the family unit and rebuilding trust with loved ones. Address family dynamics and create a supportive home environment.",
+    features: [
+      "Family sessions",
+      "Communication skills",
+      "Trust rebuilding",
+      "Education for family members",
+      "10-min healing session included",
+      "Conducted by Retd Lt Col Iti Banerjee"
+    ],
+    price: "₹899 / session",
+    popular: false
+  }
+];
+
+const Services = () => {
+  const handleWhatsAppClick = () => {
+    window.open("https://wa.me/919529806294", "_blank");
+  };
+
+  return (
+    <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
+      <CosmicBackground />
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link to="/" className="flex items-center gap-2 group cursor-pointer">
+            <div className="bg-teal-500 p-2 rounded-lg transition-transform duration-300 group-hover:scale-110">
+              <Heart className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-teal-400">New Dawn Tribe</span>
+          </Link>
+          <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300">
+            <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link>
+            <Link to="/about" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">About</Link>
+            <Link to="/services" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">Services</Link>
+            <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
+            <Link to="/#contact" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Contact</Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link to="/contact">
+              <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                Book Consultation
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative py-20 md:py-32 overflow-hidden animate-slide-up z-10">
+        <div className="container mx-auto px-4 text-center max-w-4xl">
+          <Link to="/" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium animate-slide-up delay-100">
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
+          </Link>
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-200">
+            Our Services <br />
+            <span className="text-teal-400">Tailored for Your Recovery</span>
+          </h1>
+          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto animate-slide-up delay-300 flex items-center justify-center gap-2">
+            <Globe className="w-5 h-5" /> All sessions are conducted online for your convenience.
+          </p>
+        </div>
+      </section>
+
+      {/* Services Grid */}
+      <section className="py-20 bg-black/20 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {services.map((service, index) => (
+              <Card key={service.id} className={`border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 bg-black/40 backdrop-blur-sm card-smooth transform hover:-translate-y-2 ${service.popular ? 'ring-2 ring-teal-400 relative' : ''}`}>
+                {service.popular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-teal-500 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</Badge>
+                  </div>
+                )}
+                <CardHeader className="pt-8 pb-4">
+                  <div className="mb-4 transition-transform duration-300 group-hover:scale-110">{service.icon}</div>
+                  <CardTitle className="text-2xl text-white">{service.title}</CardTitle>
+                  <CardDescription className="text-gray-300 mt-2">{service.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="pb-4">
+                  <ul className="space-y-3 mb-6">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-gray-300">
+                        <CheckCircle className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                    <div className="text-lg font-bold text-white">{service.price}</div>
+                    <div className="flex items-center gap-1 text-amber-400">
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0">
+                  <Link to="/contact">
+                    <Button className={`w-full ${service.popular ? 'bg-teal-500 hover:bg-teal-600' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}>
+                      Book Session
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-20 bg-black/30 backdrop-blur-sm animate-slide-up transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-white mb-4">Why Choose New Dawn Tribe?</h2>
+            <p className="text-gray-300 text-lg">We combine professional expertise with lived experience to provide authentic, effective support.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Users className="w-8 h-8 text-teal-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">Personalized Approach</h3>
+              <p className="text-gray-300">Every journey is unique. We tailor our services to your specific needs and goals.</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-8 h-8 text-teal-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">Evidence-Based</h3>
+              <p className="text-gray-300">Our methods are grounded in proven techniques and the latest research in addiction recovery.</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-teal-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Heart className="w-8 h-8 text-teal-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">Compassionate Care</h3>
+              <p className="text-gray-300">We offer a non-judgmental, supportive environment where you can heal and grow.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-20 bg-teal-600/90 text-white animate-slide-up z-10">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Take the Next Step?</h2>
+          <p className="text-teal-100 text-lg mb-8 max-w-2xl mx-auto">
+            Contact us today to schedule a free consultation and find the right service for your journey.
+          </p>
+          <Link to="/contact">
+            <Button size="lg" className="bg-white text-teal-600 hover:bg-slate-100 text-lg px-8 btn-smooth shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              Book a Free Consultation
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black/60 backdrop-blur-sm text-gray-400 py-8 border-t border-white/10 animate-fade-in transition-colors duration-300 z-10">
+        <div className="container mx-auto px-4 text-center">
+          <p>&copy; 2026 New Dawn Tribe. All rights reserved.</p>
+          <p className="text-sm mt-2">Empowering young adults to live free from addiction.</p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Services;
