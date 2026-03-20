@@ -11,6 +11,7 @@ const About = () => {
   return (
     <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
       <CosmicBackground />
+      
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -24,7 +25,7 @@ const About = () => {
             <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link>
             <Link to="/about" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">About</Link>
             <Link to="/services" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Services</Link>
-            <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
+            <Link to="/blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
             <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Contact</Link>
           </div>
           <div className="flex items-center gap-2">
@@ -44,7 +45,8 @@ const About = () => {
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
           </Link>
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-200">
-            My Journey <br />
+            My Journey
+            <br />
             <span className="text-teal-400">From Darkness to Light</span>
           </h1>
         </div>

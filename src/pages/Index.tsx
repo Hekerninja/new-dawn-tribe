@@ -107,7 +107,7 @@ const Index = () => {
   return (
     <div className="min-h-screen font-sans text-foreground relative">
       <CosmicBackground />
-
+      
       {/* Special Offer Banner */}
       <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white py-3 px-4 text-center">
         <div className="container mx-auto flex items-center justify-center gap-2">
@@ -131,7 +131,7 @@ const Index = () => {
           <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300">
             <Link to="/about" className="hover:text-teal-400 transition-colors">About</Link>
             <Link to="/services" className="hover:text-teal-400 transition-colors">Services</Link>
-            <Link to="/#blog" className="hover:text-teal-400 transition-colors">Blog</Link>
+            <Link to="/blog" className="hover:text-teal-400 transition-colors">Blog</Link>
             <Link to="/contact" className="hover:text-teal-400 transition-colors">Contact</Link>
           </div>
           <div className="flex items-center gap-2">
@@ -148,7 +148,8 @@ const Index = () => {
       <section className="relative py-20 md:py-32">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Reclaim Your Life <br />
+            Reclaim Your Life
+            <br />
             <span className="text-teal-400">One Step at a Time</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
@@ -172,11 +173,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
-                alt="Team supporting each other"
-                className="w-full h-96 object-cover rounded-xl"
-              />
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800" alt="Team supporting each other" className="w-full h-96 object-cover rounded-xl" />
             </div>
             <div>
               <h2 className="text-3xl font-bold text-white mb-6">Welcome to New Dawn Tribe</h2>
@@ -242,7 +239,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Blog Section */}
+      {/* Blog Section - Updated to link to Blog page */}
       <section id="blog" className="py-20 bg-black/20">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-12">
@@ -250,12 +247,14 @@ const Index = () => {
               <h2 className="text-3xl font-bold text-white mb-2">Latest Insights</h2>
               <p className="text-gray-300">Weekly articles on recovery, mental health, and growth.</p>
             </div>
-            <Button variant="ghost" className="hidden md:flex text-teal-400 hover:text-teal-300">
-              View All Posts <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
+            <Link to="/blog">
+              <Button variant="ghost" className="hidden md:flex text-teal-400 hover:text-teal-300">
+                View All Posts <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {blogs.map((blog) => (
+            {blogs.slice(0, 3).map((blog) => (
               <Link to={`/blog/${blog.id}`} key={blog.id} className="block">
                 <Card className="border border-white/10 overflow-hidden h-full bg-black/40">
                   <div className="h-48 overflow-hidden">
@@ -277,6 +276,13 @@ const Index = () => {
                 </Card>
               </Link>
             ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link to="/blog">
+              <Button size="lg" variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-500/10">
+                View All Blog Posts
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -340,32 +346,15 @@ const Index = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="text-sm font-medium mb-1 block text-gray-300">Name</label>
-                    <Input
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
-                    />
+                    <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white placeholder:text-gray-500" />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-1 block text-gray-300">Email</label>
-                    <Input
-                      type="email"
-                      placeholder="your@email.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
-                    />
+                    <Input type="email" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="bg-black/50 border-white/10 text-white placeholder:text-gray-500" />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-1 block text-gray-300">Message</label>
-                    <Textarea
-                      placeholder="How can we help you?"
-                      rows={4}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
-                    />
+                    <Textarea placeholder="How can we help you?" rows={4} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="bg-black/50 border-white/10 text-white placeholder:text-gray-500" />
                   </div>
                   <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white" disabled={isSubmitting}>
                     {isSubmitting ? "Sending..." : "Send Message"}

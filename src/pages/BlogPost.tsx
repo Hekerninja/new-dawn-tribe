@@ -96,6 +96,9 @@ const BlogPost = () => {
             <Link to="/services">
               <Button variant="ghost" className="text-gray-300 hover:text-teal-400">Services</Button>
             </Link>
+            <Link to="/blog">
+              <Button variant="ghost" className="text-gray-300 hover:text-teal-400">Blog</Button>
+            </Link>
             <Link to="/">
               <Button variant="ghost" className="text-gray-300 hover:text-teal-400">Home</Button>
             </Link>
@@ -104,7 +107,7 @@ const BlogPost = () => {
       </nav>
 
       <div className="container mx-auto px-4 py-12 max-w-4xl z-10 relative">
-        <Link to="/" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium">
+        <Link to="/blog" className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 font-medium">
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Blog
         </Link>
         <Card className="border border-white/10 shadow-xl overflow-hidden bg-black/40 backdrop-blur-sm transition-colors duration-300">

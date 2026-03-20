@@ -24,7 +24,6 @@ const Contact = () => {
       showError("Please fill in all fields.");
       return;
     }
-
     setIsSubmitting(true);
     try {
       const SERVICE_ID = 'service_vrjey4g';
@@ -36,7 +35,6 @@ const Contact = () => {
         message: formData.message,
         to_name: "New Dawn Tribe",
       };
-
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
       showSuccess("Message sent! We'll get back to you soon.");
       setFormData({ name: '', email: '', message: '' });
@@ -63,7 +61,7 @@ const Contact = () => {
             <Link to="/" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Home</Link>
             <Link to="/about" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">About</Link>
             <Link to="/services" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Services</Link>
-            <Link to="/#blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
+            <Link to="/blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
             <Link to="/contact" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">Contact</Link>
           </div>
           <div className="flex items-center gap-2">
@@ -79,7 +77,8 @@ const Contact = () => {
       <section className="relative py-20 md:py-32 overflow-hidden animate-slide-up z-10">
         <div className="container mx-auto px-4 text-center max-w-4xl">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up delay-100">
-            Get in Touch <br />
+            Get in Touch
+            <br />
             <span className="text-teal-400">We're Here to Help</span>
           </h1>
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto animate-slide-up delay-200">
@@ -170,41 +169,17 @@ const Contact = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label className="text-sm font-medium mb-2 block text-gray-300">Full Name</label>
-                    <Input
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
-                      required
-                    />
+                    <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-2 block text-gray-300">Email Address</label>
-                    <Input
-                      type="email"
-                      placeholder="your@email.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
-                      required
-                    />
+                    <Input type="email" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-2 block text-gray-300">Message</label>
-                    <Textarea
-                      placeholder="How can we help you? Tell us about your journey or questions..."
-                      rows={6}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
-                      required
-                    />
+                    <Textarea placeholder="How can we help you? Tell us about your journey or questions..." rows={6} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required />
                   </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                    disabled={isSubmitting}
-                  >
+                  <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg flex items-center justify-center gap-2" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <span className="animate-spin">⟳</span> Sending...
