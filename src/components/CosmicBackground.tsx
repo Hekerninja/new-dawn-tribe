@@ -1,1 +1,48 @@
-"use client"; import React from 'react'; const CosmicBackground = () => { return ( <div className="fixed inset-0 -z-10 overflow-hidden bg-[#0a0a1a]"> {/* Deep space gradient base */} <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#1a1a2e] to-[#16213e] opacity-90" /> {/* Animated stars */} <div className="absolute inset-0"> {[...Array(100)].map((_, i) => ( <div key={i} className="absolute rounded-full bg-white animate-twinkle" style={{ width: Math.random() * 3 + 1 + 'px', height: Math.random() * 3 + 1 + 'px', top: Math.random() * 100 + '%', left: Math.random() * 100 + '%', animationDelay: Math.random() * 5 + 's', animationDuration: Math.random() * 3 + 2 + 's', opacity: Math.random() * 0.7 + 0.3 }} /> ))} </div> {/* Nebula effects */} <div className="absolute top-0 left-0 w-full h-full opacity-30"> <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl animate-pulse-slow" /> <div className="absolute top-1/2 right-1/4 w-80 h-80 bg-teal-600 rounded-full mix-blend-screen filter blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }} /> <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl animate-pulse-slow" style={{ animationDelay: '4s' }} /> </div> {/* Subtle grid overlay for depth */} <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBMMCAwTDQwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIiAvPjwvc3ZnPg==')] opacity-20" /> </div> ); }; export default CosmicBackground;
+"use client";
+import React from 'react';
+
+const CosmicBackground = () => {
+  return (
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#0a0a1a]">
+      {/* Deep space gradient base - simplified */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#1a1a2e] to-[#16213e]" />
+      
+      {/* Reduced number of stars for better performance */}
+      <div className="absolute inset-0">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-white"
+            style={{
+              width: Math.random() * 2 + 1 + 'px',
+              height: Math.random() * 2 + 1 + 'px',
+              top: Math.random() * 100 + '%',
+              left: Math.random() * 100 + '%',
+              opacity: Math.random() * 0.5 + 0.3,
+              willChange: 'opacity',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Simplified nebula effects - reduced blur and count */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-20">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600 rounded-full mix-blend-screen filter blur-2xl" />
+        <div className="absolute top-1/2 right-1/4 w-56 h-56 bg-teal-600 rounded-full mix-blend-screen filter blur-2xl" />
+        <div className="absolute bottom-1/4 left-1/3 w-48 h-48 bg-blue-600 rounded-full mix-blend-screen filter blur-2xl" />
+      </div>
+
+      {/* Simplified grid - removed base64, using CSS pattern */}
+      <div 
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px'
+        }}
+      />
+    </div>
+  );
+};
+
+export default CosmicBackground;
