@@ -402,7 +402,8 @@ const SobrietyTracker = () => {
             </Button>
             <MobileMenu />
           </div>
-        </nav>
+        </div>
+      </nav>
 
       <div className="container mx-auto px-4 py-8 max-w-6xl z-10 relative">
         <motion.div
@@ -796,7 +797,7 @@ const SobrietyTracker = () => {
                 </CardContent>
               </Card>
             </motion.div>
-          </div>
+          </>
         )}
       </div>
     </div>
