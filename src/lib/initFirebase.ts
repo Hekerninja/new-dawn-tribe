@@ -11,6 +11,7 @@ export async function initializeDatabase() {
 
     // First, check if we can connect to the database
     try {
+      // Try a simple read operation to test connection
       const testQuery = query(collection(db, 'users'), where('email', '==', 'nonexistent@test.com'));
       await getDocs(testQuery);
       console.log('Database connection successful');
@@ -18,7 +19,19 @@ export async function initializeDatabase() {
       console.error('Database connection failed:', connectionError);
       const errorMessage = handleFirebaseError(connectionError);
       console.error('Firebase Error:', errorMessage);
-      return false;
+
+      // If connection fails, try to create a test document to see if we have write access
+      try {
+        await addDoc(collection(db, 'test'), {
+          test: true,
+          timestamp: new Date()
+        });
+        console.log('Write access successful, but read access failed');
+        return true;
+      } catch (writeError) {
+        console.error('Write access also failed:', writeError);
+        return false;
+      }
     }
 
     // Check if we already have users collection
@@ -58,11 +71,12 @@ export async function initializeDatabase() {
  */
 export async function checkDatabaseConnection() {
   try {
+    // Try a simple read operation
     const testQuery = query(collection(db, 'users'), where('email', '==', 'test@test.com'));
     await getDocs(testQuery);
     return true;
   } catch (error) {
-    console.error('Database connection failed:', error);
+    console.error('Database connection check failed:', error);
     const errorMessage = handleFirebaseError(error);
     console.error('Firebase Error:', errorMessage);
     return false;

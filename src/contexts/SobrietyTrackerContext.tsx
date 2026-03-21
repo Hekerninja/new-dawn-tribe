@@ -73,66 +73,86 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       try {
         if (user) {
           // User is signed in
-          const q = query(collection(db, "users"), where("email", "==", user.email));
-          const querySnapshot = await getDocs(q);
+          try {
+            const q = query(collection(db, "users"), where("email", "==", user.email));
+            const querySnapshot = await getDocs(q);
 
-          if (!querySnapshot.empty) {
-            const userData = querySnapshot.docs[0].data();
-            const userDocId = querySnapshot.docs[0].id;
+            if (!querySnapshot.empty) {
+              const userData = querySnapshot.docs[0].data();
+              const userDocId = querySnapshot.docs[0].id;
 
-            // Handle timestamp conversion safely
-            const startDate = userData.startDate?.toDate ? userData.startDate.toDate() : new Date(userData.startDate);
-            const lastUpdate = userData.lastUpdate?.toDate ? userData.lastUpdate.toDate() : new Date(userData.lastUpdate);
+              // Handle timestamp conversion safely
+              const startDate = userData.startDate?.toDate ? userData.startDate.toDate() : new Date(userData.startDate);
+              const lastUpdate = userData.lastUpdate?.toDate ? userData.lastUpdate.toDate() : new Date(userData.lastUpdate);
 
-            const formattedUser: UserData = {
-              id: userDocId,
-              name: userData.name || "User",
-              email: userData.email,
-              startDate: startDate,
-              streak: userData.streak || 0,
-              lastUpdate: lastUpdate,
-              isAdmin: userData.isAdmin || false,
-            };
-
-            setCurrentUser(formattedUser);
-            setIsLoggedIn(true);
-
-            // Only refresh leaderboard if user is admin
-            if (formattedUser.isAdmin) {
-              await refreshLeaderboard();
-            }
-          } else {
-            // User exists in auth but not in Firestore - create user document
-            await addDoc(collection(db, "users"), {
-              name: user.displayName || "User",
-              email: user.email,
-              startDate: serverTimestamp(),
-              streak: 0,
-              lastUpdate: serverTimestamp(),
-              isAdmin: false,
-            });
-
-            // Fetch the newly created user
-            const newQuery = query(collection(db, "users"), where("email", "==", user.email));
-            const newSnapshot = await getDocs(newQuery);
-
-            if (!newSnapshot.empty) {
-              const newUserData = newSnapshot.docs[0].data();
-              const newUserDocId = newSnapshot.docs[0].id;
-
-              const newFormattedUser: UserData = {
-                id: newUserDocId,
-                name: newUserData.name || "User",
-                email: newUserData.email,
-                startDate: newUserData.startDate.toDate(),
-                streak: newUserData.streak || 0,
-                lastUpdate: newUserData.lastUpdate.toDate(),
-                isAdmin: newUserData.isAdmin || false,
+              const formattedUser: UserData = {
+                id: userDocId,
+                name: userData.name || "User",
+                email: userData.email,
+                startDate: startDate,
+                streak: userData.streak || 0,
+                lastUpdate: lastUpdate,
+                isAdmin: userData.isAdmin || false,
               };
 
-              setCurrentUser(newFormattedUser);
+              setCurrentUser(formattedUser);
               setIsLoggedIn(true);
+
+              // Only refresh leaderboard if user is admin
+              if (formattedUser.isAdmin) {
+                await refreshLeaderboard();
+              }
+            } else {
+              // User exists in auth but not in Firestore - create user document
+              await addDoc(collection(db, "users"), {
+                name: user.displayName || "User",
+                email: user.email,
+                startDate: serverTimestamp(),
+                streak: 0,
+                lastUpdate: serverTimestamp(),
+                isAdmin: false,
+              });
+
+              // Fetch the newly created user
+              const newQuery = query(collection(db, "users"), where("email", "==", user.email));
+              const newSnapshot = await getDocs(newQuery);
+
+              if (!newSnapshot.empty) {
+                const newUserData = newSnapshot.docs[0].data();
+                const newUserDocId = newSnapshot.docs[0].id;
+
+                const newFormattedUser: UserData = {
+                  id: newUserDocId,
+                  name: newUserData.name || "User",
+                  email: newUserData.email,
+                  startDate: newUserData.startDate.toDate(),
+                  streak: newUserData.streak || 0,
+                  lastUpdate: newUserData.lastUpdate.toDate(),
+                  isAdmin: newUserData.isAdmin || false,
+                };
+
+                setCurrentUser(newFormattedUser);
+                setIsLoggedIn(true);
+              }
             }
+          } catch (permissionError) {
+            console.error("Permission error loading user data:", permissionError);
+            const errorMessage = handleFirebaseError(permissionError);
+            showError(errorMessage);
+
+            // Create a fallback user object for UI consistency
+            const fallbackUser: UserData = {
+              id: user.uid,
+              name: user.displayName || "User",
+              email: user.email || "",
+              startDate: new Date(),
+              streak: 0,
+              lastUpdate: new Date(),
+              isAdmin: false,
+            };
+
+            setCurrentUser(fallbackUser);
+            setIsLoggedIn(true);
           }
         } else {
           // User is signed out
