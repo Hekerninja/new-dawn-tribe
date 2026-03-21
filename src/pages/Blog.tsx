@@ -1,11 +1,12 @@
 "use client";
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, Heart, ArrowLeft } from 'lucide-react';
+import { ArrowRight, Calendar, Heart, ArrowLeft, Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { blogs } from './Index';
 import CosmicBackground from '@/components/CosmicBackground';
+import MobileMenu from '@/components/MobileMenu';
 
 const Blog = () => {
   return (
@@ -34,6 +35,7 @@ const Blog = () => {
                 Book Consultation
               </Button>
             </Link>
+            <MobileMenu />
           </div>
         </div>
       </nav>
