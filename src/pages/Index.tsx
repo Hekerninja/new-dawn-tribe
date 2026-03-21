@@ -9,6 +9,7 @@ import { showSuccess, showError } from "@/utils/toast";
 import { Link } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 import CosmicBackground from '@/components/CosmicBackground';
+import MobileMenu from '@/components/MobileMenu';
 
 export const blogs = [
   {
@@ -136,11 +137,14 @@ const Index = () => {
             <Link to="/contact" className="hover:text-teal-400 transition-colors">Contact</Link>
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/contact">
-              <Button className="bg-teal-500 hover:bg-teal-600 text-white">
-                Book Consultation
-              </Button>
-            </Link>
+            <div className="hidden md:block">
+              <Link to="/contact">
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+                  Book Consultation
+                </Button>
+              </Link>
+            </div>
+            <MobileMenu />
           </div>
         </div>
       </nav>
