@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { showSuccess, showError } from "@/utils/toast";
 import emailjs from '@emailjs/browser';
 import CosmicBackground from '@/components/CosmicBackground';
+import MobileMenu from '@/components/MobileMenu';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -70,6 +71,7 @@ const Contact = () => {
                 Book Consultation
               </Button>
             </Link>
+            <MobileMenu />
           </div>
         </div>
       </nav>
