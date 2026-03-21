@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Calendar, Target, Award, LogIn, UserPlus, LogOut, Plus, RotateCcw, Crown, Trash2, Shield, Users } from 'lucide-react';
+import { Heart, Calendar, Target, Award, LogIn, UserPlus, LogOut, Plus, RotateCcw, Crown, Trash2, Shield, Users, Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -92,7 +92,16 @@ const SobrietyTracker = () => {
     return (
       <div className="min-h-screen font-sans text-foreground relative flex items-center justify-center">
         <CosmicBackground />
-        <div className="text-white text-xl">Loading...</div>
+        <div className="text-center z-10">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Loader2 className="w-8 h-8 text-teal-400 animate-spin" />
+            <span className="text-white text-xl">Loading Sobriety Tracker...</span>
+          </div>
+          <p className="text-gray-300">Please wait while we initialize your session</p>
+          <div className="mt-4">
+            <Link to="/" className="text-teal-400 hover:underline">Back to Home</Link>
+          </div>
+        </div>
       </div>
     );
   }

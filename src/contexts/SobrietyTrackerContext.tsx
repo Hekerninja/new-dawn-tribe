@@ -47,6 +47,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
   const [isLoading, setIsLoading] = useState(true);
   const [leaderboard, setLeaderboard] = useState<UserData[]>([]);
   const [isDatabaseReady, setIsDatabaseReady] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
   // Initialize database on first load
   useEffect(() => {
@@ -67,10 +68,9 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     if (!isDatabaseReady) return;
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // User is signed in
-        try {
-          // Fetch user data from Firestore
+      try {
+        if (user) {
+          // User is signed in
           const q = query(collection(db, "users"), where("email", "==", user.email));
           const querySnapshot = await getDocs(q);
 
@@ -128,16 +128,18 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
               setIsLoggedIn(true);
             }
           }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          showError("Error loading user data");
+        } else {
+          // User is signed out
+          setCurrentUser(null);
+          setIsLoggedIn(false);
         }
-      } else {
-        // User is signed out
-        setCurrentUser(null);
-        setIsLoggedIn(false);
+      } catch (error) {
+        console.error("Error in auth state change:", error);
+        showError("Error loading user data");
+      } finally {
+        setAuthChecked(true);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -317,6 +319,17 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       throw error;
     }
   };
+
+  // Set loading to false if database is ready but auth hasn't been checked yet
+  useEffect(() => {
+    if (isDatabaseReady && !authChecked) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 5000); // Timeout after 5 seconds to prevent infinite loading
+
+      return () => clearTimeout(timer);
+    }
+  }, [isDatabaseReady, authChecked]);
 
   const value: SobrietyTrackerContextType = {
     currentUser,
