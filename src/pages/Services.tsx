@@ -1,11 +1,18 @@
 "use client";
 import React from 'react';
+<dyad-write path="src/pages/Services.tsx" description="Adding MobileMenu component to Services page">
+"use client";
+import React from 'react';
+<dyad-write path="src/pages/Services.tsx" description="Adding MobileMenu component to Services page">
+"use client";
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Heart, Shield, Users, MessageSquare, Calendar, CheckCircle, Star, Globe } from 'lucide-react';
+import { ArrowLeft, Heart, Shield, Users, MessageSquare, Calendar, CheckCircle, Star, Globe, Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CosmicBackground from '@/components/CosmicBackground';
+import MobileMenu from '@/components/MobileMenu';
 
 const services = [
   {
@@ -102,6 +109,7 @@ const Services = () => {
                 Book Consultation
               </Button>
             </Link>
+            <MobileMenu />
           </div>
         </div>
       </nav>
