@@ -1,25 +1,25 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Development rules - more permissive for testing
+    // Users collection
     match /users/{userId} {
-      // Allow read access to all authenticated users for development
-      allow read: if request.auth != null;
+      // Allow users to read/write their own data
+      allow read, write: if request.auth != null && request.auth.uid == userId;
 
-      // Allow write access to own data or if admin
+      // Allow admin users to read all user data (for leaderboard functionality)
+      allow read: if request.auth != null &&
+                  get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+
+      // Allow admin users to write to any user document
       allow write: if request.auth != null &&
-                  (request.auth.uid == userId ||
-                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
+                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
     // Allow read access to users collection for leaderboard functionality
+    // This is redundant with the above rule but kept for clarity
     match /users {
       allow read: if request.auth != null;
     }
-
-    // Allow write access to users collection for admin functionality
-    allow write: if request.auth != null &&
-                 get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
 
     // Strictly deny access to any other collections
     match /{document=**} {
