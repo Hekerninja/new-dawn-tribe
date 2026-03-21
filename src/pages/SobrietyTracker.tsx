@@ -205,19 +205,24 @@ const SobrietyTracker = () => {
               </motion.div>
             )}
           </div>
-          {/* Info note about admin access */}
+          {/* Admin access info - removed insecure hardcoded password */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} className="mt-8 max-w-md mx-auto" >
-            <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
+            <Card className="border border-purple-500/30 bg-black/40 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-xl text-white flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-teal-400" />
+                <CardTitle className="text-2xl text-white flex items-center gap-2">
+                  <Shield className="w-6 h-6 text-purple-400" />
                   Admin Access
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-300 text-sm">
-                  Admin access is managed through your account. If you need admin privileges, please contact the system administrator to have your account upgraded.
-                </p>
+                <div className="text-center">
+                  <p className="text-gray-300 mb-4">
+                    Admin access is managed through Firestore. Contact the system administrator to request admin privileges.
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Your admin status is stored securely in the database and cannot be bypassed client-side.
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -412,6 +417,7 @@ const SobrietyTracker = () => {
                 </Card>
               </motion.div>
             )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} >
                 <Card className="border border-white/10 bg-black/40 backdrop-blur-sm h-full">
@@ -446,6 +452,7 @@ const SobrietyTracker = () => {
                 </Card>
               </motion.div>
             </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="lg:col-span-2" >
                 <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
@@ -545,6 +552,7 @@ const SobrietyTracker = () => {
                 </Card>
               </motion.div>
             </div>
+
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.7 }} className="mt-8" >
               <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
                 <CardHeader>
