@@ -1,6 +1,4 @@
 "use client";
-import React from<dyad-write path="src/pages/Services.tsx" description="Fixing the Services page with proper MobileMenu integration">
-"use client";
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Heart, Shield, Users, MessageSquare, Calendar, CheckCircle, Star, Globe } from 'lucide-react';
