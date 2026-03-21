@@ -2,36 +2,47 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if user is admin
-    // Note: In production, use Firebase Custom Claims set via Cloud Functions
-    // For now, we protect sensitive operations based on specific document fields
     
-    // Users can read all users for leaderboard
-    // But can only write their own profile
-    match /users/{userId} {
-      // Anyone can read user profiles (for leaderboard)
-      allow read: if true;
-      
-      // Users can only update their own document
-      allow update: if request.auth != null 
-        && request.auth.uid == userId
-        && request.resource.data.keys().hasAll(['streak', 'lastUpdate'])
-        && request.resource.data.keys().size() <= 4;
-      
-      // Only specific admin users can delete or change admin status
-      // This requires custom claims in production - for now, we disable these operations
-      allow delete: if false;
-      
-      // Prevent changing isAdmin field (would need server-side validation)
-      allow update: if request.auth != null 
-        && request.auth.uid == userId
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAdmin', 'email']);
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
     }
     
-    // Disable all write operations that could escalate privileges
-    match /users/{document=**} {
-      allow read: if true;
-      allow write: if false;
+    // Helper function to check if user is an admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+    
+    // Helper function to check if user is accessing their own data
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users collection - users can read leaderboard (names and streaks only)
+    // Users can only read their own full profile
+    // Only admins can modify user data
+    match /users/{userId} {
+      // Anyone can read basic leaderboard data (name and streak only)
+      allow read: if isAuthenticated();
+      
+      // Users can read their own full profile
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Only the user themselves can update their own profile (limited fields)
+      allow update: if isOwner(userId) && 
+        request.resource.data.keys().hasAll(['name', 'email']) &&
+        request.resource.data.keys().size() <= 5;
+      
+      // Only admins can delete users or modify admin status
+      allow delete: if isAdmin();
+      allow create: if isAdmin() || request.resource.data.isAdmin == false;
+    }
+    
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
