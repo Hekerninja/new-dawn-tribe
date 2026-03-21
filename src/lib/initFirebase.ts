@@ -8,6 +8,16 @@ export async function initializeDatabase() {
   try {
     console.log('Initializing Firebase database...');
 
+    // First, check if we can connect to the database
+    try {
+      const testQuery = query(collection(db, 'users'), where('email', '==', 'nonexistent@test.com'));
+      await getDocs(testQuery);
+      console.log('Database connection successful');
+    } catch (connectionError) {
+      console.error('Database connection failed:', connectionError);
+      return false;
+    }
+
     // Check if we already have users collection
     const usersQuery = query(collection(db, 'users'));
     const usersSnapshot = await getDocs(usersQuery);
