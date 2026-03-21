@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2, Trophy, Star, Medal, PartyPopper, Gift, Sparkles } from 'lucide-react';
+import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2, Trophy, Star, Medal, PartyPopper, Gift, Sparkles, Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,8 +14,41 @@ import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { showSuccess, showError } from "@/utils/toast";
 import CosmicBackground from '@/components/CosmicBackground';
-import MobileMenu from '@/components/MobileMenu';
 import { useSobrietyTracker } from '@/contexts/SobrietyTrackerContext';
+
+// Motivational quotes - one for each day of the month
+const motivationalQuotes = [
+  "Every day sober is a victory. Celebrate your strength!",
+  "Recovery is not a race. It's a journey of self-discovery.",
+  "You are stronger than your addiction. Keep going!",
+  "One day at a time. One step at a time. You've got this!",
+  "Your past doesn't define you. Your present choices do.",
+  "Sobriety is not about perfection, it's about progress.",
+  "You're not just quitting a habit, you're building a new life.",
+  "The best time to start was yesterday. The second best time is now.",
+  "Every sober day is a gift to your future self.",
+  "You are capable of amazing things. Sobriety proves it.",
+  "Recovery is the ultimate act of self-love.",
+  "Your strength is greater than your struggle.",
+  "Sobriety: where the real adventure begins.",
+  "You're not losing anything by quitting, you're gaining everything.",
+  "The first step is the hardest. You've already taken it!",
+  "Every day sober is a day you've chosen yourself over addiction.",
+  "Recovery is a journey of healing, not just abstinence.",
+  "You are rewriting your story, one sober day at a time.",
+  "Sobriety is freedom. Embrace it fully.",
+  "Your future self is thanking you for every sober day.",
+  "Recovery is not about being perfect, it's about being honest.",
+  "You are building a life you don't need to escape from.",
+  "Sobriety is the foundation for all your dreams.",
+  "Every challenge you overcome makes you stronger.",
+  "You are not alone. Millions walk this path with you.",
+  "Recovery is a gift you give yourself every day.",
+  "Your sobriety is your superpower.",
+  "One day sober is amazing. Two days is incredible. Keep going!",
+  "You are creating a life filled with purpose and joy.",
+  "Sobriety is not deprivation, it's liberation."
+];
 
 const SobrietyTracker = () => {
   const {
@@ -38,6 +71,8 @@ const SobrietyTracker = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showMilestones, setShowMilestones] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dailyQuote, setDailyQuote] = useState('');
 
   // Calculate days since start date
   const calculateDaysSober = () => {
@@ -50,6 +85,13 @@ const SobrietyTracker = () => {
   };
 
   const daysSober = calculateDaysSober();
+
+  // Set daily motivational quote based on day of month
+  useEffect(() => {
+    const today = new Date();
+    const dayOfMonth = today.getDate() - 1; // 0-30 index
+    setDailyQuote(motivationalQuotes[dayOfMonth % motivationalQuotes.length]);
+  }, []);
 
   // Milestones data
   const milestones = [
@@ -189,12 +231,38 @@ const SobrietyTracker = () => {
                 </Button>
               </div>
             )}
-            <MobileMenu />
+            {/* Mobile Menu Button */}
+            <Button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden bg-black/20 hover:bg-black/30 text-white"
+              size="icon"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-black/90 backdrop-blur-md border-t border-white/10">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex flex-col gap-4">
+                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+                <Link to="/about" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>About</Link>
+                <Link to="/services" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Services</Link>
+                <Link to="/blog" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
+                <Link to="/contact" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+                <Link to="/tracker" className="text-teal-400" onClick={() => setMobileMenuOpen(false)}>Tracker</Link>
+                {isLoggedIn && currentUser?.isAdmin && (
+                  <Link to="/admin" className="text-purple-400 hover:text-purple-300 transition-colors" onClick={() => setMobileMenuOpen(false)}>Admin Panel</Link>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section with Motivational Quote */}
       <section className="relative py-20 md:py-24 overflow-hidden">
         <div className="container mx-auto px-4 text-center max-w-4xl">
           <motion.div
@@ -211,6 +279,24 @@ const SobrietyTracker = () => {
             <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
               Track your progress, stay motivated, and join a community committed to recovery.
             </p>
+          </motion.div>
+
+          {/* Daily Motivational Quote */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-gradient-to-r from-teal-500/10 to-purple-500/10 border border-teal-500/20 rounded-xl p-6 max-w-3xl mx-auto"
+          >
+            <div className="flex items-start gap-4">
+              <div className="bg-teal-500/20 p-3 rounded-full">
+                <Sparkles className="w-6 h-6 text-teal-400" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-white mb-2">Today's Motivation</h3>
+                <p className="text-gray-300 italic">"{dailyQuote}"</p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
