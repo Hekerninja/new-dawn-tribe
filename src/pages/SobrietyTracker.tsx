@@ -123,7 +123,7 @@ const SobrietyTracker: React.FC = () => {
               <Link to="/services" className="hover:text-teal-400 transition-colors duration-300">Services</Link>
               <Link to="/blog" className="hover:text-teal-400 transition-colors duration-300">Blog</Link>
               <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300">Contact</Link>
-            </div>
+            </Link>
             <div className="flex items-center gap-2">
               <Link to="/contact">
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hidden md:block">
@@ -193,7 +193,8 @@ const SobrietyTracker: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="text-2xl text-white flex items-center gap-2">
                       <UserPlus className="w-6 h-6 text-teal-400" />
-                      Create New Account                    </CardTitle>
+                      Create New Account
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleSignup} className="space-y-4">
@@ -294,13 +295,13 @@ const SobrietyTracker: React.FC = () => {
               <Link to="/admin">
                 <Button className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/30 flex items-center gap-2 hidden md:flex">
                   <Settings className="w-4 h-4" />
-                  Admin Panel
-                </Button>
+                  Admin Panel                </Button>
               </Link>
             )}
             <Button onClick={handleLogout} className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 flex items-center gap-2 hidden md:flex">
               <LogOut className="w-4 h-4" />
-              Logout            </Button>
+              Logout
+            </Button>
             <MobileMenu />
           </div>
         </div>
@@ -345,8 +346,7 @@ const SobrietyTracker: React.FC = () => {
                   <div className="text-center py-8">
                     <p className="text-gray-400 mb-4">No users found in the leaderboard</p>
                     <Button onClick={refreshLeaderboard} className="bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 border border-teal-500/30">
-                      Refresh Leaderboard
-                    </Button>
+                      Refresh Leaderboard                    </Button>
                   </div>
                 ) : (
                   <Table>
@@ -537,8 +537,7 @@ const SobrietyTracker: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="text-2xl text-white flex items-center gap-2">
                       <Award className="w-6 h-6 text-teal-400" />
-                      Achievements
-                    </CardTitle>
+                      Achievements                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
