@@ -14,7 +14,9 @@ import {
   RotateCcw, 
   Crown,
   Trash2,
-  Shield
+  Shield,
+  Key,
+  Lock
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,14 +37,18 @@ const SobrietyTracker = () => {
     signup,
     logout,
     resetProgress,
-    refreshLeaderboard
+    refreshLeaderboard,
+    deleteAccount,
+    updateAdminStatus
   } = useSobrietyTracker();
-  
+
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [signupForm, setSignupForm] = useState({ name: '', email: '', password: '' });
   const [showLogin, setShowLogin] = useState(true);
   const [currentStreak, setCurrentStreak] = useState(0);
   const [isAdminView, setIsAdminView] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
 
   // Calculate streak when user data changes
   useEffect(() => {
@@ -68,7 +74,7 @@ const SobrietyTracker = () => {
       showError("Please fill in all fields");
       return;
     }
-    
+
     try {
       await signup(signupForm.name, signupForm.email, signupForm.password);
     } catch (error) {
@@ -90,6 +96,17 @@ const SobrietyTracker = () => {
       await logout();
     } catch (error) {
       console.error("Logout failed:", error);
+    }
+  };
+
+  const handleAdminLogin = () => {
+    // Simple admin password check
+    if (adminPassword === "admin123") {
+      setIsAdminView(true);
+      setShowAdminLogin(false);
+      showSuccess("Admin access granted!");
+    } else {
+      showError("Invalid admin password");
     }
   };
 
@@ -285,6 +302,64 @@ const SobrietyTracker = () => {
               </motion.div>
             )}
           </div>
+
+          {/* Admin Login Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-8 max-w-md mx-auto"
+          >
+            <Card className="border border-purple-500/30 bg-black/40 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-2xl text-white flex items-center gap-2">
+                  <Shield className="w-6 h-6 text-purple-400" />
+                  Admin Access
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {!showAdminLogin ? (
+                  <div className="text-center">
+                    <Button
+                      onClick={() => setShowAdminLogin(true)}
+                      className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/30 flex items-center gap-2 mx-auto"
+                    >
+                      <Key className="w-4 h-4" /> Enter Admin Password
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block text-gray-300">Admin Password</label>
+                      <Input
+                        type="password"
+                        placeholder="Enter admin password"
+                        value={adminPassword}
+                        onChange={(e) => setAdminPassword(e.target.value)}
+                        className="bg-black/50 border-purple-500/30 text-white placeholder:text-gray-500"
+                        required
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleAdminLogin}
+                        className="flex-1 bg-purple-500 hover:bg-purple-600 text-white"
+                      >
+                        <Lock className="w-4 h-4 mr-2" /> Unlock Admin
+                      </Button>
+                      <Button
+                        onClick={() => setShowAdminLogin(false)}
+                        variant="outline"
+                        className="flex-1 border-purple-500/30 text-purple-400 hover:bg-purple-500/20"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
     );
@@ -425,7 +500,7 @@ const SobrietyTracker = () => {
                           ></motion.div>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center p-4 bg-teal-500/10 rounded-lg border border-teal-500/20">
                           <div className="text-2xl font-bold text-teal-400">1</div>
@@ -444,7 +519,7 @@ const SobrietyTracker = () => {
                           <div className="text-sm text-gray-300">Year</div>
                         </div>
                       </div>
-                      
+
                       <div className="flex gap-4">
                         <Button 
                           onClick={resetProgress}
@@ -481,7 +556,7 @@ const SobrietyTracker = () => {
                           <div className="text-sm text-gray-400">Completed 1 day</div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg border border-gray-700">
                         <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
                           <Plus className="w-5 h-5 text-gray-500" />
@@ -491,7 +566,7 @@ const SobrietyTracker = () => {
                           <div className="text-sm text-gray-500">Complete 7 days</div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg border border-gray-700">
                         <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
                           <Plus className="w-5 h-5 text-gray-500" />
@@ -501,7 +576,7 @@ const SobrietyTracker = () => {
                           <div className="text-sm text-gray-500">Complete 30 days</div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg border border-gray-700">
                         <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
                           <Plus className="w-5 h-5 text-gray-500" />
@@ -593,8 +668,6 @@ const SobrietyTracker = () => {
                               variant="outline"
                               className="border-purple-500/30 text-purple-400 hover:bg-purple-500/20"
                               onClick={() => {
-                                // Update admin status
-                                const { updateAdminStatus } = useSobrietyTracker();
                                 updateAdminStatus(user.id, !user.isAdmin);
                               }}
                             >
@@ -605,8 +678,6 @@ const SobrietyTracker = () => {
                               variant="outline"
                               className="border-red-500/30 text-red-400 hover:bg-red-500/20"
                               onClick={() => {
-                                // Delete user
-                                const { deleteAccount } = useSobrietyTracker();
                                 deleteAccount(user.id);
                               }}
                             >
