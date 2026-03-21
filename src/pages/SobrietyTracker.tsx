@@ -662,7 +662,7 @@ const SobrietyTracker = () => {
                       <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg border border-gray-700">
                         <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
                           <Plus className="w-5 h-5 text-gray-500" />
-                       div>
+                        </div>
                         <div>
                           <div className="font-medium text-gray-500">Week Champion</div>
                           <div className="text-sm text-gray-500">Complete 7 days</div>
