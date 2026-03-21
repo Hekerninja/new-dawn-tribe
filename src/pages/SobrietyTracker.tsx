@@ -796,7 +796,7 @@ const SobrietyTracker = () => {
                 </CardContent>
               </Card>
             </motion.div>
-          </>
+          </div>
         )}
       </div>
     </div>
