@@ -414,7 +414,109 @@ const SobrietyTracker = () => {
           <p className="text-xl text-gray-300">Celebrating your journey to recovery</p>
         </motion.div>
 
-        {!isAdminView ? (
+        {/* Admin view toggle button for mobile */}
+        {currentUser?.isAdmin && (
+          <div className="md:hidden mb-6">
+            <Button 
+              onClick={() => setIsAdminView(!isAdminView)}
+              className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/30 flex items-center gap-2 w-full justify-center"
+            >
+              <Shield className="w-4 h-4" /> {isAdminView ? 'Switch to User View' : 'Switch to Admin View'}
+            </Button>
+          </div>
+        )}
+
+        {isAdminView ? (
+          // Admin view with leaderboard
+          <motion.div
+            key="admin-view"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-2xl text-white flex items-center gap-2">
+                  <Crown className="w-6 h-6 text-yellow-400" />
+                  Leaderboard
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {leaderboard.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400 mb-4">No users found in the leaderboard</p>
+                    <Button
+                      onClick={refreshLeaderboard}
+                      className="bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 border border-teal-500/30"
+                    >
+                      Refresh Leaderboard
+                    </Button>
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-gray-300">Rank</TableHead>
+                        <TableHead className="text-gray-300">Name</TableHead>
+                        <TableHead className="text-gray-300">Days Sober</TableHead>
+                        <TableHead className="text-gray-300">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {leaderboard.map((user, index) => (
+                        <TableRow key={user.id}>
+                          <TableCell className="font-medium text-white">
+                            {index === 0 ? (
+                              <span className="text-yellow-400">#1</span>
+                            ) : index === 1 ? (
+                              <span className="text-gray-300">#2</span>
+                            ) : index === 2 ? (
+                              <span className="text-amber-600">#3</span>
+                            ) : (
+                              `#${index + 1}`
+                            )}
+                          </TableCell>
+                          <TableCell className="text-white flex items-center gap-2">
+                            {user.name}
+                            {user.isAdmin && (
+                              <Shield className="w-4 h-4 text-purple-400" />
+                            )}
+                          </TableCell>
+                          <TableCell className="text-teal-400">{user.streak}</TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-purple-500/30 text-purple-400 hover:bg-purple-500/20"
+                                onClick={() => {
+                                  updateAdminStatus(user.id, !user.isAdmin);
+                                }}
+                              >
+                                {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-red-500/30 text-red-400 hover:bg-red-500/20"
+                                onClick={() => {
+                                  deleteAccount(user.id);
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+        ) : (
+          // Regular user view
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <motion.div
@@ -616,94 +718,6 @@ const SobrietyTracker = () => {
               </Card>
             </motion.div>
           </>
-        ) : (
-          // Admin view with leaderboard
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-2xl text-white flex items-center gap-2">
-                  <Crown className="w-6 h-6 text-yellow-400" />
-                  Leaderboard
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {leaderboard.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-gray-400 mb-4">No users found in the leaderboard</p>
-                    <Button
-                      onClick={refreshLeaderboard}
-                      className="bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 border border-teal-500/30"
-                    >
-                      Refresh Leaderboard
-                    </Button>
-                  </div>
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-gray-300">Rank</TableHead>
-                        <TableHead className="text-gray-300">Name</TableHead>
-                        <TableHead className="text-gray-300">Days Sober</TableHead>
-                        <TableHead className="text-gray-300">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {leaderboard.map((user, index) => (
-                        <TableRow key={user.id}>
-                          <TableCell className="font-medium text-white">
-                            {index === 0 ? (
-                              <span className="text-yellow-400">#1</span>
-                            ) : index === 1 ? (
-                              <span className="text-gray-300">#2</span>
-                            ) : index === 2 ? (
-                              <span className="text-amber-600">#3</span>
-                            ) : (
-                              `#${index + 1}`
-                            )}
-                          </TableCell>
-                          <TableCell className="text-white flex items-center gap-2">
-                            {user.name}
-                            {user.isAdmin && (
-                              <Shield className="w-4 h-4 text-purple-400" />
-                            )}
-                          </TableCell>
-                          <TableCell className="text-teal-400">{user.streak}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="border-purple-500/30 text-purple-400 hover:bg-purple-500/20"
-                                onClick={() => {
-                                  updateAdminStatus(user.id, !user.isAdmin);
-                                }}
-                              >
-                                {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="border-red-500/30 text-red-400 hover:bg-red-500/20"
-                                onClick={() => {
-                                  deleteAccount(user.id);
-                                }}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
         )}
       </div>
     </div>
