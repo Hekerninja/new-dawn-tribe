@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2 } from 'lucide-react';
+import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2, Trophy, Star, Medal, PartyPopper, Gift, Sparkles } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { showSuccess, showError } from "@/utils/toast";
 import CosmicBackground from '@/components/CosmicBackground';
 import MobileMenu from '@/components/MobileMenu';
@@ -36,6 +37,7 @@ const SobrietyTracker = () => {
   const [signupData, setSignupData] = useState({ name: '', email: '', password: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showMilestones, setShowMilestones] = useState(false);
 
   // Calculate days since start date
   const calculateDaysSober = () => {
@@ -48,6 +50,22 @@ const SobrietyTracker = () => {
   };
 
   const daysSober = calculateDaysSober();
+
+  // Milestones data
+  const milestones = [
+    { days: 1, title: "First Day", description: "You've taken the first step!", icon: <Sparkles className="w-6 h-6 text-yellow-400" />, achieved: daysSober >= 1 },
+    { days: 7, title: "One Week", description: "7 days of commitment!", icon: <Star className="w-6 h-6 text-yellow-400" />, achieved: daysSober >= 7 },
+    { days: 30, title: "One Month", description: "A full month of progress!", icon: <Trophy className="w-6 h-6 text-yellow-400" />, achieved: daysSober >= 30 },
+    { days: 90, title: "Three Months", description: "90 days of transformation!", icon: <Medal className="w-6 h-6 text-yellow-400" />, achieved: daysSober >= 90 },
+    { days: 180, title: "Six Months", description: "Half a year of freedom!", icon: <PartyPopper className="w-6 h-6 text-yellow-400" />, achieved: daysSober >= 180 },
+    { days: 365, title: "One Year", description: "A full year of sobriety!", icon: <Gift className="w-6 h-6 text-yellow-400" />, achieved: daysSober >= 365 },
+  ];
+
+  // Calculate next milestone
+  const nextMilestone = milestones.find(milestone => !milestone.achieved);
+  const progressToNextMilestone = nextMilestone
+    ? Math.min(100, Math.round((daysSober / nextMilestone.days) * 100))
+    : 100;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,9 +166,9 @@ const SobrietyTracker = () => {
               <>
                 {currentUser?.isAdmin && (
                   <Link to="/admin">
-                    <Button variant="ghost" className="text-purple-400 hover:text-purple-300">
+                    <Button className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/30">
                       <Shield className="w-4 h-4 mr-2" />
-                      Admin
+                      Admin Panel
                     </Button>
                   </Link>
                 )}
@@ -279,20 +297,23 @@ const SobrietyTracker = () => {
                           </div>
                         </div>
 
-                        <div className="mt-6">
-                          <Progress value={(daysSober % 30) * 3.33} className="h-2 bg-white/10" />
-                          <div className="flex justify-between text-xs text-gray-400 mt-1">
-                            <span>Day {daysSober % 30 || 30}</span>
-                            <span>30-day milestone</span>
+                        {/* Next Milestone Progress */}
+                        {nextMilestone && (
+                          <div className="mt-6">
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-300">Next Milestone: {nextMilestone.title}</span>
+                              <span className="text-sm text-teal-400">{daysSober}/{nextMilestone.days} days</span>
+                            </div>
+                            <Progress value={progressToNextMilestone} className="h-2 bg-white/10" />
                           </div>
-                        </div>
+                        )}
 
                         <div className="mt-6 grid grid-cols-2 gap-4">
                           <Button onClick={handleResetProgress} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/20">
                             <RefreshCw className="w-4 h-4 mr-2" />
                             Reset Progress
                           </Button>
-                          <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+                          <Button onClick={() => setShowMilestones(true)} className="bg-teal-500 hover:bg-teal-600 text-white">
                             <Award className="w-4 h-4 mr-2" />
                             View Milestones
                           </Button>
@@ -686,6 +707,57 @@ const SobrietyTracker = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Milestones Modal */}
+      <Dialog open={showMilestones} onOpenChange={setShowMilestones}>
+        <DialogContent className="bg-black/80 backdrop-blur-md border border-white/10 max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center gap-2">
+              <Trophy className="w-6 h-6 text-yellow-400" />
+              Your Sobriety Milestones
+            </DialogTitle>
+            <DialogDescription className="text-gray-300">
+              Celebrate your progress and achievements on your journey to recovery
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+            {milestones.map((milestone, index) => (
+              <Card key={index} className={`border border-white/10 ${milestone.achieved ? 'bg-teal-500/10 border-teal-500/30' : 'bg-white/5'}`}>
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-yellow-500/20 p-2 rounded-full">
+                      {milestone.icon}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-white mb-1">{milestone.title}</h4>
+                      <p className="text-sm text-gray-300 mb-2">{milestone.description}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-white/10 px-2 py-1 rounded-full">
+                          {milestone.days} days
+                        </span>
+                        {milestone.achieved ? (
+                          <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
+                            Achieved ✓
+                          </span>
+                        ) : (
+                          <span className="text-xs bg-gray-500/20 text-gray-400 px-2 py-1 rounded-full">
+                            Coming soon
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setShowMilestones(false)} className="bg-teal-500 hover:bg-teal-600 text-white">
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Footer */}
       <footer className="bg-black/60 text-gray-400 py-8 border-t border-white/10 mt-12">
