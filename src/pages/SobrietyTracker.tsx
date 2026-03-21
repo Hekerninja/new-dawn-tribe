@@ -1,13 +1,15 @@
+"use client<dyad-write path="src/pages/SobrietyTracker.tsx" description="Adding mobile menu button to the Sobriety Tracker page">
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Calendar, Target, Award, LogIn, UserPlus, LogOut, Plus, RotateCcw } from 'lucide-react';
+import { Heart, Calendar, Target, Award, LogIn, UserPlus, LogOut, Plus, RotateCcw, Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { showSuccess, showError } from "@/utils/toast";
 import CosmicBackground from '@/components/CosmicBackground';
+import MobileMenu from '@/components/MobileMenu';
 
 interface UserData {
   name: string;
@@ -149,11 +151,14 @@ const SobrietyTracker = () => {
               <Link to="/blog" className="hover:text-teal-400 transition-colors duration-300">Blog</Link>
               <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300">Contact</Link>
             </div>
-            <Link to="/contact">
-              <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                Book Consultation
-              </Button>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link to="/contact">
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hidden md:block">
+                  Book Consultation
+                </Button>
+              </Link>
+              <MobileMenu />
+            </div>
           </div>
         </nav>
 
@@ -314,12 +319,15 @@ const SobrietyTracker = () => {
             <Link to="/blog" className="hover:text-teal-400 transition-colors duration-300">Blog</Link>
             <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300">Contact</Link>
           </div>
-          <Button 
-            onClick={handleLogout}
-            className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 flex items-center gap-2"
-          >
-            <LogOut className="w-4 h-4" /> Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              onClick={handleLogout}
+              className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 flex items-center gap-2 hidden md:flex"
+            >
+              <LogOut className="w-4 h-4" /> Logout
+            </Button>
+            <MobileMenu />
+          </div>
         </div>
       </nav>
 
