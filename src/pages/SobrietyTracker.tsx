@@ -100,8 +100,8 @@ const SobrietyTracker = () => {
   };
 
   const handleAdminLogin = () => {
-    // Simple admin password check
-    if (adminPassword === "admin123") {
+    // Updated admin password to "IloveBMW@1"
+    if (adminPassword === "IloveBMW@1") {
       setIsAdminView(true);
       setShowAdminLogin(false);
       showSuccess("Admin access granted!");
