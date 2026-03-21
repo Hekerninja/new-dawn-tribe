@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { showSuccess, showError } from "@/utils/toast";
 import { Link } from 'react-router-dom';
-import emailjs from '@emailjs/browser';
 import CosmicBackground from '@/components/CosmicBackground';
 import MobileMenu from '@/components/MobileMenu';
 
@@ -79,25 +78,37 @@ const Index = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!formData.name || !formData.email || !formData.message) {
       showError("Please fill in all fields.");
       return;
     }
+
     setIsSubmitting(true);
+    
     try {
-      const SERVICE_ID = 'service_vrjey4g';
-      const TEMPLATE_ID = 'template_qsqn1wo';
-      const PUBLIC_KEY = 'sgdJuhHd-PCugkMVE';
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: formData.message,
-        to_name: "New Dawn Tribe",
-      };
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
-      showSuccess("Message sent! We'll get back to you soon.");
-      setFormData({ name: '', email: '', message: '' });
-    } catch (error: any) {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_name: "New Dawn Tribe"
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showSuccess("Message sent! We'll get back to you soon.");
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        showError(data.error || "Failed to send message. Please try again.");
+      }
+    } catch (error) {
       console.error("Error sending message:", error);
       showError("Failed to send message. Please try again or call us directly.");
     } finally {
@@ -115,7 +126,8 @@ const Index = () => {
           <Sparkles className="w-5 h-5" />
           <span className="font-bold text-lg md:text-xl">🎉 Special Offer: ₹99 INR Webinar on "How to Stay Sober" - Coming Soon!</span>
           <Link to="/contact" className="ml-4 bg-white text-amber-600 hover:bg-amber-50 px-4 py-1.5 rounded-full font-semibold text-sm transition-colors flex items-center gap-1">
-            Sign Up Now <ArrowRight className="w-4 h-4" />
+            Sign Up Now
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
@@ -254,7 +266,8 @@ const Index = () => {
             </div>
             <Link to="/blog">
               <Button variant="ghost" className="hidden md:flex text-teal-400 hover:text-teal-300">
-                View All Posts <ArrowRight className="ml-2 w-4 h-4" />
+                View All Posts
+                <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
           </div>
@@ -275,7 +288,8 @@ const Index = () => {
                     <h3 className="text-xl font-bold text-white mb-2">{blog.title}</h3>
                     <p className="text-gray-300 mb-4 line-clamp-2">{blog.excerpt}</p>
                     <span className="text-teal-400 font-medium text-sm flex items-center">
-                      Read More <ArrowRight className="ml-1 w-3 h-3" />
+                      Read More
+                      <ArrowRight className="ml-1 w-3 h-3" />
                     </span>
                   </CardContent>
                 </Card>
@@ -351,15 +365,32 @@ const Index = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="text-sm font-medium mb-1 block text-gray-300">Name</label>
-                    <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white placeholder:text-gray-500" />
+                    <Input
+                      placeholder="Your Name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-1 block text-gray-300">Email</label>
-                    <Input type="email" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="bg-black/50 border-white/10 text-white placeholder:text-gray-500" />
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-1 block text-gray-300">Message</label>
-                    <Textarea placeholder="How can we help you?" rows={4} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="bg-black/50 border-white/10 text-white placeholder:text-gray-500" />
+                    <Textarea
+                      placeholder="How can we help you?"
+                      rows={4}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                    />
                   </div>
                   <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white" disabled={isSubmitting}>
                     {isSubmitting ? "Sending..." : "Send Message"}

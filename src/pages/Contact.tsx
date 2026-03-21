@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { showSuccess, showError } from "@/utils/toast";
-import emailjs from '@emailjs/browser';
 import CosmicBackground from '@/components/CosmicBackground';
 import MobileMenu from '@/components/MobileMenu';
 
@@ -21,25 +20,37 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!formData.name || !formData.email || !formData.message) {
       showError("Please fill in all fields.");
       return;
     }
+
     setIsSubmitting(true);
+    
     try {
-      const SERVICE_ID = 'service_vrjey4g';
-      const TEMPLATE_ID = 'template_qsqn1wo';
-      const PUBLIC_KEY = 'sgdJuhHd-PCugkMVE';
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: formData.message,
-        to_name: "New Dawn Tribe",
-      };
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
-      showSuccess("Message sent! We'll get back to you soon.");
-      setFormData({ name: '', email: '', message: '' });
-    } catch (error: any) {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_name: "New Dawn Tribe"
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showSuccess("Message sent! We'll get back to you soon.");
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        showError(data.error || "Failed to send message. Please try again.");
+      }
+    } catch (error) {
       console.error("Error sending message:", error);
       showError("Failed to send message. Please try again or call us directly.");
     } finally {
@@ -50,6 +61,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
       <CosmicBackground />
+      
       <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 group cursor-pointer">
@@ -162,6 +174,7 @@ const Contact = () => {
                 </div>
               </div>
             </div>
+            
             <Card className="bg-black/40 backdrop-blur-sm border border-white/10 shadow-xl card-smooth transform hover:-translate-y-2 animate-slide-up delay-200">
               <CardHeader>
                 <CardTitle className="text-2xl text-white">Send Us a Message</CardTitle>
@@ -171,24 +184,50 @@ const Contact = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label className="text-sm font-medium mb-2 block text-gray-300">Full Name</label>
-                    <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required />
+                    <Input
+                      placeholder="Your Name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                      required
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-2 block text-gray-300">Email Address</label>
-                    <Input type="email" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required />
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                      required
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-2 block text-gray-300">Message</label>
-                    <Textarea placeholder="How can we help you? Tell us about your journey or questions..." rows={6} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500" required />
+                    <Textarea
+                      placeholder="How can we help you? Tell us about your journey or questions..."
+                      rows={6}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="transition-all duration-300 focus:ring-2 focus:ring-teal-400 bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                      required
+                    />
                   </div>
-                  <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg flex items-center justify-center gap-2" disabled={isSubmitting}>
+                  <Button
+                    type="submit"
+                    className="w-full bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? (
                       <>
-                        <span className="animate-spin">⟳</span> Sending...
+                        <span className="animate-spin">⟳</span>
+                        Sending...
                       </>
                     ) : (
                       <>
-                        <Send className="w-4 h-4" /> Send Message
+                        <Send className="w-4 h-4" />
+                        Send Message
                       </>
                     )}
                   </Button>
