@@ -1,4 +1,3 @@
-"use client<dyad-write path="src/pages/SobrietyTracker.tsx" description="Adding mobile menu button to the Sobriety Tracker page">
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
