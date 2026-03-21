@@ -218,7 +218,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
   // Check database connection status
   const checkDatabaseStatus = async () => {
     try {
-      const testQuery = query(collection(db, 'users'), where('email', '==', 'test@test.com'));
+      // Try to read from test collection to verify connection
+      const testQuery = query(collection(db, 'test'), where('test', '==', true));
       await getDocs(testQuery);
       return true;
     } catch (error) {

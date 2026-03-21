@@ -9,11 +9,20 @@ export async function initializeDatabase() {
   try {
     console.log('Initializing Firebase database...');
 
-    // First, check if we can connect to the database
+    // First, check if we can connect to the database using test collection
     try {
-      // Try a simple read operation to test connection
-      const testQuery = query(collection(db, 'users'), where('email', '==', 'nonexistent@test.com'));
-      await getDocs(testQuery);
+      // Try to read from test collection to verify connection
+      const testQuery = query(collection(db, 'test'), where('test', '==', true));
+      const testSnapshot = await getDocs(testQuery);
+
+      if (testSnapshot.empty) {
+        // If no test document exists, create one
+        await addDoc(collection(db, 'test'), {
+          test: true,
+          timestamp: new Date()
+        });
+      }
+
       console.log('Database connection successful');
     } catch (connectionError) {
       console.error('Database connection failed:', connectionError);
@@ -71,8 +80,8 @@ export async function initializeDatabase() {
  */
 export async function checkDatabaseConnection() {
   try {
-    // Try a simple read operation
-    const testQuery = query(collection(db, 'users'), where('email', '==', 'test@test.com'));
+    // Try to read from test collection to verify connection
+    const testQuery = query(collection(db, 'test'), where('test', '==', true));
     await getDocs(testQuery);
     return true;
   } catch (error) {
