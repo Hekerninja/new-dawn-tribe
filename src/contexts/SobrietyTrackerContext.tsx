@@ -109,6 +109,38 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
 
             setCurrentUser(formattedUser);
             setIsLoggedIn(true);
+            await refreshLeaderboard(); // Refresh leaderboard after login
+          } else {
+            // User exists in auth but not in Firestore - create user document
+            await addDoc(collection(db, "users"), {
+              name: user.displayName || "User",
+              email: user.email,
+              startDate: serverTimestamp(),
+              streak: 0,
+              lastUpdate: serverTimestamp(),
+              isAdmin: false
+            });
+
+            // Fetch the newly created user
+            const newQuery = query(collection(db, "users"), where("email", "==", user.email));
+            const newSnapshot = await getDocs(newQuery);
+            if (!newSnapshot.empty) {
+              const newUserData = newSnapshot.docs[0].data();
+              const newUserDocId = newSnapshot.docs[0].id;
+
+              const newFormattedUser: UserData = {
+                id: newUserDocId,
+                name: newUserData.name,
+                email: newUserData.email,
+                startDate: newUserData.startDate.toDate(),
+                streak: newUserData.streak,
+                lastUpdate: newUserData.lastUpdate.toDate(),
+                isAdmin: newUserData.isAdmin || false
+              };
+
+              setCurrentUser(newFormattedUser);
+              setIsLoggedIn(true);
+            }
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
