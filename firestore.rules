@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is admin
+    // Note: In production, use Firebase Custom Claims set via Cloud Functions
+    // For now, we protect sensitive operations based on specific document fields
+    
+    // Users can read all users for leaderboard
+    // But can only write their own profile
+    match /users/{userId} {
+      // Anyone can read user profiles (for leaderboard)
+      allow read: if true;
+      
+      // Users can only update their own document
+      allow update: if request.auth != null 
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasAll(['streak', 'lastUpdate'])
+        && request.resource.data.keys().size() <= 4;
+      
+      // Only specific admin users can delete or change admin status
+      // This requires custom claims in production - for now, we disable these operations
+      allow delete: if false;
+      
+      // Prevent changing isAdmin field (would need server-side validation)
+      allow update: if request.auth != null 
+        && request.auth.uid == userId
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAdmin', 'email']);
+    }
+    
+    // Disable all write operations that could escalate privileges
+    match /users/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
