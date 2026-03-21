@@ -25,4 +25,21 @@ export const db = getFirestore(app);
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 
+// Add error handling for Firebase operations
+export const handleFirebaseError = (error: any) => {
+  console.error('Firebase Error:', error);
+
+  if (error.code === 'permission-denied') {
+    console.error('Permission denied - check your Firebase security rules');
+    return 'Permission denied - please check your Firebase configuration';
+  }
+
+  if (error.code === 'unauthenticated') {
+    console.error('User not authenticated');
+    return 'Please log in to perform this action';
+  }
+
+  return error.message || 'An error occurred with Firebase';
+};
+
 export default app;

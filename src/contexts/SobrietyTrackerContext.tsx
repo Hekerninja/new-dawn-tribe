@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { collection, addDoc, getDocs, query, orderBy, where, doc, updateDoc, onSnapshot, serverTimestamp, deleteDoc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { auth, db, handleFirebaseError } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { showSuccess, showError } from '@/utils/toast';
 import { initializeDatabase } from '@/lib/initFirebase';
@@ -57,6 +57,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
         setIsDatabaseReady(dbReady);
       } catch (error) {
         console.error('Database initialization failed:', error);
+        const errorMessage = handleFirebaseError(error);
+        console.error('Firebase Error:', errorMessage);
         setIsDatabaseReady(false);
       }
     };
@@ -139,7 +141,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
         }
       } catch (error) {
         console.error("Error in auth state change:", error);
-        showError("Error loading user data");
+        const errorMessage = handleFirebaseError(error);
+        showError(errorMessage);
       } finally {
         setAuthChecked(true);
         setIsLoading(false);
@@ -176,6 +179,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
             });
           } catch (error) {
             console.error("Error processing user document:", error);
+            const errorMessage = handleFirebaseError(error);
+            console.error('Firebase Error:', errorMessage);
           }
         });
 
@@ -186,7 +191,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       }
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
-      showError("Error loading leaderboard");
+      const errorMessage = handleFirebaseError(error);
+      showError(errorMessage);
       // Set empty leaderboard to prevent UI issues
       setLeaderboard([]);
     }
@@ -200,6 +206,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       return true;
     } catch (error) {
       console.error('Database connection check failed:', error);
+      const errorMessage = handleFirebaseError(error);
+      console.error('Firebase Error:', errorMessage);
       return false;
     }
   };
@@ -211,7 +219,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       showSuccess("Logged in successfully!");
     } catch (error: any) {
       console.error("Login error:", error);
-      showError(error.message || "Failed to log in");
+      const errorMessage = handleFirebaseError(error);
+      showError(errorMessage);
       throw error;
     }
   };
@@ -236,7 +245,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       showSuccess("Account created successfully!");
     } catch (error: any) {
       console.error("Signup error:", error);
-      showError(error.message || "Failed to create account");
+      const errorMessage = handleFirebaseError(error);
+      showError(errorMessage);
       throw error;
     }
   };
@@ -248,7 +258,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       showSuccess("Logged out successfully!");
     } catch (error: any) {
       console.error("Logout error:", error);
-      showError(error.message || "Failed to log out");
+      const errorMessage = handleFirebaseError(error);
+      showError(errorMessage);
       throw error;
     }
   };
@@ -270,7 +281,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       showSuccess("Progress reset successfully!");
     } catch (error: any) {
       console.error("Reset progress error:", error);
-      showError(error.message || "Failed to reset progress");
+      const errorMessage = handleFirebaseError(error);
+      showError(errorMessage);
       throw error;
     }
   };
@@ -293,7 +305,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       showSuccess("Account deleted successfully!");
     } catch (error: any) {
       console.error("Delete account error:", error);
-      showError(error.message || "Failed to delete account");
+      const errorMessage = handleFirebaseError(error);
+      showError(errorMessage);
       throw error;
     }
   };
@@ -319,7 +332,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       showSuccess(`Admin status updated successfully!`);
     } catch (error: any) {
       console.error("Update admin status error:", error);
-      showError(error.message || "Failed to update admin status");
+      const errorMessage = handleFirebaseError(error);
+      showError(errorMessage);
       throw error;
     }
   };

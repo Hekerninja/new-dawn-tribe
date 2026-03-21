@@ -1,5 +1,6 @@
 import { db } from './firebase';
 import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { handleFirebaseError } from './firebase';
 
 /**
  * Initialize Firebase database with default data
@@ -15,6 +16,8 @@ export async function initializeDatabase() {
       console.log('Database connection successful');
     } catch (connectionError) {
       console.error('Database connection failed:', connectionError);
+      const errorMessage = handleFirebaseError(connectionError);
+      console.error('Firebase Error:', errorMessage);
       return false;
     }
 
@@ -44,6 +47,8 @@ export async function initializeDatabase() {
     return true;
   } catch (error) {
     console.error('Error initializing database:', error);
+    const errorMessage = handleFirebaseError(error);
+    console.error('Firebase Error:', errorMessage);
     return false;
   }
 }
@@ -58,6 +63,8 @@ export async function checkDatabaseConnection() {
     return true;
   } catch (error) {
     console.error('Database connection failed:', error);
+    const errorMessage = handleFirebaseError(error);
+    console.error('Firebase Error:', errorMessage);
     return false;
   }
 }
