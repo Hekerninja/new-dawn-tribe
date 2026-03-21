@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, query, orderBy, where, doc, updateDoc, onSnapshot, serverTimestamp, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy, where, doc, updateDoc, onSnapshot, serverTimestamp, deleteDoc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db, handleFirebaseError } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { showSuccess, showError } from '@/utils/toast';
@@ -74,19 +74,18 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
         if (user) {
           // User is signed in
           try {
-            const q = query(collection(db, "users"), where("email", "==", user.email));
-            const querySnapshot = await getDocs(q);
+            // Get user document
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
 
-            if (!querySnapshot.empty) {
-              const userData = querySnapshot.docs[0].data();
-              const userDocId = querySnapshot.docs[0].id;
-
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
               // Handle timestamp conversion safely
               const startDate = userData.startDate?.toDate ? userData.startDate.toDate() : new Date(userData.startDate);
               const lastUpdate = userData.lastUpdate?.toDate ? userData.lastUpdate.toDate() : new Date(userData.lastUpdate);
 
               const formattedUser: UserData = {
-                id: userDocId,
+                id: userDoc.id,
                 name: userData.name || "User",
                 email: userData.email,
                 startDate: startDate,
@@ -104,25 +103,23 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
               }
             } else {
               // User exists in auth but not in Firestore - create user document
-              await addDoc(collection(db, "users"), {
+              const now = serverTimestamp();
+              await setDoc(userDocRef, {
                 name: user.displayName || "User",
                 email: user.email,
-                startDate: serverTimestamp(),
+                startDate: now,
                 streak: 0,
-                lastUpdate: serverTimestamp(),
+                lastUpdate: now,
                 isAdmin: false,
               });
 
               // Fetch the newly created user
-              const newQuery = query(collection(db, "users"), where("email", "==", user.email));
-              const newSnapshot = await getDocs(newQuery);
+              const newUserDoc = await getDoc(userDocRef);
 
-              if (!newSnapshot.empty) {
-                const newUserData = newSnapshot.docs[0].data();
-                const newUserDocId = newSnapshot.docs[0].id;
-
+              if (newUserDoc.exists()) {
+                const newUserData = newUserDoc.data();
                 const newFormattedUser: UserData = {
-                  id: newUserDocId,
+                  id: newUserDoc.id,
                   name: newUserData.name || "User",
                   email: newUserData.email,
                   startDate: newUserData.startDate.toDate(),
@@ -253,7 +250,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
 
       // Add user to Firestore
       const now = serverTimestamp();
-      await addDoc(collection(db, "users"), {
+      await setDoc(doc(db, "users", user.uid), {
         name,
         email,
         startDate: now,

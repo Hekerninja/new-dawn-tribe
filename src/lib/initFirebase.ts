@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
 import { handleFirebaseError } from './firebase';
 
 /**
@@ -19,19 +19,7 @@ export async function initializeDatabase() {
       console.error('Database connection failed:', connectionError);
       const errorMessage = handleFirebaseError(connectionError);
       console.error('Firebase Error:', errorMessage);
-
-      // If connection fails, try to create a test document to see if we have write access
-      try {
-        await addDoc(collection(db, 'test'), {
-          test: true,
-          timestamp: new Date()
-        });
-        console.log('Write access successful, but read access failed');
-        return true;
-      } catch (writeError) {
-        console.error('Write access also failed:', writeError);
-        return false;
-      }
+      return false;
     }
 
     // Check if we already have users collection
@@ -42,7 +30,7 @@ export async function initializeDatabase() {
       console.log('No users found, creating initial admin user...');
 
       // Create initial admin user (you can remove this in production)
-      await addDoc(collection(db, 'users'), {
+      await setDoc(doc(db, 'users', 'admin-user'), {
         name: 'Admin User',
         email: 'admin@sobrietytracker.com',
         startDate: new Date(),
@@ -54,6 +42,18 @@ export async function initializeDatabase() {
       console.log('Initial admin user created');
     } else {
       console.log(`Found ${usersSnapshot.size} existing users`);
+    }
+
+    // Create leaderboard collection if it doesn't exist
+    const leaderboardRef = doc(db, 'leaderboard', 'current');
+    const leaderboardDoc = await getDocs(query(collection(db, 'leaderboard'), where('__name__', '==', 'current')));
+
+    if (leaderboardDoc.empty) {
+      await setDoc(leaderboardRef, {
+        lastUpdated: new Date(),
+        users: []
+      });
+      console.log('Leaderboard collection initialized');
     }
 
     console.log('Database initialization complete');
