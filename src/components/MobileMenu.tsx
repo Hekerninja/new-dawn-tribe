@@ -1,8 +1,4 @@
 "use client";
-import React, {<dyad-write path="src/components/MobileMenu.tsx" description="Creating a mobile menu component for small screens">
-"use client";
-import React, {<dyad-write path="src/components/MobileMenu.tsx" description="Creating a mobile menu component for small screens">
-"use client";
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Menu, Heart } from 'lucide-react';
