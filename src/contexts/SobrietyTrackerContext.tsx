@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, query, orderBy, where, doc, updateDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy, where, doc, updateDoc, onSnapshot, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { showSuccess, showError } from '@/utils/toast';
@@ -13,6 +13,7 @@ interface UserData {
   startDate: Date;
   streak: number;
   lastUpdate: Date;
+  isAdmin?: boolean;
 }
 
 interface SobrietyTrackerContextType {
@@ -26,6 +27,8 @@ interface SobrietyTrackerContextType {
   resetProgress: () => Promise<void>;
   refreshLeaderboard: () => Promise<void>;
   checkDatabaseStatus: () => Promise<boolean>;
+  deleteAccount: (userId: string) => Promise<void>;
+  updateAdminStatus: (userId: string, isAdmin: boolean) => Promise<void>;
 }
 
 const SobrietyTrackerContext = createContext<SobrietyTrackerContextType | undefined>(undefined);
@@ -86,6 +89,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
               startDate: startDate,
               streak: userData.streak || 0,
               lastUpdate: lastUpdate,
+              isAdmin: userData.isAdmin || false,
             };
 
             setCurrentUser(formattedUser);
@@ -99,6 +103,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
               startDate: serverTimestamp(),
               streak: 0,
               lastUpdate: serverTimestamp(),
+              isAdmin: false,
             });
 
             // Fetch the newly created user
@@ -116,6 +121,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
                 startDate: newUserData.startDate.toDate(),
                 streak: newUserData.streak || 0,
                 lastUpdate: newUserData.lastUpdate.toDate(),
+                isAdmin: newUserData.isAdmin || false,
               };
 
               setCurrentUser(newFormattedUser);
@@ -140,31 +146,38 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
   // Refresh leaderboard
   const refreshLeaderboard = async () => {
     try {
-      const q = query(collection(db, "users"), orderBy("streak", "desc"));
-      const querySnapshot = await getDocs(q);
-      const users: UserData[] = [];
+      // Only fetch leaderboard if current user is admin
+      if (currentUser?.isAdmin) {
+        const q = query(collection(db, "users"), orderBy("streak", "desc"));
+        const querySnapshot = await getDocs(q);
+        const users: UserData[] = [];
 
-      querySnapshot.forEach((doc) => {
-        try {
-          const data = doc.data();
-          // Handle timestamp conversion safely
-          const startDate = data.startDate?.toDate ? data.startDate.toDate() : new Date(data.startDate);
-          const lastUpdate = data.lastUpdate?.toDate ? data.lastUpdate.toDate() : new Date(data.lastUpdate);
+        querySnapshot.forEach((doc) => {
+          try {
+            const data = doc.data();
+            // Handle timestamp conversion safely
+            const startDate = data.startDate?.toDate ? data.startDate.toDate() : new Date(data.startDate);
+            const lastUpdate = data.lastUpdate?.toDate ? data.lastUpdate.toDate() : new Date(data.lastUpdate);
 
-          users.push({
-            id: doc.id,
-            name: data.name || "User",
-            email: data.email,
-            startDate: startDate,
-            streak: data.streak || 0,
-            lastUpdate: lastUpdate,
-          });
-        } catch (error) {
-          console.error("Error processing user document:", error);
-        }
-      });
+            users.push({
+              id: doc.id,
+              name: data.name || "User",
+              email: data.email,
+              startDate: startDate,
+              streak: data.streak || 0,
+              lastUpdate: lastUpdate,
+              isAdmin: data.isAdmin || false,
+            });
+          } catch (error) {
+            console.error("Error processing user document:", error);
+          }
+        });
 
-      setLeaderboard(users);
+        setLeaderboard(users);
+      } else {
+        // For non-admin users, return empty leaderboard
+        setLeaderboard([]);
+      }
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
       showError("Error loading leaderboard");
@@ -211,6 +224,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
         startDate: now,
         streak: 0,
         lastUpdate: now,
+        isAdmin: false,
       });
 
       showSuccess("Account created successfully!");
@@ -255,6 +269,55 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     }
   };
 
+  // Delete account function (admin only)
+  const deleteAccount = async (userId: string) => {
+    try {
+      // Check if current user is admin
+      if (!currentUser?.isAdmin) {
+        showError("You don't have permission to delete accounts");
+        return;
+      }
+
+      // Delete user document from Firestore
+      await deleteDoc(doc(db, "users", userId));
+
+      // Refresh leaderboard after deletion
+      await refreshLeaderboard();
+
+      showSuccess("Account deleted successfully!");
+    } catch (error: any) {
+      console.error("Delete account error:", error);
+      showError(error.message || "Failed to delete account");
+      throw error;
+    }
+  };
+
+  // Update admin status function (admin only)
+  const updateAdminStatus = async (userId: string, isAdmin: boolean) => {
+    try {
+      // Check if current user is admin
+      if (!currentUser?.isAdmin) {
+        showError("You don't have permission to change admin status");
+        return;
+      }
+
+      // Update admin status in Firestore
+      const userRef = doc(db, "users", userId);
+      await updateDoc(userRef, {
+        isAdmin: isAdmin,
+      });
+
+      // Refresh leaderboard after update
+      await refreshLeaderboard();
+
+      showSuccess(`Admin status updated successfully!`);
+    } catch (error: any) {
+      console.error("Update admin status error:", error);
+      showError(error.message || "Failed to update admin status");
+      throw error;
+    }
+  };
+
   const value: SobrietyTrackerContextType = {
     currentUser,
     isLoggedIn,
@@ -266,6 +329,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     resetProgress,
     refreshLeaderboard,
     checkDatabaseStatus,
+    deleteAccount,
+    updateAdminStatus,
   };
 
   return (
