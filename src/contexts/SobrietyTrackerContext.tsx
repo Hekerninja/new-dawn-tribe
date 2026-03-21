@@ -97,13 +97,17 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
             const userData = querySnapshot.docs[0].data();
             const userDocId = querySnapshot.docs[0].id;
 
+            // Handle timestamp conversion safely
+            const startDate = userData.startDate?.toDate ? userData.startDate.toDate() : new Date(userData.startDate);
+            const lastUpdate = userData.lastUpdate?.toDate ? userData.lastUpdate.toDate() : new Date(userData.lastUpdate);
+
             const formattedUser: UserData = {
               id: userDocId,
-              name: userData.name,
+              name: userData.name || "User",
               email: userData.email,
-              startDate: userData.startDate.toDate(),
-              streak: userData.streak,
-              lastUpdate: userData.lastUpdate.toDate(),
+              startDate: startDate,
+              streak: userData.streak || 0,
+              lastUpdate: lastUpdate,
               isAdmin: userData.isAdmin || false
             };
 
@@ -130,10 +134,10 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
 
               const newFormattedUser: UserData = {
                 id: newUserDocId,
-                name: newUserData.name,
+                name: newUserData.name || "User",
                 email: newUserData.email,
                 startDate: newUserData.startDate.toDate(),
-                streak: newUserData.streak,
+                streak: newUserData.streak || 0,
                 lastUpdate: newUserData.lastUpdate.toDate(),
                 isAdmin: newUserData.isAdmin || false
               };
@@ -165,22 +169,33 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
 
       const users: UserData[] = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        users.push({
-          id: doc.id,
-          name: data.name,
-          email: data.email,
-          startDate: data.startDate.toDate(),
-          streak: data.streak,
-          lastUpdate: data.lastUpdate.toDate(),
-          isAdmin: data.isAdmin || false
-        });
+        try {
+          const data = doc.data();
+
+          // Handle timestamp conversion safely
+          const startDate = data.startDate?.toDate ? data.startDate.toDate() : new Date(data.startDate);
+          const lastUpdate = data.lastUpdate?.toDate ? data.lastUpdate.toDate() : new Date(data.lastUpdate);
+
+          users.push({
+            id: doc.id,
+            name: data.name || "User",
+            email: data.email,
+            startDate: startDate,
+            streak: data.streak || 0,
+            lastUpdate: lastUpdate,
+            isAdmin: data.isAdmin || false
+          });
+        } catch (error) {
+          console.error("Error processing user document:", error);
+        }
       });
 
       setLeaderboard(users);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
       showError("Error loading leaderboard");
+      // Set empty leaderboard to prevent UI issues
+      setLeaderboard([]);
     }
   };
 

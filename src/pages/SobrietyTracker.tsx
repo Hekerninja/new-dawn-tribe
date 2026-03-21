@@ -560,7 +560,7 @@ const SobrietyTracker = () => {
                       <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg border border-gray-700">
                         <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
                           <Plus className="w-5 h-5 text-gray-500" />
-                        </div>
+                       div>
                         <div>
                           <div className="font-medium text-gray-500">Week Champion</div>
                           <div className="text-sm text-gray-500">Complete 7 days</div>
@@ -631,64 +631,76 @@ const SobrietyTracker = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-gray-300">Rank</TableHead>
-                      <TableHead className="text-gray-300">Name</TableHead>
-                      <TableHead className="text-gray-300">Days Sober</TableHead>
-                      <TableHead className="text-gray-300">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {leaderboard.map((user, index) => (
-                      <TableRow key={user.id}>
-                        <TableCell className="font-medium text-white">
-                          {index === 0 ? (
-                            <span className="text-yellow-400">#1</span>
-                          ) : index === 1 ? (
-                            <span className="text-gray-300">#2</span>
-                          ) : index === 2 ? (
-                            <span className="text-amber-600">#3</span>
-                          ) : (
-                            `#${index + 1}`
-                          )}
-                        </TableCell>
-                        <TableCell className="text-white flex items-center gap-2">
-                          {user.name}
-                          {user.isAdmin && (
-                            <Shield className="w-4 h-4 text-purple-400" />
-                          )}
-                        </TableCell>
-                        <TableCell className="text-teal-400">{user.streak}</TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="border-purple-500/30 text-purple-400 hover:bg-purple-500/20"
-                              onClick={() => {
-                                updateAdminStatus(user.id, !user.isAdmin);
-                              }}
-                            >
-                              {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="border-red-500/30 text-red-400 hover:bg-red-500/20"
-                              onClick={() => {
-                                deleteAccount(user.id);
-                              }}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
+                {leaderboard.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400 mb-4">No users found in the leaderboard</p>
+                    <Button
+                      onClick={refreshLeaderboard}
+                      className="bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 border border-teal-500/30"
+                    >
+                      Refresh Leaderboard
+                    </Button>
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-gray-300">Rank</TableHead>
+                        <TableHead className="text-gray-300">Name</TableHead>
+                        <TableHead className="text-gray-300">Days Sober</TableHead>
+                        <TableHead className="text-gray-300">Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {leaderboard.map((user, index) => (
+                        <TableRow key={user.id}>
+                          <TableCell className="font-medium text-white">
+                            {index === 0 ? (
+                              <span className="text-yellow-400">#1</span>
+                            ) : index === 1 ? (
+                              <span className="text-gray-300">#2</span>
+                            ) : index === 2 ? (
+                              <span className="text-amber-600">#3</span>
+                            ) : (
+                              `#${index + 1}`
+                            )}
+                          </TableCell>
+                          <TableCell className="text-white flex items-center gap-2">
+                            {user.name}
+                            {user.isAdmin && (
+                              <Shield className="w-4 h-4 text-purple-400" />
+                            )}
+                          </TableCell>
+                          <TableCell className="text-teal-400">{user.streak}</TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-purple-500/30 text-purple-400 hover:bg-purple-500/20"
+                                onClick={() => {
+                                  updateAdminStatus(user.id, !user.isAdmin);
+                                }}
+                              >
+                                {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-red-500/30 text-red-400 hover:bg-red-500/20"
+                                onClick={() => {
+                                  deleteAccount(user.id);
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
               </CardContent>
             </Card>
           </motion.div>
