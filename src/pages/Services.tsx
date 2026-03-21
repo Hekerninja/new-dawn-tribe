@@ -1,13 +1,9 @@
 "use client";
-import React from 'react';
-<dyad-write path="src/pages/Services.tsx" description="Adding MobileMenu component to Services page">
-"use client";
-import React from 'react';
-<dyad-write path="src/pages/Services.tsx" description="Adding MobileMenu component to Services page">
+import React from<dyad-write path="src/pages/Services.tsx" description="Fixing the Services page with proper MobileMenu integration">
 "use client";
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Heart, Shield, Users, MessageSquare, Calendar, CheckCircle, Star, Globe, Menu } from 'lucide-react';
+import { ArrowLeft, Heart, Shield, Users, MessageSquare, Calendar, CheckCircle, Star, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -101,7 +97,7 @@ const Services = () => {
             <Link to="/about" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">About</Link>
             <Link to="/services" className="text-teal-400 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1">Services</Link>
             <Link to="/blog" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
-            <Link to="/#contact" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Contact</Link>
+            <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-teal-400 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full">Contact</Link>
           </div>
           <div className="flex items-center gap-2">
             <Link to="/contact">
