@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2, Trophy, Star, Medal, PartyPopper, Gift, Sparkles, Menu, X } from 'lucide-react';
+import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2, Trophy, Star, Medal, PartyPopper, Gift, Sparkles, Menu, X, Home, Info, BookOpen, MessageSquare, Target, BarChart3 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -247,14 +247,28 @@ const SobrietyTracker = () => {
           <div className="md:hidden bg-black/90 backdrop-blur-md border-t border-white/10">
             <div className="container mx-auto px-4 py-4">
               <div className="flex flex-col gap-4">
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-                <Link to="/about" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>About</Link>
-                <Link to="/services" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Services</Link>
-                <Link to="/blog" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
-                <Link to="/contact" className="text-gray-300 hover:text-teal-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-                <Link to="/tracker" className="text-teal-400" onClick={() => setMobileMenuOpen(false)}>Tracker</Link>
+                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Home className="w-4 h-4" /> Home
+                </Link>
+                <Link to="/about" className="text-gray-300 hover:text-teal-400 transition-colors flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Info className="w-4 h-4" /> About
+                </Link>
+                <Link to="/services" className="text-gray-300 hover:text-teal-400 transition-colors flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Target className="w-4 h-4" /> Services
+                </Link>
+                <Link to="/blog" className="text-gray-300 hover:text-teal-400 transition-colors flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                  <BookOpen className="w-4 h-4" /> Blog
+                </Link>
+                <Link to="/contact" className="text-gray-300 hover:text-teal-400 transition-colors flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                  <MessageSquare className="w-4 h-4" /> Contact
+                </Link>
+                <Link to="/tracker" className="text-teal-400 flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                  <BarChart3 className="w-4 h-4" /> Tracker
+                </Link>
                 {isLoggedIn && currentUser?.isAdmin && (
-                  <Link to="/admin" className="text-purple-400 hover:text-purple-300 transition-colors" onClick={() => setMobileMenuOpen(false)}>Admin Panel</Link>
+                  <Link to="/admin" className="text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                    <Shield className="w-4 h-4" /> Admin Panel
+                  </Link>
                 )}
               </div>
             </div>
