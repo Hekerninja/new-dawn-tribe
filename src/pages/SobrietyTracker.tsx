@@ -16,7 +16,8 @@ import {
   Trash2,
   Shield,
   Key,
-  Lock
+  Lock,
+  Users
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,6 +50,7 @@ const SobrietyTracker = () => {
   const [isAdminView, setIsAdminView] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [adminPassword, setAdminPassword] = useState('');
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   // Calculate streak when user data changes
   useEffect(() => {
@@ -400,8 +402,7 @@ const SobrietyTracker = () => {
             </Button>
             <MobileMenu />
           </div>
-        </div>
-      </nav>
+        </nav>
 
       <div className="container mx-auto px-4 py-8 max-w-6xl z-10 relative">
         <motion.div
@@ -422,6 +423,18 @@ const SobrietyTracker = () => {
               className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/30 flex items-center gap-2 w-full justify-center"
             >
               <Shield className="w-4 h-4" /> {isAdminView ? 'Switch to User View' : 'Switch to Admin View'}
+            </Button>
+          </div>
+        )}
+
+        {/* Leaderboard button for regular users */}
+        {!isAdminView && (
+          <div className="mb-6">
+            <Button
+              onClick={() => setShowLeaderboard(!showLeaderboard)}
+              className="bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 border border-teal-500/30 flex items-center gap-2 w-full md:w-auto justify-center"
+            >
+              <Users className="w-4 h-4" /> {showLeaderboard ? 'Hide Leaderboard' : 'View Community Leaderboard'}
             </Button>
           </div>
         )}
@@ -518,6 +531,72 @@ const SobrietyTracker = () => {
         ) : (
           // Regular user view
           <>
+            {/* Show leaderboard for regular users when requested */}
+            {showLeaderboard && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-8"
+              >
+                <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
+                  <CardHeader>
+                    <CardTitle className="text-2xl text-white flex items-center gap-2">
+                      <Crown className="w-6 h-6 text-yellow-400" />
+                      Community Leaderboard
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {leaderboard.length === 0 ? (
+                      <div className="text-center py-8">
+                        <p className="text-gray-400 mb-4">No users found in the leaderboard</p>
+                        <Button
+                          onClick={refreshLeaderboard}
+                          className="bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 border border-teal-500/30"
+                        >
+                          Refresh Leaderboard
+                        </Button>
+                      </div>
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="text-gray-300">Rank</TableHead>
+                            <TableHead className="text-gray-300">Name</TableHead>
+                            <TableHead className="text-gray-300">Days Sober</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {leaderboard.map((user, index) => (
+                            <TableRow key={user.id}>
+                              <TableCell className="font-medium text-white">
+                                {index === 0 ? (
+                                  <span className="text-yellow-400">#1</span>
+                                ) : index === 1 ? (
+                                  <span className="text-gray-300">#2</span>
+                                ) : index === 2 ? (
+                                  <span className="text-amber-600">#3</span>
+                                ) : (
+                                  `#${index + 1}`
+                                )}
+                              </TableCell>
+                              <TableCell className="text-white flex items-center gap-2">
+                                {user.name}
+                                {user.isAdmin && (
+                                  <Shield className="w-4 h-4 text-purple-400" />
+                                )}
+                              </TableCell>
+                              <TableCell className="text-teal-400">{user.streak}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
