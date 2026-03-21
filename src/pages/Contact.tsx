@@ -20,14 +20,14 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.message) {
       showError("Please fill in all fields.");
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
@@ -61,7 +61,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
       <CosmicBackground />
-      
+
       <nav className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 group cursor-pointer">
@@ -174,7 +174,7 @@ const Contact = () => {
                 </div>
               </div>
             </div>
-            
+
             <Card className="bg-black/40 backdrop-blur-sm border border-white/10 shadow-xl card-smooth transform hover:-translate-y-2 animate-slide-up delay-200">
               <CardHeader>
                 <CardTitle className="text-2xl text-white">Send Us a Message</CardTitle>

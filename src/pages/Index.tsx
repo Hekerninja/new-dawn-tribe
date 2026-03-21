@@ -78,14 +78,14 @@ const Index = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.message) {
       showError("Please fill in all fields.");
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
@@ -119,7 +119,7 @@ const Index = () => {
   return (
     <div className="min-h-screen font-sans text-foreground relative">
       <CosmicBackground />
-      
+
       {/* Special Offer Banner */}
       <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white py-3 px-4 text-center">
         <div className="container mx-auto flex items-center justify-center gap-2">
