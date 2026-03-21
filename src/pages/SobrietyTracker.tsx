@@ -34,10 +34,10 @@ const SobrietyTracker = () => {
 
   // Refresh leaderboard on mount and when user logs in/out
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && currentUser?.isAdmin) {
       refreshLeaderboard();
     }
-  }, [isLoggedIn, refreshLeaderboard]);
+  }, [isLoggedIn, currentUser, refreshLeaderboard]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -94,7 +94,11 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
 
             setCurrentUser(formattedUser);
             setIsLoggedIn(true);
-            await refreshLeaderboard();
+
+            // Only refresh leaderboard if user is admin
+            if (formattedUser.isAdmin) {
+              await refreshLeaderboard();
+            }
           } else {
             // User exists in auth but not in Firestore - create user document
             await addDoc(collection(db, "users"), {
