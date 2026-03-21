@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import bookCover from '../assets/book-cover.jpg';
 import CosmicBackground from '@/components/CosmicBackground';
+import MobileMenu from '@/components/MobileMenu';
 
 const About = () => {
   return (
@@ -34,6 +35,7 @@ const About = () => {
                 Book Consultation
               </Button>
             </Link>
+            <MobileMenu />
           </div>
         </div>
       </nav>
