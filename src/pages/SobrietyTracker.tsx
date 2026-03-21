@@ -123,7 +123,7 @@ const SobrietyTracker: React.FC = () => {
               <Link to="/services" className="hover:text-teal-400 transition-colors duration-300">Services</Link>
               <Link to="/blog" className="hover:text-teal-400 transition-colors duration-300">Blog</Link>
               <Link to="/contact" className="hover:text-teal-400 transition-colors duration-300">Contact</Link>
-            </Link>
+            </div>
             <div className="flex items-center gap-2">
               <Link to="/contact">
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white btn-smooth shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hidden md:block">
@@ -180,8 +180,7 @@ const SobrietyTracker: React.FC = () => {
                     <p className="text-gray-400">
                       Don't have an account?{' '}
                       <button onClick={() => setShowLogin(false)} className="text-teal-400 hover:underline">
-                        Sign up
-                      </button>
+                        Sign up                      </button>
                     </p>
                   </div>
                 </CardContent>
@@ -238,8 +237,7 @@ const SobrietyTracker: React.FC = () => {
                       <p className="text-gray-400">
                         Already have an account?{' '}
                         <button onClick={() => setShowLogin(true)} className="text-teal-400 hover:underline">
-                          Login
-                        </button>
+                          Login                        </button>
                       </p>
                     </div>
                   </CardContent>
@@ -300,8 +298,7 @@ const SobrietyTracker: React.FC = () => {
             )}
             <Button onClick={handleLogout} className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 flex items-center gap-2 hidden md:flex">
               <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
+              Logout            </Button>
             <MobileMenu />
           </div>
         </div>
