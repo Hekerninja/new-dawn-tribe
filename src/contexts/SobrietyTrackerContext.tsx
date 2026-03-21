@@ -11,7 +11,8 @@ import {
   doc,
   updateDoc,
   deleteDoc,
-  onSnapshot
+  onSnapshot,
+  serverTimestamp
 } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { 
@@ -21,6 +22,7 @@ import {
   onAuthStateChanged 
 } from 'firebase/auth';
 import { showSuccess, showError } from '@/utils/toast';
+import { initializeDatabase } from '@/lib/initFirebase';
 
 interface UserData {
   id: string;
@@ -44,6 +46,7 @@ interface SobrietyTrackerContextType {
   refreshLeaderboard: () => Promise<void>;
   deleteAccount: (userId: string) => Promise<void>;
   updateAdminStatus: (userId: string, isAdmin: boolean) => Promise<void>;
+  checkDatabaseStatus: () => Promise<boolean>;
 }
 
 const SobrietyTrackerContext = createContext<SobrietyTrackerContextType | undefined>(undefined);
@@ -61,9 +64,27 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [leaderboard, setLeaderboard] = useState<UserData[]>([]);
+  const [isDatabaseReady, setIsDatabaseReady] = useState(false);
+
+  // Initialize database on first load
+  useEffect(() => {
+    const initDb = async () => {
+      try {
+        const dbReady = await initializeDatabase();
+        setIsDatabaseReady(dbReady);
+      } catch (error) {
+        console.error('Database initialization failed:', error);
+        setIsDatabaseReady(false);
+      }
+    };
+
+    initDb();
+  }, []);
 
   // Listen for auth state changes
   useEffect(() => {
+    if (!isDatabaseReady) return;
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in
@@ -71,11 +92,11 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
           // Fetch user data from Firestore
           const q = query(collection(db, "users"), where("email", "==", user.email));
           const querySnapshot = await getDocs(q);
-          
+
           if (!querySnapshot.empty) {
             const userData = querySnapshot.docs[0].data();
             const userDocId = querySnapshot.docs[0].id;
-            
+
             const formattedUser: UserData = {
               id: userDocId,
               name: userData.name,
@@ -85,7 +106,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
               lastUpdate: userData.lastUpdate.toDate(),
               isAdmin: userData.isAdmin || false
             };
-            
+
             setCurrentUser(formattedUser);
             setIsLoggedIn(true);
           }
@@ -102,14 +123,14 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [isDatabaseReady]);
 
   // Refresh leaderboard
   const refreshLeaderboard = async () => {
     try {
       const q = query(collection(db, "users"), orderBy("streak", "desc"));
       const querySnapshot = await getDocs(q);
-      
+
       const users: UserData[] = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -123,11 +144,23 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
           isAdmin: data.isAdmin || false
         });
       });
-      
+
       setLeaderboard(users);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
       showError("Error loading leaderboard");
+    }
+  };
+
+  // Check database connection status
+  const checkDatabaseStatus = async () => {
+    try {
+      const testQuery = query(collection(db, 'users'), where('email', '==', 'test@test.com'));
+      await getDocs(testQuery);
+      return true;
+    } catch (error) {
+      console.error('Database connection check failed:', error);
+      return false;
     }
   };
 
@@ -148,9 +181,9 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       // Add user to Firestore
-      const now = new Date();
+      const now = serverTimestamp();
       await addDoc(collection(db, "users"), {
         name,
         email,
@@ -159,7 +192,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
         lastUpdate: now,
         isAdmin: false
       });
-      
+
       showSuccess("Account created successfully!");
     } catch (error: any) {
       console.error("Signup error:", error);
@@ -183,23 +216,23 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
   // Reset progress function
   const resetProgress = async () => {
     if (!currentUser) return;
-    
+
     try {
-      const now = new Date();
+      const now = serverTimestamp();
       const userRef = doc(db, "users", currentUser.id);
       await updateDoc(userRef, {
         startDate: now,
         streak: 0,
         lastUpdate: now
       });
-      
+
       setCurrentUser({
         ...currentUser,
-        startDate: now,
+        startDate: new Date(),
         streak: 0,
-        lastUpdate: now
+        lastUpdate: new Date()
       });
-      
+
       showSuccess("Progress reset successfully!");
     } catch (error: any) {
       console.error("Reset progress error:", error);
@@ -248,7 +281,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     resetProgress,
     refreshLeaderboard,
     deleteAccount,
-    updateAdminStatus
+    updateAdminStatus,
+    checkDatabaseStatus
   };
 
   return (
