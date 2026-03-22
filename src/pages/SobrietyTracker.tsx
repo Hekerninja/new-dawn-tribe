@@ -13,11 +13,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { showSuccess, showError } from "@/utils/toast";
+import toast from "sonner";
 import CosmicBackground from '@/components/CosmicBackground';
 import { useSobrietyTracker } from '@/contexts/SobrietyTrackerContext';
 
-// Motivational quotes - one for each day of the month
-const motivationalQuotes = [
+// Motivational quotes - one for each day of the monthconst motivationalQuotes = [
   "Every day sober is a victory. Celebrate your strength!",
   "Recovery is not a race. It's a journey of self-discovery.",
   "You are stronger than your addiction. Keep going!",
@@ -170,6 +170,108 @@ const SobrietyTracker = () => {
   // Get user rank
   const userRank = leaderboard.findIndex(user => user.id === currentUser?.id) + 1;
 
+  // Interactive Recovery Timeline Stages
+  const timelineStages = [
+    {
+      id: 1,
+      title: "First 24 Hours",
+      description: "The most challenging period as your body begins to detoxify.",
+      icon: <Flame className="w-5 h-5 text-teal-400" />,
+    },
+    {
+      id: 2,
+      title: "Week 1",
+      description: "Physical withdrawal symptoms peak and begin to subside.",
+      icon: <Calendar className="w-5 h-5 text-teal-400" />,
+    },
+    {
+      id: 3,
+      title: "Month 1",
+      description: "Psychological challenges emerge as you adjust to life without the substance.",
+      icon: <Clock className="w-5 h-5 text-teal-400" />,
+    },
+    {
+      id: 4,
+      title: "Month 3",
+      description: "New habits start to form, and cravings become less frequent.",
+      icon: <Users className="w-5 h-5 text-teal-400" />,
+    },
+    {
+      id: 5,
+      title: "Month 6",
+      description: "Significant improvement in physical and mental health is noticeable.",
+      icon: <Shield className="w-5 h-5 text-teal-400" />,
+    },
+    {
+      id: 6,
+      title: "Year 1",
+      description: "You've built a new life in recovery and are stronger than ever.",
+      icon: <Award className="w-5 h-5 text-teal-400" />,
+    },
+  ];
+
+  // Progress Calculator State
+  const [calcValues, setCalcValues] = useState({
+    dailyUsage: '',
+    costPerUse: '',
+    timePerUse: '',
+  });
+  const [results, setResults] = useState(null);
+  const [calcError, setCalcError] = useState('');
+
+  const handleCalculate = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCalcError('');
+    const { dailyUsage, costPerUse, timePerUse } = calcValues;
+
+    // Validate
+    if (!dailyUsage || !costPerUse || !timePerUse) {
+      setCalcError('Please fill in all fields.');
+      return;
+    }
+
+    const dailyUsageNum = parseFloat(dailyUsage);
+    const costPerUseNum = parseFloat(costPerUse);
+    const timePerUseNum = parseFloat(timePerUse);
+
+    if (isNaN(dailyUsageNum) || isNaN(costPerUseNum) || isNaN(timePerUseNum) ||
+        dailyUsageNum <= 0 || costPerUseNum <= 0 || timePerUseNum <= 0) {
+      setCalcError('Please enter valid positive numbers.');
+      return;
+    }
+
+    const dailyCost = dailyUsageNum * costPerUseNum;
+    const weeklyCost = dailyCost * 7;
+    const monthlyCost = dailyCost * 30;
+    const yearlyCost = dailyCost * 365;
+
+    const dailyTime = dailyUsageNum * timePerUseNum;
+    const weeklyTime = dailyTime * 7;
+    const monthlyTime = dailyTime * 30;
+    const yearlyTime = dailyTime * 365;
+
+    setResults({
+      dailyCost,
+      weeklyCost,
+      monthlyCost,
+      yearlyCost,
+      dailyTime,
+      weeklyTime,
+      monthlyTime,
+      yearlyTime,
+    });
+  };
+
+  const handleResetCalc = () => {
+    setCalcValues({
+      dailyUsage: '',
+      costPerUse: '',
+      timePerUse: '',
+    });
+    setResults(null);
+    setCalcError('');
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen font-sans text-foreground relative flex items-center justify-center">
@@ -296,8 +398,7 @@ const SobrietyTracker = () => {
           </motion.div>
 
           {/* Daily Motivational Quote */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="bg-gradient-to-r from-teal-500/10 to-purple-500/10 border border-teal-500/20 rounded-xl p-6 max-w-3xl mx-auto"
@@ -330,179 +431,302 @@ const SobrietyTracker = () => {
             {isLoggedIn && (
               <TabsTrigger value="profile" className="data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                 <UserCheck className="w-4 h-4 mr-2" />
-                My Profile
-              </TabsTrigger>
+                My Profile              </TabsTrigger>
             )}
             {!isLoggedIn && (
               <>
                 <TabsTrigger value="login" className="data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                   <LogIn className="w-4 h-4 mr-2" />
-                  Login
-                </TabsTrigger>
+                  Login                </TabsTrigger>
                 <TabsTrigger value="signup" className="data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                   <UserPlus className="w-4 h-4 mr-2" />
-                  Sign Up
-                </TabsTrigger>
+                  Sign Up                </TabsTrigger>
               </>
             )}
           </TabsList>
 
           {/* Tracker Tab */}
           <TabsContent value="tracker">
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Progress Card */}
+            <div className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Progress Card */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center gap-2">
+                        <Flame className="w-5 h-5 text-teal-400" />
+                        Your Progress
+                      </CardTitle>
+                      <CardDescription className="text-gray-400">
+                        {isLoggedIn ? `Welcome back, ${currentUser?.name}!` : "Login to start tracking your sobriety journey"}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {isLoggedIn ? (
+                        <>
+                          <div className="text-center mb-6">
+                            <div className="text-5xl font-bold text-teal-400 mb-2">
+                              {daysSober}
+                            </div>
+                            <div className="text-gray-300">days sober</div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-300">Start Date:</span>
+                              <span className="text-white font-medium">
+                                {currentUser?.startDate ? new Date(currentUser.startDate).toLocaleDateString() : 'N/A'}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-300">Current Streak:</span>
+                              <span className="text-teal-400 font-bold">
+                                {daysSober} days
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-300">Your Rank:</span>
+                              <span className="text-amber-400 font-bold">
+                                #{userRank || 'N/A'}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Next Milestone Progress */}
+                          {nextMilestone && (
+                            <div className="mt-6">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm text-gray-300">Next Milestone: {nextMilestone.title}</span>
+                                <span className="text-sm text-teal-400">{daysSober}/{nextMilestone.days} days</span>
+                              </div>
+                              <Progress value={progressToNextMilestone} className="h-2 bg-white/10" />
+                            </div>
+                          )}
+
+                          <div className="mt-6 grid grid-cols-2 gap-4">
+                            <Button onClick={handleResetProgress} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/20">
+                              <RefreshCw className="w-4 h-4 mr-2" />
+                              Reset Progress
+                            </Button>
+                            <Button onClick={() => setShowMilestones(true)} className="bg-teal-500 hover:bg-teal-600 text-white">
+                              <Award className="w-4 h-4 mr-2" />
+                              View Milestones
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-center py-8">
+                          <p className="text-gray-300 mb-4">Please login or sign up to start tracking your sobriety journey.</p>
+                          <div className="flex gap-2 justify-center">
+                            <Button onClick={() => setActiveTab('login')} variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-500/10">
+                              Login
+                            </Button>
+                            <Button onClick={() => setActiveTab('signup')} className="bg-teal-500 hover:bg-teal-600 text-white">
+                              Sign Up
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                {/* Stats Card */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                >
+                  <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-teal-400" />
+                        Community Stats                      </CardTitle>
+                      <CardDescription className="text-gray-400">
+                        See how our community is doing together
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Users className="w-5 h-5 text-teal-400" />
+                            <span className="text-gray-300">Total Members</span>
+                          </div>
+                          <span className="text-white font-bold">{totalUsers}</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Calendar className="w-5 h-5 text-teal-400" />
+                            <span className="text-gray-300">Total Days Sober</span>
+                          </div>
+                          <span className="text-white font-bold">{totalDaysSobriety}</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Award className="w-5 h-5 text-amber-400" />
+                            <span className="text-gray-300">Average Streak</span>
+                          </div>
+                          <span className="text-white font-bold">{avgDays} days</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 p-4 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-lg border border-teal-500/20">
+                        <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                          <Crown className="w-4 h-4 text-yellow-400" />
+                          Top 3 This Week
+                        </h4>
+                        {leaderboard.length === 0 ? (
+                          <p className="text-gray-400 text-sm">No data available</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {leaderboard.slice(0, 3).map((user, index) => (
+                              <div key={user.id} className="flex items-center justify-between text-sm">
+                                <div className="flex items-center gap-2">
+                                  <span className={`font-bold ${index === 0 ? 'text-yellow-400' : index === 1 ? 'text-gray-300' : 'text-amber-600'}`}>
+                                    {index + 1}.
+                                  </span>
+                                  <span className="text-white">{user.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-teal-400 font-bold">{user.streak} days</span>
+                                  {user.isAdmin && <Shield className="w-3 h-3 text-purple-400" />}
+                                </div>
+                              }
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
+
+              {/* Interactive Recovery Timeline */}
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
               >
                 <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
-                      <Flame className="w-5 h-5 text-teal-400" />
-                      Your Progress
+                      <Clock className="w-5 h-5 text-teal-400" />
+                      Recovery Timeline
                     </CardTitle>
                     <CardDescription className="text-gray-400">
-                      {isLoggedIn ? `Welcome back, ${currentUser?.name}!` : "Login to start tracking your sobriety journey"}
+                      Click on each stage to learn more about what to expect.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    {isLoggedIn ? (
-                      <>
-                        <div className="text-center mb-6">
-                          <div className="text-5xl font-bold text-teal-400 mb-2">
-                            {daysSober}
-                          </div>
-                          <div className="text-gray-300">days sober</div>
-                        </div>
-
-                        <div className="space-y-4">
-                          <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Start Date:</span>
-                            <span className="text-white font-medium">
-                              {currentUser?.startDate ? new Date(currentUser.startDate).toLocaleDateString() : 'N/A'}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Current Streak:</span>
-                            <span className="text-teal-400 font-bold">
-                              {daysSober} days
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Your Rank:</span>
-                            <span className="text-amber-400 font-bold">
-                              #{userRank || 'N/A'}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Next Milestone Progress */}
-                        {nextMilestone && (
-                          <div className="mt-6">
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="text-sm text-gray-300">Next Milestone: {nextMilestone.title}</span>
-                              <span className="text-sm text-teal-400">{daysSober}/{nextMilestone.days} days</span>
+                  <CardContent className="p-6">
+                    <div className="overflow-x-auto px-4">
+                      <div className="inline-flex space-x-6">
+                        {timelineStages.map(stage => (
+                          <div key={stage.id} className="flex flex-col items-center text-center cursor-pointer hover:opacity-80 transition-opacity" onClick={() => toast.info(stage.title, { description: stage.description })}>
+                            <div className="w-10 h-10 rounded-full bg-teal-500/20 flex items-center justify-center mb-2">
+                              {stage.icon}
                             </div>
-                            <Progress value={progressToNextMilestone} className="h-2 bg-white/10" />
+                            <h4 className="font-medium text-white">{stage.title}</h4>
+                            <p className="text-xs text-gray-400">{stage.description}</p>
                           </div>
-                        )}
-
-                        <div className="mt-6 grid grid-cols-2 gap-4">
-                          <Button onClick={handleResetProgress} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/20">
-                            <RefreshCw className="w-4 h-4 mr-2" />
-                            Reset Progress
-                          </Button>
-                          <Button onClick={() => setShowMilestones(true)} className="bg-teal-500 hover:bg-teal-600 text-white">
-                            <Award className="w-4 h-4 mr-2" />
-                            View Milestones
-                          </Button>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="text-center py-8">
-                        <p className="text-gray-300 mb-4">Please login or sign up to start tracking your sobriety journey.</p>
-                        <div className="flex gap-2 justify-center">
-                          <Button onClick={() => setActiveTab('login')} variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-500/10">
-                            Login
-                          </Button>
-                          <Button onClick={() => setActiveTab('signup')} className="bg-teal-500 hover:bg-teal-600 text-white">
-                            Sign Up
-                          </Button>
-                        </div>
+                        ))}
                       </div>
-                    )}
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
 
-              {/* Stats Card */}
+              {/* Progress Calculator */}
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
               >
                 <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
                       <TrendingUp className="w-5 h-5 text-teal-400" />
-                      Community Stats
+                      Progress Calculator
                     </CardTitle>
                     <CardDescription className="text-gray-400">
-                      See how our community is doing together
+                      See how much time and money you could save by choosing a healthier path.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <Users className="w-5 h-5 text-teal-400" />
-                          <span className="text-gray-300">Total Members</span>
-                        </div>
-                        <span className="text-white font-bold">{totalUsers}</span>
+                  <CardContent className="p-6">
+                    <form onSubmit={handleCalculate} className="space-y-4">
+                      <div>
+                        <Label className="text-gray-300">Daily Usage</Label>
+                        <Input
+                          type="number"
+                          placeholder="e.g., 5 cigarettes"
+                          value={calcValues.dailyUsage}
+                          onChange={(e) => setCalcValues({ ...calcValues, dailyUsage: e.target.value })}
+                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                          required
+                        />
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <Calendar className="w-5 h-5 text-teal-400" />
-                          <span className="text-gray-300">Total Days Sober</span>
-                        </div>
-                        <span className="text-white font-bold">{totalDaysSobriety}</span>
+                      <div>
+                        <Label className="text-gray-300">Cost per Use (₹)</Label>
+                        <Input
+                          type="number"
+                          placeholder="e.g., 10"
+                          value={calcValues.costPerUse}
+                          onChange={(e) => setCalcValues({ ...calcValues, costPerUse: e.target.value })}
+                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                          required
+                        />
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <Award className="w-5 h-5 text-amber-400" />
-                          <span className="text-gray-300">Average Streak</span>
-                        </div>
-                        <span className="text-white font-bold">{avgDays} days</span>
+                      <div>
+                        <Label className="text-gray-300">Time per Use (minutes)</Label>
+                        <Input
+                          type="number"
+                          placeholder="e.g., 5"
+                          value={calcValues.timePerUse}
+                          onChange={(e) => setCalcValues({ ...calcValues, timePerUse: e.target.value })}
+                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
+                          required
+                        />
                       </div>
-                    </div>
+                      <div className="flex items-center justify-end">
+                        <Button type="submit" className="bg-teal-500 hover:bg-teal-600 text-white">
+                          Calculate
+                        </Button>
+                        <Button 
+                          type="button"
+                          onClick={handleResetCalc}
+                          className="ml-2 bg-white/10 hover:bg-white/20 text-white border border-white/20"
+                        >
+                          Reset
+                        </Button>
+                      </div>
+                    </form>
 
-                    <div className="mt-6 p-4 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-lg border border-teal-500/20">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Crown className="w-4 h-4 text-yellow-400" />
-                        Top 3 This Week
-                      </h4>
-                      {leaderboard.length === 0 ? (
-                        <p className="text-gray-400 text-sm">No data available</p>
-                      ) : (
-                        <div className="space-y-2">
-                          {leaderboard.slice(0, 3).map((user, index) => (
-                            <div key={user.id} className="flex items-center justify-between text-sm">
-                              <div className="flex items-center gap-2">
-                                <span className={`font-bold ${index === 0 ? 'text-yellow-400' : index === 1 ? 'text-gray-300' : 'text-amber-600'}`}>
-                                  {index + 1}.
-                                </span>
-                                <span className="text-white">{user.name}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-teal-400 font-bold">{user.streak} days</span>
-                                {user.isAdmin && <Shield className="w-3 h-3 text-purple-400" />}
-                              </div>
-                            </div>
-                          ))}
+                    {calcError && <p className="text-red-400 text-sm mt-2">{calcError}</p>}
+                    {results && (
+                      <div className="mt-6">
+                        <h3 className="font-semibold text-white mb-4">Your Potential Savings</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="border border-white/10 bg-black/50 p-4 rounded-lg">
+                            <h4 className="text-teal-400 mb-2">Money Saved</h4>
+                            <p className="text-gray-300">Daily: ₹{results.dailyCost.toFixed(2)}</p>
+                            <p className="text-gray-300">Weekly: ₹{results.weeklyCost.toFixed(2)}</p>
+                            <p className="text-gray-300">Monthly: ₹{results.monthlyCost.toFixed(2)}</p>
+                            <p className="text-gray-300">Yearly: ₹{results.yearlyCost.toFixed(2)}</p>
+                          </div>
+                          <div className="border border-white/10 bg-black/50 p-4 rounded-lg">
+                            <h4 className="text-teal-400 mb-2">Time Saved</h4>
+                            <p className="text-gray-300">Daily: {results.dailyTime} minutes</p>
+                            <p className="text-gray-300">Weekly: {results.weeklyTime} minutes</p>
+                            <p className="text-gray-300">Monthly: {results.monthlyTime} minutes</p>
+                            <p className="text-gray-300">Yearly: {results.yearlyTime} minutes</p>
+                          </div>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -604,8 +828,7 @@ const SobrietyTracker = () => {
                       </div>
                       <div>
                         <Label className="text-gray-300">Email</Label>
-                        <Input
-                          value={currentUser?.email || ''}
+                        <Input                          value={currentUser?.email || ''}
                           readOnly
                           className="bg-black/50 border-white/10 text-white mt-1"
                         />
@@ -769,14 +992,12 @@ const SobrietyTracker = () => {
                     </div>
                     <div>
                       <Label className="text-gray-300">Password</Label>
-                      <Input
-                        type="password"
+                      <Input                        type="password"
                         placeholder="•••••••• (min 6 characters)"
                         value={signupData.password}
                         onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                         className="bg-black/50 border-white/10 text-white placeholder:text-gray-500 mt-1"
-                        required
-                        minLength={6}
+                        required                        minLength={6}
                       />
                     </div>
                     <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white" disabled={isSubmitting}>
