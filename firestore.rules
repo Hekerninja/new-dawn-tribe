@@ -11,10 +11,9 @@ service cloud.firestore {
       // Allow users to update their own data
       allow update: if request.auth != null && request.auth.uid == userId;
 
-      // Allow admin users to delete any user
+      // Allow admin users to delete specific users (only the targeted userId)
       allow delete: if request.auth != null &&
-                    (request.auth.uid == userId ||
-                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
+                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
 
       // Allow admin users to update any user's admin status
       allow update: if request.auth != null &&
