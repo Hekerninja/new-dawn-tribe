@@ -313,7 +313,8 @@ const SobrietyTracker = () => {
                   <Link to="/admin">
                     <Button className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/30">
                       <Shield className="w-4 h-4 mr-2" />
-                      Admin Panel                    </Button>
+                      Admin Panel
+                    </Button>
                   </Link>
                 )}
                 <Button onClick={logout} className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30">
@@ -398,7 +399,8 @@ const SobrietyTracker = () => {
           </motion.div>
 
           {/* Daily Motivational Quote */}
-          <motion.div            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="bg-gradient-to-r from-teal-500/10 to-purple-500/10 border border-teal-500/20 rounded-xl p-6 max-w-3xl mx-auto"
@@ -431,16 +433,19 @@ const SobrietyTracker = () => {
             {isLoggedIn && (
               <TabsTrigger value="profile" className="data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                 <UserCheck className="w-4 h-4 mr-2" />
-                My Profile              </TabsTrigger>
+                My Profile
+              </TabsTrigger>
             )}
             {!isLoggedIn && (
               <>
                 <TabsTrigger value="login" className="data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                   <LogIn className="w-4 h-4 mr-2" />
-                  Login                </TabsTrigger>
+                  Login
+                </TabsTrigger>
                 <TabsTrigger value="signup" className="data-[state=active]:bg-teal-500 data-[state=active]:text-white">
                   <UserPlus className="w-4 h-4 mr-2" />
-                  Sign Up                </TabsTrigger>
+                  Sign Up
+                </TabsTrigger>
               </>
             )}
           </TabsList>
@@ -545,9 +550,11 @@ const SobrietyTracker = () => {
                     <CardHeader>
                       <CardTitle className="text-white flex items-center gap-2">
                         <TrendingUp className="w-5 h-5 text-teal-400" />
-                        Community Stats                      </CardTitle>
+                        Community Stats
+                      </CardTitle>
                       <CardDescription className="text-gray-400">
-                        See how our community is doing together                      </CardDescription>
+                        See how our community is doing together
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
@@ -577,7 +584,8 @@ const SobrietyTracker = () => {
                       <div className="mt-6 p-4 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-lg border border-teal-500/20">
                         <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
                           <Crown className="w-4 h-4 text-yellow-400" />
-                          Top 3 This Week                        </h4>
+                          Top 3 This Week
+                        </h4>
                         {leaderboard.length === 0 ? (
                           <p className="text-gray-400 text-sm">No data available</p>
                         ) : (
@@ -594,7 +602,7 @@ const SobrietyTracker = () => {
                                   <span className="text-teal-400 font-bold">{user.streak} days</span>
                                   {user.isAdmin && <Shield className="w-3 h-3 text-purple-400" />}
                                 </div>
-                              }
+                              </div>
                             ))}
                           </div>
                         )}
@@ -605,7 +613,8 @@ const SobrietyTracker = () => {
               </div>
 
               {/* Interactive Recovery Timeline */}
-              <motion.div                initial={{ opacity: 0, y: 20 }}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
@@ -674,7 +683,8 @@ const SobrietyTracker = () => {
                           value={calcValues.costPerUse}
                           onChange={(e) => setCalcValues({ ...calcValues, costPerUse: e.target.value })}
                           className="bg-black/50 border-white/10 text-white placeholder:text-gray-500"
-                          required                        />
+                          required
+                        />
                       </div>
                       <div>
                         <Label className="text-gray-300">Time per Use (minutes)</Label>
@@ -691,7 +701,7 @@ const SobrietyTracker = () => {
                         <Button type="submit" className="bg-teal-500 hover:bg-teal-600 text-white">
                           Calculate
                         </Button>
-                        <Button 
+                        <Button
                           type="button"
                           onClick={handleResetCalc}
                           className="ml-2 bg-white/10 hover:bg-white/20 text-white border border-white/20"
@@ -744,7 +754,8 @@ const SobrietyTracker = () => {
                     </CardDescription>
                   </div>
                   <div className="flex gap-2">
-                    <Input                      placeholder="Search users..."
+                    <Input
+                      placeholder="Search users..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="bg-black/50 border-white/10 text-white placeholder:text-gray-500 w-64"
@@ -805,7 +816,8 @@ const SobrietyTracker = () => {
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
                       <UserCheck className="w-5 h-5 text-teal-400" />
-                      Your Profile                    </CardTitle>
+                      Your Profile
+                    </CardTitle>
                     <CardDescription className="text-gray-400">
                       Manage your account and preferences
                     </CardDescription>
@@ -822,7 +834,8 @@ const SobrietyTracker = () => {
                       </div>
                       <div>
                         <Label className="text-gray-300">Email</Label>
-                        <Input                          value={currentUser?.email || ''}
+                        <Input
+                          value={currentUser?.email || ''}
                           readOnly
                           className="bg-black/50 border-white/10 text-white mt-1"
                         />
@@ -839,7 +852,8 @@ const SobrietyTracker = () => {
                         <Label className="text-gray-300">Account Status</Label>
                         <Input
                           value={currentUser?.isAdmin ? 'Administrator' : 'Member'}
-                          readOnly                          className="bg-black/50 border-white/10 text-white mt-1"
+                          readOnly
+                          className="bg-black/50 border-white/10 text-white mt-1"
                         />
                       </div>
                     </div>
@@ -859,7 +873,8 @@ const SobrietyTracker = () => {
                       Account Settings
                     </CardTitle>
                     <CardDescription className="text-gray-400">
-                      Manage your preferences                    </CardDescription>
+                      Manage your preferences
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
@@ -905,7 +920,8 @@ const SobrietyTracker = () => {
                         value={loginData.email}
                         onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                         className="bg-black/50 border-white/10 text-white placeholder:text-gray-500 mt-1"
-                        required                      />
+                        required
+                      />
                     </div>
                     <div>
                       <Label className="text-gray-300">Password</Label>
@@ -972,7 +988,8 @@ const SobrietyTracker = () => {
                     </div>
                     <div>
                       <Label className="text-gray-300">Email</Label>
-                      <Input                        type="email"
+                      <Input
+                        type="email"
                         placeholder="your@email.com"
                         value={signupData.email}
                         onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
@@ -982,12 +999,14 @@ const SobrietyTracker = () => {
                     </div>
                     <div>
                       <Label className="text-gray-300">Password</Label>
-                      <Input                        type="password"
+                      <Input
+                        type="password"
                         placeholder="•••••••• (min 6 characters)"
                         value={signupData.password}
                         onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                         className="bg-black/50 border-white/10 text-white placeholder:text-gray-500 mt-1"
-                        required                        minLength={6}
+                        required
+                        minLength={6}
                       />
                     </div>
                     <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white" disabled={isSubmitting}>
