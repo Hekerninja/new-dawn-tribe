@@ -48,8 +48,8 @@ const AdminPanel = () => {
   }, [checkDatabaseStatus]);
 
   // Filter leaderboard by search term
-  const filteredLeaderboard = leaderboard.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredLeaderboard = leaderboard.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -69,7 +69,7 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen font-sans text-foreground relative">
       <CosmicBackground />
-      
+
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -243,17 +243,17 @@ const AdminPanel = () => {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div>
                     <CardTitle className="text-white flex items-center gap-2">
-                      <Users className="w-5 h-5 text-teal-400" />
+                      <Users className="w-4 h-4 mr-2" />
                       User Management
                     </CardTitle>
                     <CardDescription className="text-gray-400">Manage all registered users</CardDescription>
                   </div>
                   <div className="flex gap-2">
-                    <Input 
-                      placeholder="Search users..." 
-                      value={searchTerm} 
-                      onChange={(e) => setSearchTerm(e.target.value)} 
-                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500 w-64" 
+                    <Input
+                      placeholder="Search users..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="bg-black/50 border-white/10 text-white placeholder:text-gray-500 w-64"
                     />
                     <Button onClick={refreshLeaderboard} className="bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 border border-teal-500/30">
                       <RefreshCw className="w-4 h-4" />
@@ -297,17 +297,17 @@ const AdminPanel = () => {
                           </TableCell>
                           <TableCell>
                             <div className="flex gap-2">
-                              <Button 
-                                size="sm" 
-                                variant="outline" 
+                              <Button
+                                size="sm"
+                                variant="outline"
                                 className={`border ${user.isAdmin ? 'border-purple-500/30 text-purple-400 hover:bg-purple-500/20' : 'border-green-500/30 text-green-400 hover:bg-green-500/20'}`}
                                 onClick={() => updateAdminStatus(user.id, !user.isAdmin)}
                               >
                                 {user.isAdmin ? <><UserX className="w-3 h-3 mr-1" /> Remove Admin</> : <><UserCheck className="w-3 h-3 mr-1" /> Make Admin</>}
                               </Button>
-                              <Button 
-                                size="sm" 
-                                variant="outline" 
+                              <Button
+                                size="sm"
+                                variant="outline"
                                 className="border-red-500/30 text-red-400 hover:bg-red-500/20"
                                 onClick={() => {
                                   if (confirm('Are you sure you want to delete this account? This action cannot be undone.')) {
@@ -333,7 +333,7 @@ const AdminPanel = () => {
             <Card className="border border-white/10 bg-black/40 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Settings className="w-5 h-5 text-teal-400" />
+                  <Settings className="w-4 h-4 mr-2" />
                   System Settings
                 </CardTitle>
                 <CardDescription className="text-gray-400">Configure system preferences</CardDescription>
@@ -356,12 +356,12 @@ const AdminPanel = () => {
                       <h4 className="font-medium text-white">Database Connection</h4>
                       <p className="text-sm text-gray-400">Check Firestore connection status</p>
                     </div>
-                    <Button 
-                      onClick={async () => { 
-                        const status = await checkDatabaseStatus(); 
-                        showSuccess(status ? 'Database connected successfully' : 'Database connection failed'); 
-                      }} 
-                      variant="outline" 
+                    <Button
+                      onClick={async () => {
+                        const status = await checkDatabaseStatus();
+                        showSuccess(status ? 'Database connected successfully' : 'Database connection failed');
+                      }}
+                      variant="outline"
                       className="border-white/20 text-white hover:bg-white/10"
                     >
                       Test Connection
