@@ -5,20 +5,23 @@ service cloud.firestore {
       // Allow users to read their own data
       allow read: if request.auth != null && request.auth.uid == userId;
 
+      // Allow admin users to read all users data
+      allow read: if request.auth != null &&
+                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+
       // Allow users to create their own profile
       allow create: if request.auth != null && request.auth.uid == userId;
 
       // Allow users to update their own data
       allow update: if request.auth != null && request.auth.uid == userId;
 
-      // Allow admin users to delete specific users (only the targeted userId)
+      // Allow admin users to delete any user
       allow delete: if request.auth != null &&
                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
 
-      // Allow admin users to update any user's admin status
+      // Allow admin users to update any user's data
       allow update: if request.auth != null &&
-                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true &&
-                    request.resource.data.isAdmin != null;
+                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
     match /test/{document} {
@@ -27,6 +30,10 @@ service cloud.firestore {
 
       // Allow authenticated users to create test documents
       allow create: if request.auth != null;
+
+      // Allow admin users to delete test documents
+      allow delete: if request.auth != null &&
+                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
   }
 }
