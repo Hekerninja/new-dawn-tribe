@@ -113,10 +113,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
               setCurrentUser(formattedUser);
               setIsLoggedIn(true);
 
-              // Only refresh leaderboard if user is admin
-              if (formattedUser.isAdmin) {
-                await refreshLeaderboard();
-              }
+              // Always refresh leaderboard when user logs in
+              await refreshLeaderboard();
             } else {
               // User exists in auth but not in Firestore - create user document
               const now = new Date(); // Use JavaScript Date instead of serverTimestamp
@@ -146,6 +144,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
 
                 setCurrentUser(newFormattedUser);
                 setIsLoggedIn(true);
+                await refreshLeaderboard();
               }
             }
           } catch (permissionError) {
@@ -188,40 +187,35 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
   // Refresh leaderboard
   const refreshLeaderboard = async () => {
     try {
-      // Only fetch leaderboard if current user is admin
-      if (currentUser?.isAdmin) {
-        const q = query(collection(db, "users"), orderBy("streak", "desc"));
-        const querySnapshot = await getDocs(q);
-        const users: UserData[] = [];
+      // Fetch all users for leaderboard
+      const q = query(collection(db, "users"), orderBy("streak", "desc"));
+      const querySnapshot = await getDocs(q);
+      const users: UserData[] = [];
 
-        querySnapshot.forEach((doc) => {
-          try {
-            const data = doc.data();
-            // Handle timestamp conversion safely
-            const startDate = convertFirebaseTimestamp(data.startDate);
-            const lastUpdate = convertFirebaseTimestamp(data.lastUpdate);
+      querySnapshot.forEach((doc) => {
+        try {
+          const data = doc.data();
+          // Handle timestamp conversion safely
+          const startDate = convertFirebaseTimestamp(data.startDate);
+          const lastUpdate = convertFirebaseTimestamp(data.lastUpdate);
 
-            users.push({
-              id: doc.id,
-              name: data.name || "User",
-              email: data.email,
-              startDate: startDate,
-              streak: data.streak || 0,
-              lastUpdate: lastUpdate,
-              isAdmin: data.isAdmin || false,
-            });
-          } catch (error) {
-            console.error("Error processing user document:", error);
-            const errorMessage = handleFirebaseError(error);
-            console.error('Firebase Error:', errorMessage);
-          }
-        });
+          users.push({
+            id: doc.id,
+            name: data.name || "User",
+            email: data.email,
+            startDate: startDate,
+            streak: data.streak || 0,
+            lastUpdate: lastUpdate,
+            isAdmin: data.isAdmin || false,
+          });
+        } catch (error) {
+          console.error("Error processing user document:", error);
+          const errorMessage = handleFirebaseError(error);
+          console.error('Firebase Error:', errorMessage);
+        }
+      });
 
-        setLeaderboard(users);
-      } else {
-        // For non-admin users, return empty leaderboard
-        setLeaderboard([]);
-      }
+      setLeaderboard(users);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
       const errorMessage = handleFirebaseError(error);
