@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { showSuccess, showError } from "@/utils/toast";
-import toast from "sonner";
+import { toast } from "sonner";
 import CosmicBackground from '@/components/CosmicBackground';
 import { useSobrietyTracker } from '@/contexts/SobrietyTrackerContext';
 
