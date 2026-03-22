@@ -65,6 +65,22 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     initDb();
   }, []);
 
+  // Helper function to safely convert Firebase timestamp to Date
+  const convertFirebaseTimestamp = (timestamp: any): Date => {
+    if (timestamp && typeof timestamp === 'object') {
+      if (timestamp.seconds && timestamp.nanoseconds) {
+        // This is a Firebase Timestamp object
+        return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+      }
+      if (timestamp.toDate) {
+        // This is a Firebase Timestamp with toDate method
+        return timestamp.toDate();
+      }
+    }
+    // If it's not a valid timestamp, return current date
+    return new Date();
+  };
+
   // Listen for auth state changes
   useEffect(() => {
     if (!isDatabaseReady) return;
@@ -81,8 +97,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
             if (userDoc.exists()) {
               const userData = userDoc.data();
               // Handle timestamp conversion safely
-              const startDate = userData.startDate?.toDate ? userData.startDate.toDate() : new Date(userData.startDate);
-              const lastUpdate = userData.lastUpdate?.toDate ? userData.lastUpdate.toDate() : new Date(userData.lastUpdate);
+              const startDate = convertFirebaseTimestamp(userData.startDate);
+              const lastUpdate = convertFirebaseTimestamp(userData.lastUpdate);
 
               const formattedUser: UserData = {
                 id: userDoc.id,
@@ -103,7 +119,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
               }
             } else {
               // User exists in auth but not in Firestore - create user document
-              const now = serverTimestamp();
+              const now = new Date(); // Use JavaScript Date instead of serverTimestamp
               await setDoc(userDocRef, {
                 name: user.displayName || "User",
                 email: user.email,
@@ -122,9 +138,9 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
                   id: newUserDoc.id,
                   name: newUserData.name || "User",
                   email: newUserData.email,
-                  startDate: newUserData.startDate.toDate(),
+                  startDate: convertFirebaseTimestamp(newUserData.startDate),
                   streak: newUserData.streak || 0,
-                  lastUpdate: newUserData.lastUpdate.toDate(),
+                  lastUpdate: convertFirebaseTimestamp(newUserData.lastUpdate),
                   isAdmin: newUserData.isAdmin || false,
                 };
 
@@ -182,8 +198,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
           try {
             const data = doc.data();
             // Handle timestamp conversion safely
-            const startDate = data.startDate?.toDate ? data.startDate.toDate() : new Date(data.startDate);
-            const lastUpdate = data.lastUpdate?.toDate ? data.lastUpdate.toDate() : new Date(data.lastUpdate);
+            const startDate = convertFirebaseTimestamp(data.startDate);
+            const lastUpdate = convertFirebaseTimestamp(data.lastUpdate);
 
             users.push({
               id: doc.id,
@@ -249,8 +265,8 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Add user to Firestore
-      const now = serverTimestamp();
+      // Add user to Firestore with current date
+      const now = new Date();
       await setDoc(doc(db, "users", user.uid), {
         name,
         email,
@@ -287,7 +303,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
     if (!currentUser) return;
 
     try {
-      const now = serverTimestamp();
+      const now = new Date();
       const userRef = doc(db, "users", currentUser.id);
       await updateDoc(userRef, {
         startDate: now,
@@ -295,7 +311,7 @@ export const SobrietyTrackerProvider: React.FC<{ children: React.ReactNode }> = 
         lastUpdate: now,
       });
 
-      setCurrentUser({ ...currentUser, startDate: new Date(), streak: 0, lastUpdate: new Date() });
+      setCurrentUser({ ...currentUser, startDate: now, streak: 0, lastUpdate: now });
       showSuccess("Progress reset successfully!");
     } catch (error: any) {
       console.error("Reset progress error:", error);
