@@ -16,6 +16,7 @@ const DatabaseStatus = () => {
         const isConnected = await checkDatabaseStatus();
         setStatus(isConnected ? 'connected' : 'error');
       } catch (error) {
+        console.error('Database status check error:', error);
         setStatus('error');
       }
     };
