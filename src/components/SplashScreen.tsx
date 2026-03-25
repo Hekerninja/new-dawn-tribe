@@ -8,7 +8,8 @@ const SplashScreen = () => {
   const [isMounted, setIsMounted] = useState(false);
   const navigate = useNavigate();
 
-  // Set mounted state after first render  useEffect(() => {
+  // Set mounted state after first render
+  useEffect(() => {
     setIsMounted(true);
   }, []);
 
