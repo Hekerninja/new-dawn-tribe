@@ -8,12 +8,12 @@ const SplashScreen = () => {
   const [isMounted, setIsMounted] = useState(false);
   const navigate = useNavigate();
 
-  // Set mounted state after first render
-  useEffect(() => {
+  // Set mounted state after first render  useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Handle splash screen timeout  useEffect(() => {
+  // Handle splash screen timeout
+  useEffect(() => {
     if (isMounted) {
       const timer = setTimeout(() => {
         setShowSplash(false);
