@@ -15,14 +15,14 @@ import masterclassImage from '@/assets/Gemini_Generated_Image_p1vadfp1vadfp1va.p
 // To add a new event, append an object to this array following the same shape.
 const EVENTS = [
   {
-    id: "masterclass-oct-26",
+    id: "masterclass-jun-21",
     badge: "Masterclass",
     badgeColor: "amber",
     title: "Unlock Your Freedom",
     subtitle: "The De-Addiction Masterclass",
     tagline: "A One-Day Transformation to Reclaim Your Life",
-    date: "Saturday, October 26th",
-    time: "9:00 AM – 5:00 PM",
+    date: "Sunday, June 21st, 2026",
+    time: "12:00 PM – 2:00 PM",
     platform: "Virtual (Zoom)",
     price: "₹99",
     originalPrice: "₹999",
@@ -47,14 +47,12 @@ const EVENTS = [
       "Digital workbook and resource kit (sent before the event)",
     ],
     agenda: [
-      { time: "9:00 AM",  title: "Welcome & Opening Ceremony",   desc: "Set intentions, meet your cohort, and prepare your mind for transformation." },
-      { time: "10:00 AM", title: "Understanding Addiction",       desc: "The neuroscience of dependency — why willpower alone never works." },
-      { time: "11:30 AM", title: "Breaking the Identity Loop",    desc: "Discover how your self-image keeps you stuck and how to rewrite it." },
-      { time: "1:00 PM",  title: "Lunch Break",                   desc: "Recharge and connect with fellow participants." },
-      { time: "2:00 PM",  title: "Powerful Tools & Techniques",   desc: "Practical exercises you can use the same day to manage cravings and triggers." },
-      { time: "3:30 PM",  title: "Building Resilience",           desc: "Create a personalised relapse-prevention plan that actually sticks." },
-      { time: "4:30 PM",  title: "Q&A with Sagar Banerjee",       desc: "Live hot-seat coaching and your burning questions answered." },
-      { time: "5:00 PM",  title: "Closing & Next Steps",          desc: "Leave with clarity, community, and a concrete 30-day action plan." },
+      { time: "12:00 PM", title: "Welcome & Opening",             desc: "Set intentions, meet your cohort, and prepare your mind for transformation." },
+      { time: "12:20 PM", title: "Understanding Addiction",        desc: "The neuroscience of dependency — why willpower alone never works." },
+      { time: "12:45 PM", title: "Breaking the Identity Loop",     desc: "Discover how your self-image keeps you stuck and how to rewrite it." },
+      { time: "1:15 PM",  title: "Powerful Tools & Techniques",    desc: "Practical exercises you can use the same day to manage cravings and triggers." },
+      { time: "1:40 PM",  title: "Q&A with Sagar Banerjee",        desc: "Live hot-seat coaching and your burning questions answered." },
+      { time: "2:00 PM",  title: "Closing & Next Steps",           desc: "Leave with clarity, community, and a concrete 30-day action plan." },
     ],
     faqs: [
       { q: "Who is this masterclass for?",           a: "Anyone struggling with addiction or supporting a loved one — no prior experience needed. Whether you're in early recovery or have been trying to quit for years, this day is designed for you." },
