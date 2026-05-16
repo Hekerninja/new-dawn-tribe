@@ -217,33 +217,22 @@ function EventDetail({ event, onBack }: { event: typeof EVENTS[0]; onBack: () =>
         </div>
       </section>
 
-      {/* About host */}
+      {/* About host — text only, no photo */}
       <section className="relative z-10 py-20 bg-black/20">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="flex flex-col md:flex-row gap-10 items-center">
-            <div className="shrink-0">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300&h=300"
-                alt="Sagar Banerjee"
-                className="w-44 h-44 object-cover rounded-full ring-4 ring-teal-400/40"
-              />
-            </div>
-            <div>
-              <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">Your Host</span>
-              <h2 className="text-2xl font-bold text-white mt-1 mb-3">Sagar Banerjee</h2>
-              <div className="flex gap-2 flex-wrap mb-4">
-                {["2+ Years Sober", "De-Addiction Coach", "Author", "New Dawn Tribe Founder"].map(t => (
-                  <span key={t} className="bg-teal-500/15 text-teal-300 text-xs font-medium px-3 py-1 rounded-full">{t}</span>
-                ))}
-              </div>
-              <p className="text-gray-300 leading-relaxed text-sm mb-4">
-                Sagar Banerjee is the founder of New Dawn Tribe and a certified de-addiction coach who has helped hundreds of young adults reclaim their lives. Having walked the path of addiction and recovery himself — and maintained over 2 years of sobriety — he brings both professional expertise and deep personal empathy to every session.
-              </p>
-              <div className="flex items-center gap-1 mt-4">
-                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
-                <span className="text-gray-400 text-sm ml-2">Rated 5★ by past participants</span>
-              </div>
-            </div>
+        <div className="container mx-auto px-4 max-w-3xl text-center">
+          <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">Your Host</span>
+          <h2 className="text-2xl font-bold text-white mt-2 mb-4">Sagar Banerjee</h2>
+          <div className="flex gap-2 flex-wrap justify-center mb-6">
+            {["2+ Years Sober", "De-Addiction Coach", "Author", "New Dawn Tribe Founder"].map(t => (
+              <span key={t} className="bg-teal-500/15 text-teal-300 text-xs font-medium px-3 py-1 rounded-full">{t}</span>
+            ))}
+          </div>
+          <p className="text-gray-300 leading-relaxed text-sm">
+            Sagar Banerjee is the founder of New Dawn Tribe and a certified de-addiction coach who has helped hundreds of young adults reclaim their lives. Having walked the path of addiction and recovery himself — and maintained over 2 years of sobriety — he brings both professional expertise and deep personal empathy to every session.
+          </p>
+          <div className="flex items-center gap-1 mt-6 justify-center">
+            {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
+            <span className="text-gray-400 text-sm ml-2">Rated 5★ by past participants</span>
           </div>
         </div>
       </section>

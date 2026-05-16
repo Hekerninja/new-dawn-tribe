@@ -1,29 +1,26 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import UnicornScene from "unicornstudio-react";
 
 const SplashScreen = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
-  const navigate = useNavigate();
 
   // Set mounted state after first render
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Handle splash screen timeout
+  // Hide splash after timeout — no navigation, stay on current page
   useEffect(() => {
     if (isMounted) {
       const timer = setTimeout(() => {
         setShowSplash(false);
-        navigate('/');
-      }, 10000); // 10 seconds
+      }, 10000);
 
       return () => clearTimeout(timer);
     }
-  }, [isMounted, navigate]);
+  }, [isMounted]);
 
   if (!showSplash) {
     return null; // Return null to let the main app render
