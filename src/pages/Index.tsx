@@ -144,6 +144,7 @@ const Index = () => {
           <div className="hidden md:flex gap-6 text-sm font-medium text-gray-300">
             <Link to="/about" className="hover:text-teal-400 transition-colors">About</Link>
             <Link to="/services" className="hover:text-teal-400 transition-colors">Services</Link>
+            <Link to="/events" className="hover:text-teal-400 transition-colors">Events</Link>
             <Link to="/blog" className="hover:text-teal-400 transition-colors">Blog</Link>
             <Link to="/quiz" className="hover:text-teal-400 transition-colors">Quiz</Link>
             <Link to="/tracker" className="hover:text-teal-400 transition-colors">Tracker</Link>

@@ -93,6 +93,13 @@ const MobileMenu = () => {
                 Services
               </Link>
               <Link
+                to="/events"
+                className="text-xl py-3 px-4 text-gray-300 hover:text-teal-400 hover:bg-white/10 rounded-lg transition-colors"
+                onClick={closeMenu}
+              >
+                Events
+              </Link>
+              <Link
                 to="/blog"
                 className="text-xl py-3 px-4 text-gray-300 hover:text-teal-400 hover:bg-white/10 rounded-lg transition-colors"
                 onClick={closeMenu}
