@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import CosmicBackground from '@/components/CosmicBackground';
 import MobileMenu from '@/components/MobileMenu';
-import masterclassImage from '@/assets/Gemini_Generated_Image_p1vadfp1vadfp1va.png';
+import masterclassImage from '@/assets/9b570b38-5483-4dbd-a5b6-3827ca6be2ab.jpg';
 
 // ── Event data ─────────────────────────────────────────────────────────────
 // To add a new event, append an object to this array following the same shape.
@@ -24,9 +24,9 @@ const EVENTS = [
     date: "Sunday, June 21st, 2026",
     time: "12:00 PM – 2:00 PM",
     platform: "Virtual (Zoom)",
-    price: "₹99",
+    price: "FREE",
     originalPrice: "₹999",
-    discount: "90% OFF",
+    discount: "100% FREE",
     status: "Upcoming",
     image: masterclassImage,
     registrationUrl: "https://docs.google.com/forms/d/e/1FAIpQLSeHS1Ul2J5-1f1LEnPzm0AwXfYBh6Tf7dd5qGcqpt6m85uI5g/viewform?usp=dialog",
@@ -56,7 +56,7 @@ const EVENTS = [
     ],
     faqs: [
       { q: "Who is this masterclass for?",           a: "Anyone struggling with addiction or supporting a loved one — no prior experience needed. Whether you're in early recovery or have been trying to quit for years, this day is designed for you." },
-      { q: "Is it really only ₹99?",                 a: "Yes! We've priced it this way intentionally so nobody is priced out of their recovery. Spots are strictly limited to keep the session intimate and powerful." },
+      { q: "Is it really free?",                      a: "Yes! This masterclass is completely free. Spots are strictly limited to keep the session intimate and powerful — register now to secure your place." },
       { q: "What platform will the masterclass be on?", a: "You'll receive a Zoom link upon registration. Make sure you have Zoom installed before the day." },
       { q: "Will there be a recording?",             a: "The masterclass is live-only to maintain the energy and confidentiality of participants. Show up live!" },
       { q: "What if I need to cancel?",              a: "Reach out to us at newdawntribe@gmail.com and we'll sort you out." },
