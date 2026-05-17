@@ -124,8 +124,8 @@ const Index = () => {
       <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white py-3 px-4 text-center">
         <div className="container mx-auto flex items-center justify-center gap-2">
           <Sparkles className="w-5 h-5" />
-          <span className="font-bold text-lg md:text-xl">🎉 Special Offer: ₹99 INR Webinar on "How to Stay Sober" - Coming Soon!</span>
-          <Link to="/contact" className="ml-4 bg-white text-amber-600 hover:bg-amber-50 px-4 py-1.5 rounded-full font-semibold text-sm transition-colors flex items-center gap-1">
+          <span className="font-bold text-lg md:text-xl">One Day De-Addiction Masterclass — Register Now, It's FREE!</span>
+          <Link to="/events" className="ml-4 bg-white text-amber-600 hover:bg-amber-50 px-4 py-1.5 rounded-full font-semibold text-sm transition-colors flex items-center gap-1">
             Sign Up Now
             <ArrowRight className="w-4 h-4" />
           </Link>
