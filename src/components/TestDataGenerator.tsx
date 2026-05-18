@@ -41,7 +41,6 @@ const TestDataGenerator = () => {
 
       showSuccess("Test data generated successfully!");
     } catch (error) {
-      console.error("Error generating test data:", error);
       const errorMessage = handleFirebaseError(error);
       showError(errorMessage);
     } finally {

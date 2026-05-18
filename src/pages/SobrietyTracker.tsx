@@ -123,8 +123,14 @@ const SobrietyTracker = () => {
     try {
       await login(loginData.email, loginData.password);
       setLoginData({ email: '', password: '' });
-    } catch (error) {
-      console.error("Login failed:", error);
+    } catch (error: any) {
+      if (error?.code === 'auth/user-not-found' || error?.code === 'auth/wrong-password' || error?.code === 'auth/invalid-credential') {
+        showError("Invalid email or password. Please try again.");
+      } else if (error?.code === 'auth/too-many-requests') {
+        showError("Too many failed attempts. Please try again later.");
+      } else {
+        showError("Login failed. Please check your connection and try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -136,13 +142,25 @@ const SobrietyTracker = () => {
       showError("Please fill in all fields.");
       return;
     }
+    if (signupData.password.length < 6) {
+      showError("Password must be at least 6 characters.");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
       await signup(signupData.name, signupData.email, signupData.password);
       setSignupData({ name: '', email: '', password: '' });
-    } catch (error) {
-      console.error("Signup failed:", error);
+    } catch (error: any) {
+      if (error?.code === 'auth/email-already-in-use') {
+        showError("An account with this email already exists.");
+      } else if (error?.code === 'auth/invalid-email') {
+        showError("Please enter a valid email address.");
+      } else if (error?.code === 'auth/weak-password') {
+        showError("Password is too weak. Please use at least 6 characters.");
+      } else {
+        showError("Sign up failed. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }

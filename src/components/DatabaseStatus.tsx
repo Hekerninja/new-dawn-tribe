@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useSobrietyTracker } from '@/contexts/SobrietyTrackerContext';
-import { Database, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { Database, CircleCheck as CheckCircle, TriangleAlert as AlertTriangle, Loader as Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const DatabaseStatus = () => {
@@ -15,8 +15,7 @@ const DatabaseStatus = () => {
       try {
         const isConnected = await checkDatabaseStatus();
         setStatus(isConnected ? 'connected' : 'error');
-      } catch (error) {
-        console.error('Database status check error:', error);
+      } catch {
         setStatus('error');
       }
     };

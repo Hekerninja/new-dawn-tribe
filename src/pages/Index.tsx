@@ -108,8 +108,7 @@ const Index = () => {
       } else {
         showError(data.error || "Failed to send message. Please try again.");
       }
-    } catch (error) {
-      console.error("Error sending message:", error);
+    } catch {
       showError("Failed to send message. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);

@@ -1,1 +1,25 @@
-"use client"; import { useLocation } from "react-router-dom"; import { useEffect } from "react"; import { Link } from "react-router-dom"; import { Button } from "@/components/ui/button"; import CosmicBackground from '@/components/CosmicBackground'; const NotFound = () => { const location = useLocation(); useEffect(() => { console.error( "404 Error: User attempted to access non-existent route:", location.pathname, ); }, [location.pathname]); return ( <div className="min-h-screen flex items-center justify-center bg-[#0a0a1a] font-sans text-foreground relative"> <CosmicBackground /> <div className="text-center z-10"> <h1 className="text-4xl font-bold text-white mb-4">404</h1> <p className="text-xl text-gray-300 mb-4">Oops! Page not found</p> <Link to="/"> <Button variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-500/10">Return to Home</Button> </Link> </div> </div> ); }; export default NotFound;
+"use client";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import CosmicBackground from '@/components/CosmicBackground';
+
+const NotFound = () => {
+  const location = useLocation();
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#0a0a1a] font-sans text-foreground relative">
+      <CosmicBackground />
+      <div className="text-center z-10">
+        <h1 className="text-4xl font-bold text-white mb-4">404</h1>
+        <p className="text-xl text-gray-300 mb-4">Oops! Page not found</p>
+        <p className="text-sm text-gray-500 mb-8">{location.pathname}</p>
+        <Link to="/">
+          <Button variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-500/10">Return to Home</Button>
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+export default NotFound;
