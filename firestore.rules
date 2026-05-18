@@ -1,39 +1,42 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // Helper: check if the requesting user is an admin
+    function isAdmin() {
+      return request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
     match /users/{userId} {
-      // Allow users to read their own data
-      allow read: if request.auth != null && request.auth.uid == userId;
-
-      // Allow admin users to read all users data
+      // Users can read their own profile; admins can read any profile
       allow read: if request.auth != null &&
-                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+                     (request.auth.uid == userId || isAdmin());
 
-      // Allow users to create their own profile
-      allow create: if request.auth != null && request.auth.uid == userId;
+      // Users can only create their own profile document
+      allow create: if request.auth != null &&
+                       request.auth.uid == userId &&
+                       request.resource.data.keys().hasAll(['displayName', 'email']) &&
+                       request.resource.data.email is string &&
+                       request.resource.data.displayName is string;
 
-      // Allow users to update their own data
-      allow update: if request.auth != null && request.auth.uid == userId;
-
-      // Allow admin users to delete any user
-      allow delete: if request.auth != null &&
-                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-
-      // Allow admin users to update any user's data
+      // Users can update their own profile; admins can update any profile
       allow update: if request.auth != null &&
-                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+                       (request.auth.uid == userId || isAdmin());
+
+      // Only admins can delete accounts
+      allow delete: if isAdmin();
     }
 
     match /test/{document} {
-      // Allow anyone to read test documents
-      allow read: if true;
+      // Only authenticated users can read test documents (not public)
+      allow read: if request.auth != null;
 
-      // Allow authenticated users to create test documents
+      // Only authenticated users can create test documents
       allow create: if request.auth != null;
 
-      // Allow admin users to delete test documents
-      allow delete: if request.auth != null &&
-                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      // Only admins can delete test documents
+      allow delete: if isAdmin();
     }
   }
 }

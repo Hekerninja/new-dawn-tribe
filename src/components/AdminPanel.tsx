@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Users, Shield, Trash2, Crown, LogOut, RefreshCw, BarChart3, Settings, UserCheck, UserX, Activity, Database } from 'lucide-react';
+import { Heart, Users, Shield, Trash2, Crown, LogOut, RefreshCw, ChartBar as BarChart3, Settings, UserCheck, UserX, Activity, Database, TriangleAlert as AlertTriangle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { showSuccess } from "@/utils/toast";
 import CosmicBackground from '@/components/CosmicBackground';
 import MobileMenu from '@/components/MobileMenu';
@@ -19,6 +20,7 @@ const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [dbStatus, setDbStatus] = useState<'checking' | 'connected' | 'error'>('checking');
   const [searchTerm, setSearchTerm] = useState('');
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   // Check if user is admin
   if (!currentUser?.isAdmin) {
@@ -309,11 +311,7 @@ const AdminPanel = () => {
                                 size="sm"
                                 variant="outline"
                                 className="border-red-500/30 text-red-400 hover:bg-red-500/20"
-                                onClick={() => {
-                                  if (confirm('Are you sure you want to delete this account? This action cannot be undone.')) {
-                                    deleteAccount(user.id);
-                                  }
-                                }}
+                                onClick={() => setDeleteTargetId(user.id)}
                               >
                                 <Trash2 className="w-3 h-3" />
                               </Button>
@@ -390,6 +388,29 @@ const AdminPanel = () => {
           <p>&copy; 2026 New Dawn Tribe. Admin Panel.</p>
         </div>
       </footer>
+
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={!!deleteTargetId} onOpenChange={(open) => { if (!open) setDeleteTargetId(null); }}>
+        <AlertDialogContent className="bg-gray-900 border border-white/10 text-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-red-400">
+              <AlertTriangle className="w-5 h-5" /> Delete Account
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              This will permanently delete the account and all associated data. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-white/20 text-gray-300 hover:bg-white/10">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => { if (deleteTargetId) { deleteAccount(deleteTargetId); setDeleteTargetId(null); } }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

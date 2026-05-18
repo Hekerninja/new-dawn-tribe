@@ -1,12 +1,29 @@
 "use client";
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Heart } from 'lucide-react';
+import { ArrowLeft, Heart, Shield } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CosmicBackground from '@/components/CosmicBackground';
 import TestDataGenerator from '@/components/TestDataGenerator';
+import { useSobrietyTracker } from '@/contexts/SobrietyTrackerContext';
 
 const TestData = () => {
+  const { currentUser } = useSobrietyTracker();
+
+  if (!currentUser?.isAdmin) {
+    return (
+      <div className="min-h-screen font-sans text-foreground relative flex items-center justify-center">
+        <CosmicBackground />
+        <div className="text-center z-10 p-8">
+          <Shield className="w-16 h-16 text-red-400 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-white mb-4">Access Denied</h1>
+          <p className="text-gray-300 mb-8">You don't have permission to access this page.</p>
+          <Link to="/"><Button className="bg-teal-500 hover:bg-teal-600 text-white">Return Home</Button></Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen font-sans text-foreground animate-fade-in theme-transition relative">
       <CosmicBackground />

@@ -9,9 +9,26 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Middleware — restrict CORS to known origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  process.env.ALLOWED_ORIGIN,
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow server-to-server requests (no origin) and listed origins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['POST', 'GET'],
+  allowedHeaders: ['Content-Type'],
+}));
+app.use(express.json({ limit: '10kb' }));
 
 // Rate limiting to prevent abuse
 const limiter = rateLimit({
@@ -62,7 +79,7 @@ app.post('/api/send-email', async (req, res) => {
 
     await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
 
-    console.log(`Email sent successfully from ${from_email}`);
+    console.log('Email sent successfully.');
     res.status(200).json({ success: true, message: 'Email sent successfully!' });
   } catch (error) {
     console.error('EmailJS Error:', error);

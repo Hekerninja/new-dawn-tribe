@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2, Trophy, Star, Medal, PartyPopper, Gift, Sparkles, Menu, X, Home, Info, BookOpen, MessageSquare, Target, BarChart3 } from 'lucide-react';
+import { Heart, Users, Shield, LogIn, UserPlus, LogOut, RefreshCw, Crown, Flame, Calendar, Clock, Award, TrendingUp, Settings, UserCheck, UserX, Trash2, Trophy, Star, Medal, PartyPopper, Gift, Sparkles, Menu, X, Chrome as Home, Info, BookOpen, MessageSquare, Target, ChartBar as BarChart3 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { showSuccess, showError } from "@/utils/toast";
 import { toast } from "sonner";
 import CosmicBackground from '@/components/CosmicBackground';
@@ -74,6 +75,7 @@ const SobrietyTracker = () => {
   const [showMilestones, setShowMilestones] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dailyQuote, setDailyQuote] = useState('');
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Calculate days since start date
   const calculateDaysSober = () => {
@@ -147,14 +149,11 @@ const SobrietyTracker = () => {
   };
 
   const handleResetProgress = async () => {
-    if (window.confirm('Are you sure you want to reset your progress? This cannot be undone.')) {
-      try {
-        await resetProgress();
-        showSuccess("Your progress has been reset. Starting fresh today!");
-      } catch (error) {
-        console.error("Reset failed:", error);
-        showError("Failed to reset progress. Please try again.");
-      }
+    try {
+      await resetProgress();
+      showSuccess("Your progress has been reset. Starting fresh today!");
+    } catch (error) {
+      showError("Failed to reset progress. Please try again.");
     }
   };
 
@@ -513,7 +512,7 @@ const SobrietyTracker = () => {
                           )}
 
                           <div className="mt-6 grid grid-cols-2 gap-4">
-                            <Button onClick={handleResetProgress} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/20">
+                            <Button onClick={() => setShowResetConfirm(true)} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/20">
                               <RefreshCw className="w-4 h-4 mr-2" />
                               Reset Progress
                             </Button>
@@ -878,7 +877,7 @@ const SobrietyTracker = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <Button onClick={handleResetProgress} variant="outline" className="w-full border-red-500/30 text-red-400 hover:bg-red-500/20">
+                      <Button onClick={() => setShowResetConfirm(true)} variant="outline" className="w-full border-red-500/30 text-red-400 hover:bg-red-500/20">
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Reset My Progress
                       </Button>
@@ -1096,6 +1095,27 @@ const SobrietyTracker = () => {
           <p className="text-sm mt-2">Empowering young adults to live free from addiction.</p>
         </div>
       </footer>
+
+      {/* Reset progress confirmation */}
+      <AlertDialog open={showResetConfirm} onOpenChange={setShowResetConfirm}>
+        <AlertDialogContent className="bg-gray-900 border border-white/10 text-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-400">Reset Your Progress?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              This will permanently reset your sobriety start date and all progress. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-white/20 text-gray-300 hover:bg-white/10">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => { setShowResetConfirm(false); handleResetProgress(); }}
+            >
+              Reset
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
